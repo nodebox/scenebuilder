@@ -3,6 +3,7 @@ package scenebuilder.model;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public abstract class Node {
     private String name = "";
     private Point position = new Point(0, 0);
     private Map<String, Object> attributes = new HashMap<String, Object>();
-    private Map<String, Port> ports = new HashMap<String, Port>();
+    private Map<String, Port> ports = new LinkedHashMap<String, Port>();
 
     public static Map<String, Object> createAttributes(String displayName, String description) {
         Map<String, Object> attributes = new HashMap<String, Object>();

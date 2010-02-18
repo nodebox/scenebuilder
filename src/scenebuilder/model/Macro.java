@@ -82,7 +82,11 @@ public class Macro extends Node {
             Node n = c.getOutputNode();
             if (!context.hasExecuted(n)) {
                 context.addToExecutedNodes(n);
+                updateChildDependencies(n, context, time);
                 if (!n.execute(context, time)) return false;
+            }
+            if (c.getOutputPort().getName().equals("h")) {
+                System.out.println("hue");
             }
             child.setValue(c.getInputPort().getName(), n.getValue(c.getOutputPort().getName()));
         }

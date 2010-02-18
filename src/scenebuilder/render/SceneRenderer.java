@@ -1,5 +1,7 @@
 package scenebuilder.render;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -21,6 +23,8 @@ public class SceneRenderer {
     private boolean finished = false;
     private Scene scene;
     private Timer timer;
+    private int screenWidth, screenHeight;
+    private double width, height;
 
     public SceneRenderer(Scene scene) {
         this.scene = scene;
@@ -29,7 +33,9 @@ public class SceneRenderer {
     public void init() throws Exception {
         // Initialize LWJGL
         DisplayMode mode = new DisplayMode(800, 600);
-        Display.setTitle("Test Renderer");
+        screenWidth = mode.getWidth();
+        screenHeight = mode.getHeight();
+        Display.setTitle("Viewer");
         Display.setDisplayMode(mode);
         Display.setFullscreen(false);
         Display.setVSyncEnabled(true);
@@ -38,7 +44,6 @@ public class SceneRenderer {
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
 
-        double width, height;
         double factor = mode.getWidth() / (double) mode.getHeight();
         if (mode.getWidth() < mode.getHeight()) {
             width = 100.0;
@@ -50,7 +55,7 @@ public class SceneRenderer {
         GL11.glOrtho(-width, width, -height, height, -1.0, 1.0);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
-        GL11.glViewport(0, 0, mode.getWidth(), mode.getHeight());
+        GL11.glViewport(0, 0, screenWidth, screenHeight);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -66,7 +71,10 @@ public class SceneRenderer {
     public void render() {
         GL11.glPushMatrix();
         Context context = new Context();
-
+        double relativeX = Mouse.getX() / (double)screenWidth ;
+        double relativeY = Mouse.getY() / (double)screenHeight;
+        context.setMouseX((relativeX - 0.5) * width);
+        context.setMouseY((relativeY - 0.5) * height);
         scene.execute(context, timer.getTime());
         GL11.glPopMatrix();
     }
@@ -74,7 +82,7 @@ public class SceneRenderer {
     public void run() {
         while (!finished) {
             Display.update();
-            if (Display.isCloseRequested() || Thread.interrupted())
+            if (Display.isCloseRequested() || Thread.currentThread().isInterrupted())
                 finished = true;
             else if (Display.isActive() || true) { // TODO: only needs to be inactive if the app is no longer in front.
                 // The window is in the foreground, so we should play the game
@@ -99,10 +107,14 @@ public class SceneRenderer {
     }
 
     public void cleanup() {
-        //AL.destroy();
-        //Display.destroy();
+        AL.destroy();
+        try {
+            Display.releaseContext();
+        } catch (LWJGLException e) {
+            throw new RuntimeException(e);
+        }
+        Display.destroy();
     }
-
 
     public static void main(String[] args) {
         // Initialize scene
