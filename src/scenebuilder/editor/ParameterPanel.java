@@ -86,7 +86,12 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             String valueString = value == null ? "" : value.toString();
 
             JComponent c;
-            if (port.getType() == Port.Type.NUMBER) {
+            if (port.getType() == Port.Type.BOOLEAN) {
+                JCheckBox checkBox = new JCheckBox("", node.asBoolean(port.getName()));
+                checkBox.putClientProperty("JComponent.sizeVariant", "small");
+                checkBox.addActionListener(this);
+                c = checkBox;
+            } else if (port.getType() == Port.Type.NUMBER) {
                 DraggableNumber number = new DraggableNumber();
                 number.setValue(node.asNumber(port.getName()));
                 number.addChangeListener(this);
@@ -127,24 +132,27 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
 
     public void actionPerformed(ActionEvent e) {
-        JTextField f = (JTextField) e.getSource();
-        Port p = getPort(f);
+        Port p = getPort((JComponent)e.getSource());
         if (p == null) return;
-        Node n = p.getNode();
-        Object parsedValue = n.parseValue(p.getName(), f.getText());
-        p.getNode().setValue(p.getName(), parsedValue);
+        if (e.getSource() instanceof JCheckBox) {
+            JCheckBox b = (JCheckBox) e.getSource();
+            p.setValue(b.isSelected());
+        } else if (e.getSource() instanceof JTextField) {
+            JTextField f = (JTextField) e.getSource();
+            Node n = p.getNode();
+            Object parsedValue = n.parseValue(p.getName(), f.getText());
+            p.getNode().setValue(p.getName(), parsedValue);
+        }
     }
 
     public void stateChanged(ChangeEvent e) {
+        Port p = getPort((JComponent)e.getSource());
+        if (p == null) return;
         if (e.getSource() instanceof DraggableNumber) {
             DraggableNumber number = (DraggableNumber) e.getSource();
-            Port p = getPort(number);
-            if (p == null) return;
             p.setValue(number.getValue());
         } else if (e.getSource() instanceof ColorWell) {
             ColorWell well = (ColorWell) e.getSource();
-            Port p = getPort(well);
-            if (p == null) return;
             p.setValue(well.getColor());
         }
     }
