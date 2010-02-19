@@ -147,7 +147,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
             NodeView inputView = nodeViews.get(c.getInputNode());
             float outputX = outputView.getX() + outputView.getWidth() - 10;
             float outputY = outputView.getY() + outputView.getPortPosition(c.getOutputPort());
-            float inputX = inputView.getX() + 10;
+            float inputX = inputView.getX() + 13;
             float inputY = inputView.getY() + inputView.getPortPosition(c.getInputPort());
             float dx = Math.abs(inputX - outputX) / 2;
             GeneralPath p = new GeneralPath();

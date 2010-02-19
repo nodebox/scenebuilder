@@ -20,9 +20,10 @@ public class NodeView {
     private static final int NODE_MINIMUM_WIDTH = 150;
     private static final Color NODE_NAME_COLOR = new Color(233, 233, 233);
     private static final Font NODE_NAME_FONT = new Font(Font.DIALOG, Font.BOLD, 10);
-    private static final Color NODE_HEADER_COLOR = new Color(83, 83, 85);
-    private static final Color NODE_BODY_COLOR = new Color(39, 39, 41);
+    private static final Color NODE_HEADER_COLOR = new Color(83, 83, 85, 200);
+    private static final Color NODE_BODY_COLOR = new Color(39, 39, 41, 200);
     private static final Color NODE_PORT_COLOR = new Color(233, 233, 233);
+    private static final Stroke NODE_PORT_STROKE = new BasicStroke(1);
     private static final Font NODE_PORT_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
     private static final Color NODE_BORDER_COLOR = new Color(18, 18, 18);
     private static final Stroke NODE_BORDER_STROKE = new BasicStroke(2);
@@ -99,7 +100,7 @@ public class NodeView {
     }
 
     public int getPortPosition(Port p) {
-        return NODE_HEADER_HEIGHT + PORT_HEIGHT * getPortIndex(p) + VERTICAL_TEXT_NUDGE * 2;
+        return NODE_HEADER_HEIGHT + PORT_HEIGHT * getPortIndex(p) + 15;
     }
 
     public void paintComponent(Graphics g) {
@@ -120,9 +121,11 @@ public class NodeView {
         g2.setColor(NODE_PORT_COLOR);
         int y = NODE_HEADER_HEIGHT + NODE_PORT_FONT.getSize() + VERTICAL_TEXT_NUDGE;
         g2.setFont(NODE_PORT_FONT);
+        g2.setStroke(NODE_PORT_STROKE);
         Collection<Port> inputPorts = node.getInputPorts();
         for (Port port : inputPorts) {
-            g2.drawString(port.getName(), 10, y);
+            g2.drawOval(9, y-6, 4, 4);
+            g2.drawString(port.getName(), 20, y);
             y += PORT_HEIGHT;
         }
         // Reset y to draw the output ports.
@@ -130,7 +133,8 @@ public class NodeView {
         Collection<Port> outputPorts= node.getOutputPorts();
         for (Port port : outputPorts) {
             Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getName(), g);
-            g2.drawString(port.getName(), totalWidth - (int) r.getWidth() - 10, y);
+            g2.drawString(port.getName(), totalWidth - (int) r.getWidth() - 20, y);
+            g2.drawOval(totalWidth-13, y-6, 4, 4);
             y += PORT_HEIGHT;
         }
 
