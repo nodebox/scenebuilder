@@ -11,6 +11,8 @@ public class Macro extends Node {
 
     public Macro() {
         super(Function.Filter);
+        setAttribute(DISPLAY_NAME_ATTRIBUTE, "Macro Node");
+        setAttribute(DESCRIPTION_ATTRIBUTE, "A Node that can contain other nodes.");
         children = new LinkedList<Node>();
         connections = new LinkedList<Connection>();
     }

@@ -17,7 +17,7 @@ public class Mouse extends Node {
     public Mouse() {
         super(Function.Generator);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Mouse");
-        setAttribute(DESCRIPTION_ATTRIBUTE,"Read the current state of the mouse." );
+        setAttribute(DESCRIPTION_ATTRIBUTE, "Read the current state of the mouse.");
         addOutputPort(Port.Type.NUMBER, PORT_X);
         addOutputPort(Port.Type.NUMBER, PORT_Y);
         addOutputPort(Port.Type.BOOLEAN, PORT_LEFT);
@@ -28,8 +28,8 @@ public class Mouse extends Node {
 
     @Override
     public boolean execute(Context context, double time) {
-        setValue(PORT_X, (double)context.getMouseX());
-        setValue(PORT_Y, (double)context.getMouseY());
+        setValue(PORT_X, (double) context.getMouseX());
+        setValue(PORT_Y, (double) context.getMouseY());
 
         return true;
     }

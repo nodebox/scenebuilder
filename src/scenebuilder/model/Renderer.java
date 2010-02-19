@@ -8,5 +8,5 @@ public class Renderer {
         this.scene = scene;
     }
 
-    
+
 }

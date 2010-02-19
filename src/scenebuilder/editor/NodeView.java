@@ -1,13 +1,10 @@
 package scenebuilder.editor;
 
+import scenebuilder.model.Macro;
 import scenebuilder.model.Node;
 import scenebuilder.model.Port;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -33,7 +30,7 @@ public class NodeView {
 
     private final SceneViewer sceneViewer;
     private final Node node;
-    private RoundRectangle2D nodeRect;
+    private Shape nodeRect;
     private int totalWidth;
     private int totalHeight;
     private int px, py;
@@ -68,7 +65,8 @@ public class NodeView {
     }
 
     public int getY() {
-    return bounds.y;}
+        return bounds.y;
+    }
 
     public int getWidth() {
         return bounds.width;
@@ -82,10 +80,14 @@ public class NodeView {
         Point pos = node.getPosition();
         java.util.List<Port> inputPorts = node.getInputPorts();
         java.util.List<Port> outputPorts = node.getOutputPorts();
-        int maxAmount = Math.max(inputPorts.size(), outputPorts.size());
+        int maxAmount = Math.max(Math.max(inputPorts.size(), outputPorts.size()), 1);
         totalHeight = NODE_HEADER_HEIGHT + maxAmount * PORT_HEIGHT;
         totalWidth = NODE_MINIMUM_WIDTH;
-        nodeRect = new RoundRectangle2D.Float(3, 3, totalWidth, totalHeight, 5, 5);
+        if (node instanceof Macro) {
+            nodeRect = new Rectangle2D.Float(3, 3, totalWidth, totalHeight);
+        } else {
+            nodeRect = new RoundRectangle2D.Float(3, 3, totalWidth, totalHeight, 7, 7);
+        }
         setBounds(pos.x - 3, pos.y - 3, totalWidth + 6, totalHeight + 6);
     }
 
@@ -110,6 +112,7 @@ public class NodeView {
         Shape originalClip = g2.getClip();
         g2.translate(3, 3);
         g2.setColor(NODE_BODY_COLOR);
+
         g2.fill(nodeRect);
         g2.clip(nodeRect);
         g2.setColor(NODE_HEADER_COLOR);
@@ -124,17 +127,17 @@ public class NodeView {
         g2.setStroke(NODE_PORT_STROKE);
         Collection<Port> inputPorts = node.getInputPorts();
         for (Port port : inputPorts) {
-            g2.drawOval(9, y-6, 4, 4);
+            g2.drawOval(9, y - 6, 4, 4);
             g2.drawString(port.getName(), 20, y);
             y += PORT_HEIGHT;
         }
         // Reset y to draw the output ports.
         y = NODE_HEADER_HEIGHT + NODE_PORT_FONT.getSize() + VERTICAL_TEXT_NUDGE;
-        Collection<Port> outputPorts= node.getOutputPorts();
+        Collection<Port> outputPorts = node.getOutputPorts();
         for (Port port : outputPorts) {
             Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getName(), g);
             g2.drawString(port.getName(), totalWidth - (int) r.getWidth() - 20, y);
-            g2.drawOval(totalWidth-13, y-6, 4, 4);
+            g2.drawOval(totalWidth - 13, y - 6, 4, 4);
             y += PORT_HEIGHT;
         }
 

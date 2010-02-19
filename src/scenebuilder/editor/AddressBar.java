@@ -2,6 +2,7 @@ package scenebuilder.editor;
 
 import scenebuilder.gui.SwingUtils;
 import scenebuilder.model.Macro;
+import scenebuilder.model.Node;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -81,9 +82,10 @@ public class AddressBar extends JPanel implements MouseListener {
             } else {
                 g2.setColor(TEXT_NORMAL_COLOR);
             }
-            SwingUtils.drawShadowText(g2, part.getName(), x, 16);
+            String displayName = part.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString();
+            SwingUtils.drawShadowText(g2, displayName, x, 16);
 
-            int width = (int) g2.getFontMetrics().stringWidth(part.getName());
+            int width = (int) g2.getFontMetrics().stringWidth(displayName);
             x += width + 5;
             positions[i] = x + 10;
             g2.drawImage(addressArrow, x, 1, null);

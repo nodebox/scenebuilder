@@ -25,8 +25,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
 
     private Map<JComponent, Port> components = new HashMap<JComponent, Port>();
+    private SceneDocument document;
 
-    public ParameterPanel() {
+    public ParameterPanel(SceneDocument document) {
+        this.document = document;
         Dimension d = new Dimension(300, 600);
         //setSize(d.width, d.height);
         setMinimumSize(d);
@@ -132,7 +134,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
 
     public void actionPerformed(ActionEvent e) {
-        Port p = getPort((JComponent)e.getSource());
+        Port p = getPort((JComponent) e.getSource());
         if (p == null) return;
         if (e.getSource() instanceof JCheckBox) {
             JCheckBox b = (JCheckBox) e.getSource();
@@ -146,7 +148,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     }
 
     public void stateChanged(ChangeEvent e) {
-        Port p = getPort((JComponent)e.getSource());
+        Port p = getPort((JComponent) e.getSource());
         if (p == null) return;
         if (e.getSource() instanceof DraggableNumber) {
             DraggableNumber number = (DraggableNumber) e.getSource();

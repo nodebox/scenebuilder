@@ -1,5 +1,7 @@
 package scenebuilder.model;
 
+import scenebuilder.util.StringUtils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
@@ -50,7 +52,8 @@ public abstract class Node {
     public Node(Function function) {
         this.function = function;
         name = getClass().getSimpleName() + createInstance(getClass());
-
+        setAttribute(DISPLAY_NAME_ATTRIBUTE, StringUtils.humanizeName(name));
+        setAttribute(DESCRIPTION_ATTRIBUTE, "Generic node.");
     }
 
     public Function getFunction() {
@@ -217,12 +220,14 @@ public abstract class Node {
             case IMAGE:
                 return null;
         }
-        throw new AssertionError(String.format("Unknown port type %s.",port.getType()));
+        throw new AssertionError(String.format("Unknown port type %s.", port.getType()));
     }
 
     //// Custom interface ////
 
-    public JComponent createEditorComponent() { return null; }
+    public JComponent createEditorComponent() {
+        return null;
+    }
 
 
     //// Execution ////

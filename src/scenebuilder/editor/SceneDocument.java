@@ -33,8 +33,8 @@ public class SceneDocument extends JFrame {
         setSize(800, 600);
         JPanel content = new JPanel(new BorderLayout(0, 0));
         addressBar = new AddressBar(this);
-        viewer = new SceneViewer(scene);
-        parameters = new ParameterPanel();
+        viewer = new SceneViewer(this, scene);
+        parameters = new ParameterPanel(this);
         viewer.addPropertyChangeListener(SceneViewer.SELECT_PROPERTY, parameters);
         content.add(addressBar, BorderLayout.NORTH);
         content.add(viewer, BorderLayout.CENTER);
@@ -80,7 +80,7 @@ public class SceneDocument extends JFrame {
 
     public void close() {
         rendererThread.interrupt();
-        while(rendererThread.isAlive()) {
+        while (rendererThread.isAlive()) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -137,6 +137,19 @@ public class SceneDocument extends JFrame {
         root.connect(mouse, Mouse.PORT_Y, sprite, Sprite.PORT_Y);
         root.connect(lfo, LFO.PORT_RESULT, hsvToColor, HSVToColor.PORT_H);
         root.connect(hsvToColor, HSVToColor.PORT_COLOR, sprite, Sprite.PORT_COLOR);
+        return scene;
+    }
+
+    public static Scene macroScene() {
+        final Scene scene = new Scene();
+        Macro root = scene.getRootMacro();
+        Node clear = new Clear();
+        clear.setPosition(new Point(50, 50));
+        clear.setValue(Clear.PORT_COLOR, Color.DARK_GRAY);
+        Macro macro = new Macro();
+        macro.setPosition(new Point(50, 200));
+        root.addChild(clear);
+        root.addChild(macro);
         return scene;
     }
 
@@ -206,11 +219,13 @@ public class SceneDocument extends JFrame {
         JMenu sceneMenu = new JMenu("Scene");
         sceneMenu.add(new SwitchSceneAction("Basic Animation", basicLFOScene()));
         sceneMenu.add(new SwitchSceneAction("Mouse Input", mouseScene()));
+        sceneMenu.add(new SwitchSceneAction("Macros", macroScene()));
         sceneMenu.add(new SwitchSceneAction("Creatures Layers", creaturesScene()));
         sceneMenuBar.add(sceneMenu);
         // Initialize scene
-        Scene scene = basicLFOScene();
+        //Scene scene = basicLFOScene();
         //Scene scene = mouseScene();
+        Scene scene = macroScene();
         //Scene scene = creaturesScene();
         // Start document
         documentWindow = new SceneDocument(scene);

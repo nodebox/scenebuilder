@@ -179,7 +179,7 @@ public class ColorDialog extends JDialog implements ChangeListener {
             float s = saturation;
             float v = brightness;
             float r, g, b, f, p, q, t;
-            h = h / (float) (60.0/360);
+            h = h / (float) (60.0 / 360);
             int i = (int) Math.floor(h);
             f = h - i;
             p = v * (1 - s);

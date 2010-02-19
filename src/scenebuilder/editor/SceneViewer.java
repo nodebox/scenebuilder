@@ -26,7 +26,6 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
 
 
     private final Scene scene;
-    private Macro currentMacro;
     private double zoomFactor = 1.0;
     private double centerX = 0.0;
     private double centerY = 0.0;
@@ -34,10 +33,12 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     private boolean spaceDown;
     private int px, py;
     private HashMap<Node, NodeView> nodeViews = new HashMap<Node, NodeView>();
-    private JPopupMenu popupMenu;
+    private JPopupMenu viewerPopup;
+    private SceneDocument document;
+    private JPopupMenu nodeViewPopup;
 
-
-    public SceneViewer(Scene scene) {
+    public SceneViewer(SceneDocument document, Scene scene) {
+        this.document = document;
         this.scene = scene;
         setCurrentMacro(scene.getRootMacro());
         addMouseListener(this);
@@ -45,25 +46,30 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         addKeyListener(this);
         setLayout(null);
         setFocusable(true);
-        initPopupMenu();
+        initPopupMenus();
+    }
+
+    public Macro getCurrentMacro() {
+        return document.getCurrentMacro();
     }
 
     public void setCurrentMacro(Macro currentMacro) {
         nodeViews.clear();
-        this.currentMacro = currentMacro;
         for (Node node : currentMacro.getChildren()) {
             NodeView view = new NodeView(this, node);
             nodeViews.put(node, view);
-            //add(view);
         }
+        repaint();
     }
 
-     private void initPopupMenu() {
-        popupMenu = new JPopupMenu();
-        //popupMenu.add(new NewNodeAction());
-        popupMenu.add(new ResetViewAction());
-        //popupMenu.add(new GoUpAction());
-         addMouseListener(new PopupHandler());
+    private void initPopupMenus() {
+        viewerPopup = new JPopupMenu();
+        //viewerPopup.add(new NewNodeAction());
+        viewerPopup.add(new ResetViewAction());
+        //viewerPopup.add(new GoUpAction());
+        nodeViewPopup = new JPopupMenu();
+        addMouseListener(new PopupHandler());
+
     }
 
     //// Selections ////
@@ -124,10 +130,10 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         g2.fillRect(clip.x, clip.y, clip.width, clip.height);
         g2.setColor(GRID_COLOR);
         for (double y = centerY % GRID_SPACING; y < size.height; y += GRID_SPACING * zoomFactor) {
-            g2.drawLine(0, (int) y, size.width , (int) y);
+            g2.drawLine(0, (int) y, size.width, (int) y);
         }
 
-        for (double x = centerX % GRID_SPACING; x < size.width ; x += GRID_SPACING * zoomFactor) {
+        for (double x = centerX % GRID_SPACING; x < size.width; x += GRID_SPACING * zoomFactor) {
             g2.drawLine((int) x, 0, (int) x, size.height);
         }
 
@@ -142,7 +148,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     }
 
     private void paintConnections(Graphics2D g) {
-        for (Connection c : currentMacro.getConnections()) {
+        for (Connection c : getCurrentMacro().getConnections()) {
             NodeView outputView = nodeViews.get(c.getOutputNode());
             NodeView inputView = nodeViews.get(c.getInputNode());
             float outputX = outputView.getX() + outputView.getWidth() - 10;
@@ -161,7 +167,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
 
     private NodeView getNodeAt(Point p) {
         Point transformedPoint = new Point(p);
-        transformedPoint.translate(-(int)centerX, -(int)centerY);
+        transformedPoint.translate(-(int) centerX, -(int) centerY);
         for (NodeView view : nodeViews.values()) {
             if (view.getBounds().contains(transformedPoint)) return view;
         }
@@ -184,6 +190,8 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     }
 
     public void mouseReleased(MouseEvent e) {
+        NodeView view = getNodeAt(e.getPoint());
+        if (view == null) return;
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -230,6 +238,19 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         }
     }
 
+    public boolean checkForNodeViewPopup(MouseEvent e) {
+        if (!e.isPopupTrigger()) return false;
+        NodeView view = getNodeAt(e.getPoint());
+        Node node = getNode(view);
+        nodeViewPopup.removeAll();
+        if (node instanceof Macro)
+            nodeViewPopup.add(new EditMacroAction((Macro) node));
+        nodeViewPopup.add(new RenameAction(node));
+        nodeViewPopup.show(SceneViewer.this, e.getX(), e.getY());
+        return true;
+    }
+
+
     private class PopupHandler extends MouseAdapter {
 
         @Override
@@ -242,14 +263,19 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
             checkForPopup(e);
         }
 
-         public void checkForPopup(MouseEvent e) {
-             if (e.isPopupTrigger()) {
-                 popupMenu.show(SceneViewer.this, e.getX(), e.getY());
-             }
-         }
+        public void checkForPopup(MouseEvent e) {
+            if (checkForNodeViewPopup(e)) return;
+            if (e.isPopupTrigger()) {
+                viewerPopup.removeAll();
+                if (getCurrentMacro().getParent() != null)
+                    viewerPopup.add(new EditParentAction(getCurrentMacro().getParent()));
+                viewerPopup.add(new ResetViewAction());
+                viewerPopup.show(SceneViewer.this, e.getX(), e.getY());
+            }
+        }
     }
 
-     private class ResetViewAction extends AbstractAction {
+    private class ResetViewAction extends AbstractAction {
         private ResetViewAction() {
             super("Reset View");
         }
@@ -257,6 +283,50 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         public void actionPerformed(ActionEvent e) {
             centerX = centerY = 0;
             zoomFactor = 1.0;
+            repaint();
+        }
+    }
+
+    private class EditParentAction extends AbstractAction {
+        private Macro parent;
+
+        private EditParentAction(Macro parent) {
+            super("Edit Parent");
+            this.parent = parent;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            document.setCurrentMacro(parent);
+        }
+
+    }
+
+    private class EditMacroAction extends AbstractAction {
+        private Macro macro;
+
+        private EditMacroAction(Macro macro) {
+            super("Edit Macro");
+            this.macro = macro;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            document.setCurrentMacro(macro);
+        }
+    }
+
+    private class RenameAction extends AbstractAction {
+        private Node node;
+
+        private RenameAction(Node node) {
+            super("Rename");
+            this.node = node;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            String s = JOptionPane.showInputDialog(SceneViewer.this, "New name:", node.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString());
+            if (s == null || s.length() == 0)
+                return;
+            node.setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, s);
             repaint();
         }
     }

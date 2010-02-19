@@ -2,11 +2,8 @@ package scenebuilder.model;
 
 import org.lwjgl.opengl.GL11;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 public class GLImage {
     /**
@@ -43,13 +40,13 @@ public class GLImage {
     private float heightRatio;
 
 
-     /**
+    /**
      * Create a new texture
      *
-     * @param target The GL target
+     * @param target    The GL target
      * @param textureID The GL texture ID
      */
-    public GLImage(int target,int textureID) {
+    public GLImage(int target, int textureID) {
         this.target = target;
         this.textureID = textureID;
     }
@@ -62,7 +59,7 @@ public class GLImage {
      * Bind the specified GL context to a texture
      */
     public void bind() {
-      GL11.glBindTexture(target, textureID);
+        GL11.glBindTexture(target, textureID);
     }
 
     /**
@@ -147,7 +144,7 @@ public class GLImage {
      */
     private void setHeight() {
         if (texHeight != 0) {
-            heightRatio = ((float) height)/texHeight;
+            heightRatio = ((float) height) / texHeight;
         }
     }
 
@@ -157,7 +154,7 @@ public class GLImage {
      */
     private void setWidth() {
         if (texWidth != 0) {
-            widthRatio = ((float) width)/texWidth;
+            widthRatio = ((float) width) / texWidth;
         }
     }
 

@@ -71,8 +71,8 @@ public class SceneRenderer {
     public void render() {
         GL11.glPushMatrix();
         Context context = new Context();
-        double relativeX = Mouse.getX() / (double)screenWidth ;
-        double relativeY = Mouse.getY() / (double)screenHeight;
+        double relativeX = Mouse.getX() / (double) screenWidth;
+        double relativeY = Mouse.getY() / (double) screenHeight;
         context.setMouseX((relativeX - 0.5) * width);
         context.setMouseY((relativeY - 0.5) * height);
         scene.execute(context, timer.getTime());

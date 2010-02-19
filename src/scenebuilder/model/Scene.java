@@ -7,6 +7,7 @@ public class Scene {
     public Scene() {
         rootMacro = new Macro();
         rootMacro.setName("root");
+        rootMacro.setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, "Root");
     }
 
     public Macro getRootMacro() {
