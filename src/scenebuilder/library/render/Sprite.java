@@ -47,7 +47,7 @@ public class Sprite extends Node {
         double left = -width / 2;
         double top = -height / 2;
         double right = width / 2;
-        double bottom = height/ 2;
+        double bottom = height / 2;
 
         if (getPort(PORT_IMAGE).isConnected()) {
             GL11.glColor4f(1f, 1f, 1f, 1f);
