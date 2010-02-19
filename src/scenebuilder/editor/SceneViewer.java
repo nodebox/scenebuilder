@@ -175,6 +175,11 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     }
 
     public void mouseClicked(MouseEvent e) {
+        NodeView view = getNodeAt(e.getPoint());
+        if (view == null) return;
+        if (e.getClickCount() != 2) {
+            new RenameAction(getNode(view)).actionPerformed(null);
+        }
     }
 
     public void mousePressed(MouseEvent e) {
