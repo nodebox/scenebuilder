@@ -178,7 +178,7 @@ public abstract class Node {
 
     private Port getPortChecked(String name) {
         Port p = ports.get(name);
-        if (p == null) throw new IllegalArgumentException(String.format("Port %s does not exist.", name));
+        if (p == null) throw new IllegalArgumentException(String.format("%s: port %s does not exist.", this, name));
         return p;
     }
 
@@ -193,7 +193,7 @@ public abstract class Node {
         try {
             return (Boolean) getValue(name);
         } catch (ClassCastException e) {
-            throw new IllegalArgumentException(String.format("Port %s is not of type boolean.", name));
+            throw new IllegalArgumentException(String.format("%s: port %s is not of type boolean.", this, name));
         }
     }
 
@@ -201,7 +201,15 @@ public abstract class Node {
         try {
             return (Double) getValue(name);
         } catch (ClassCastException e) {
-            throw new IllegalArgumentException(String.format("Port %s is not of type number.", name));
+            throw new IllegalArgumentException(String.format("%s: port %s is not of type number.", this, name));
+        }
+    }
+
+    public int asInteger(String name) {
+        try {
+            return (Integer) getValue(name);
+        } catch (ClassCastException e) {
+            throw new IllegalArgumentException(String.format("%s: port %s is not of type integer.", this, name));
         }
     }
 
@@ -209,7 +217,7 @@ public abstract class Node {
         try {
             return (String) getValue(name);
         } catch (ClassCastException e) {
-            throw new IllegalArgumentException(String.format("Port %s is not of type string.", name));
+            throw new IllegalArgumentException(String.format("%s: port %s is not of type string.", this, name));
         }
     }
 
@@ -217,7 +225,7 @@ public abstract class Node {
         try {
             return (Color) getValue(name);
         } catch (ClassCastException e) {
-            throw new IllegalArgumentException(String.format("Port %s is not of type color.", name));
+            throw new IllegalArgumentException(String.format("%s: port %s is not of type color.", this, name));
         }
     }
 
@@ -225,7 +233,7 @@ public abstract class Node {
         try {
             return (GLImage) getValue(name);
         } catch (ClassCastException e) {
-            throw new IllegalArgumentException(String.format("Port %s is not of type image.", name));
+            throw new IllegalArgumentException(String.format("%s: port %s is not of type image.", this, name));
         }
     }
 
@@ -242,6 +250,8 @@ public abstract class Node {
                 return Boolean.parseBoolean(value);
             case NUMBER:
                 return Double.parseDouble(value);
+            case INTEGER:
+                return Integer.parseInt(value);
             case COLOR:
                 // TODO: Parse color
                 return Color.BLACK;
@@ -281,6 +291,6 @@ public abstract class Node {
 
     @Override
     public String toString() {
-        return String.format("%s(%s)", getClass().getSimpleName(), getDisplayName(), getName());
+        return "Node[" + name + "]";
     }
 }

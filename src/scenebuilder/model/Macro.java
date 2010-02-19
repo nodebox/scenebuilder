@@ -44,10 +44,14 @@ public class Macro extends Node {
     }
 
     public void connect(Node outputNode, String outputPort, Node inputNode, String inputPort) {
-        if (outputNode == null || inputNode == null) throw new RuntimeException("Nodes cannot be null.");
+        if (outputNode == null || inputNode == null) throw new IllegalArgumentException("Nodes cannot be null.");
+        if (!this.containsChild(outputNode))
+            throw new IllegalArgumentException(this + ": output " + outputNode + " is not a child of this macro.");
+        if (!this.containsChild(inputNode))
+            throw new IllegalArgumentException(this + ": input " + inputNode + " is not a child of this macro.");
         Port output = outputNode.getPort(outputPort);
         Port input = inputNode.getPort(inputPort);
-        if (output == null || input == null) throw new RuntimeException("Invalid port names");
+        if (output == null || input == null) throw new IllegalArgumentException("Invalid port names");
         connections.add(new Connection(this, outputNode, output, inputNode, input));
     }
 
@@ -117,9 +121,6 @@ public class Macro extends Node {
                 context.addToExecutedNodes(n);
                 updateChildDependencies(n, context, time);
                 if (!n.execute(context, time)) return false;
-            }
-            if (c.getOutputPort().getName().equals("h")) {
-                System.out.println("hue");
             }
             child.setValue(c.getInputPort().getName(), n.getValue(c.getOutputPort().getName()));
         }

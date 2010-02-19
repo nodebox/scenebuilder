@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -101,17 +102,28 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
                 number.setValue(node.asNumber(port.getName()));
                 number.addChangeListener(this);
                 c = number;
+            } else if (port.getType() == Port.Type.INTEGER) {
+                DraggableNumber number = new DraggableNumber();
+                number.setValue(node.asInteger(port.getName()));
+                number.addChangeListener(this);
+                c = number;
+                NumberFormat intFormat = NumberFormat.getNumberInstance();
+                intFormat.setMinimumFractionDigits(0);
+                intFormat.setMaximumFractionDigits(0);
+                number.setNumberFormat(intFormat);
             } else if (port.getType() == Port.Type.COLOR) {
                 ColorWell well = new ColorWell();
                 well.setColor(node.asColor(port.getName()));
                 well.addChangeListener(this);
                 c = well;
-            } else {
+            } else if (port.getType() == Port.Type.STRING) {
                 JTextField field = new JTextField(valueString);
                 field.setFont(PORT_VALUE_FONT);
                 field.putClientProperty("JComponent.sizeVariant", "small");
                 field.addActionListener(this);
                 c = field;
+            } else {
+                continue;
             }
             if (port.isConnected()) {
                 c.setEnabled(false);
@@ -156,24 +168,25 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     public void actionPerformed(ActionEvent e) {
         Port p = getPort((JComponent) e.getSource());
         if (p == null) return;
-        if (e.getSource() instanceof JCheckBox) {
+        if (p.getType() == Port.Type.BOOLEAN) {
             JCheckBox b = (JCheckBox) e.getSource();
             p.setValue(b.isSelected());
-        } else if (e.getSource() instanceof JTextField) {
+        } else if (p.getType() == Port.Type.STRING) {
             JTextField f = (JTextField) e.getSource();
-            Node n = p.getNode();
-            Object parsedValue = n.parseValue(p.getName(), f.getText());
-            p.getNode().setValue(p.getName(), parsedValue);
+            p.setValue(f.getText());
         }
     }
 
     public void stateChanged(ChangeEvent e) {
         Port p = getPort((JComponent) e.getSource());
         if (p == null) return;
-        if (e.getSource() instanceof DraggableNumber) {
+        if (p.getType() == Port.Type.NUMBER) {
             DraggableNumber number = (DraggableNumber) e.getSource();
             p.setValue(number.getValue());
-        } else if (e.getSource() instanceof ColorWell) {
+        } else if (p.getType() == Port.Type.INTEGER) {
+            DraggableNumber number = (DraggableNumber) e.getSource();
+            p.setValue((int) Math.round(number.getValue()));
+        } else if (p.getType() == Port.Type.COLOR) {
             ColorWell well = (ColorWell) e.getSource();
             p.setValue(well.getColor());
         }

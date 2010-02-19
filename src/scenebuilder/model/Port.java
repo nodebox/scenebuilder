@@ -2,13 +2,14 @@ package scenebuilder.model;
 
 import scenebuilder.util.StringUtils;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Port {
 
     public static enum Type {
-        BOOLEAN, NUMBER, COLOR, STRING, IMAGE
+        BOOLEAN, NUMBER, INTEGER, COLOR, STRING, IMAGE
     }
 
     public static final String DISPLAY_NAME_ATTRIBUTE = "displayName";
@@ -84,7 +85,37 @@ public class Port {
     }
 
     public void setValue(Object value) {
-        this.value = value;
+        switch (getType()) {
+            case BOOLEAN:
+                if (!(value instanceof Boolean))
+                    throw new IllegalArgumentException(this + ": Value is not a boolean.");
+                break;
+            case NUMBER:
+                if (!(value instanceof Double) && !(value instanceof Integer))
+                    throw new IllegalArgumentException(this + ": Value is not a double or integer.");
+                break;
+            case INTEGER:
+                if (!(value instanceof Integer))
+                    throw new IllegalArgumentException(this + ": Value is not an integer.");
+                break;
+            case COLOR:
+                if (!(value instanceof Color))
+                    throw new IllegalArgumentException(this + ": Value is not a color.");
+                break;
+            case STRING:
+                if (!(value instanceof String))
+                    throw new IllegalArgumentException(this + ": Value is not a string.");
+                break;
+            case IMAGE:
+                if (!(value instanceof GLImage))
+                    throw new IllegalArgumentException(this + ": Value is not a GLImage.");
+                break;
+        }
+        if (getType() == Type.NUMBER && value instanceof Integer) {
+            this.value = Double.valueOf((Integer) value);
+        } else {
+            this.value = value;
+        }
     }
 
     //// Connections ////
@@ -93,5 +124,10 @@ public class Port {
         Macro parent = node.getParent();
         if (parent == null) return false;
         return parent.isConnected(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Port[" + node.getName() + "." + name + "]";
     }
 }
