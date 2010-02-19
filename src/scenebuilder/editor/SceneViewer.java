@@ -107,22 +107,21 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.scale(zoomFactor, zoomFactor);
-        g2.translate(centerX, centerY);
-
         Rectangle clip = g2.getClipBounds();
         Dimension size = getSize();
         g2.setColor(BACKGROUND_COLOR);
         g2.fillRect(clip.x, clip.y, clip.width, clip.height);
         g2.setColor(GRID_COLOR);
-        for (double y = -500; y < size.height + 500; y += GRID_SPACING * zoomFactor) {
-            g2.drawLine(-500, (int) y, size.width + 500, (int) y);
+        for (double y = centerY % GRID_SPACING; y < size.height; y += GRID_SPACING * zoomFactor) {
+            g2.drawLine(0, (int) y, size.width , (int) y);
         }
 
-        for (double x = -500; x < size.width + 500; x += GRID_SPACING * zoomFactor) {
-            g2.drawLine((int) x, -500, (int) x, size.width + 500);
+        for (double x = centerX % GRID_SPACING; x < size.width ; x += GRID_SPACING * zoomFactor) {
+            g2.drawLine((int) x, 0, (int) x, size.height);
         }
 
+        g2.scale(zoomFactor, zoomFactor);
+        g2.translate(centerX, centerY);
 
         paintConnections(g2);
 
