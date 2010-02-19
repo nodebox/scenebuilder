@@ -34,6 +34,8 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     private boolean spaceDown;
     private int px, py;
     private HashMap<Node, NodeView> nodeViews = new HashMap<Node, NodeView>();
+    private JPopupMenu popupMenu;
+
 
     public SceneViewer(Scene scene) {
         this.scene = scene;
@@ -43,6 +45,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         addKeyListener(this);
         setLayout(null);
         setFocusable(true);
+        initPopupMenu();
     }
 
     public void setCurrentMacro(Macro currentMacro) {
@@ -53,6 +56,14 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
             nodeViews.put(node, view);
             //add(view);
         }
+    }
+
+     private void initPopupMenu() {
+        popupMenu = new JPopupMenu();
+        //popupMenu.add(new NewNodeAction());
+        popupMenu.add(new ResetViewAction());
+        //popupMenu.add(new GoUpAction());
+         addMouseListener(new PopupHandler());
     }
 
     //// Selections ////
@@ -216,6 +227,37 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             spaceDown = false;
+        }
+    }
+
+    private class PopupHandler extends MouseAdapter {
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            checkForPopup(e);
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            checkForPopup(e);
+        }
+
+         public void checkForPopup(MouseEvent e) {
+             if (e.isPopupTrigger()) {
+                 popupMenu.show(SceneViewer.this, e.getX(), e.getY());
+             }
+         }
+    }
+
+     private class ResetViewAction extends AbstractAction {
+        private ResetViewAction() {
+            super("Reset View");
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            centerX = centerY = 0;
+            zoomFactor = 1.0;
+            repaint();
         }
     }
 }
