@@ -1,6 +1,8 @@
 package scenebuilder.editor;
 
 import scenebuilder.library.animation.LFO;
+import scenebuilder.library.behavior.BoidVariables;
+import scenebuilder.library.behavior.Boids;
 import scenebuilder.library.device.Mouse;
 import scenebuilder.library.image.generator.Source;
 import scenebuilder.library.render.Clear;
@@ -239,6 +241,53 @@ public class SceneDocument extends JFrame {
         root.connect(mouse, Mouse.PORT_X, imageMacro, xPort.getName());
     }
 
+    public static void boidsMacro(Macro root, Mouse mouse, double parallax, int y) {
+        Macro boidsMacro = new Macro();
+        boidsMacro.setPosition(250, y);
+        boidsMacro.setDisplayName("Boids");
+        root.addChild(boidsMacro);
+        // Math
+        scenebuilder.library.util.numeric.Math math = new scenebuilder.library.util.numeric.Math();
+        math.setPosition(new Point(50, 50));
+        math.setValue("operation", "*");
+        math.setValue("v2", parallax);
+        boidsMacro.addChild(math);
+        // Boids
+        Boids boids = new Boids();
+        boids.setPosition(250, 50);
+        boids.setValue(Boids.PORT_WIDTH, 200.0);
+        boids.setValue(Boids.PORT_HEIGHT, 200.0);
+        boids.setValue(Boids.PORT_AMOUNT, 20);
+        boids.setValue(Boids.PORT_SPEED, 0.4);
+        boidsMacro.addChild(boids);
+        boidsMacro.connect(math, "result", boids, Boids.PORT_X);
+        // Inner boids
+        BoidVariables boidVariables = new BoidVariables();
+        boidVariables.setPosition(50, 50);
+        boids.addChild(boidVariables);
+        Source source = new Source();
+        source.setPosition(new Point(50, 250));
+        source.loadImage(new File("images/sparkle1.png"));
+        boids.addChild(source);
+        Sprite sprite = new Sprite();
+        sprite.setPosition(250, 50);
+        sprite.setValue(Sprite.PORT_WIDTH, 10.0);
+        sprite.setValue(Sprite.PORT_HEIGHT, 10.0);
+        boids.addChild(sprite);
+        boids.connect(boidVariables, BoidVariables.PORT_X, sprite, Sprite.PORT_X);
+        boids.connect(boidVariables, BoidVariables.PORT_Y, sprite, Sprite.PORT_Y);
+        boids.connect(source, Source.PORT_IMAGE, sprite, Sprite.PORT_IMAGE);
+        // Publish ports
+        Port xPort = boidsMacro.publishPort(math.getPort("v1"));
+        xPort.setDisplayName("X");
+        Port parallaxPort = boidsMacro.publishPort(math.getPort("v2"));
+        parallaxPort.setDisplayName("Parallax");
+        boidsMacro.publishPort(boids.getPort(Boids.PORT_AMOUNT));
+        boidsMacro.publishPort(boids.getPort(Boids.PORT_SPEED));
+        // Connect root mouse
+        root.connect(mouse, Mouse.PORT_X, boidsMacro, xPort.getName());
+    }
+
     public static Scene creaturesScene() {
         // Load full scene.
         int y = 50;
@@ -257,7 +306,40 @@ public class SceneDocument extends JFrame {
         imageMacro(root, mouse, "images/colors.png", 1.1, y += macroHeight);
         imageMacro(root, mouse, "images/creatures.png", 1.1, y += macroHeight);
         imageMacro(root, mouse, "images/foreground.png", 1.5, y += macroHeight);
-        imageMacro(root, mouse, "images/manysparkles.png", 2.0, y += macroHeight);
+        //imageMacro(root, mouse, "images/manysparkles.png", 2.0, y += macroHeight);
+        boidsMacro(root, mouse, 2.0, y += macroHeight);
+
+        // TODO:
+
+        return scene;
+    }
+
+    public static Scene boidsScene() {
+        Scene scene = new Scene();
+        Macro root = scene.getRootMacro();
+        Node clear = new Clear();
+        clear.setPosition(new Point(50, 50));
+        clear.setValue(Clear.PORT_COLOR, Color.BLACK);
+        root.addChild(clear);
+        Boids boids = new Boids();
+        boids.setPosition(50, 250);
+        root.addChild(boids);
+
+        BoidVariables boidVariables = new BoidVariables();
+        boidVariables.setPosition(50, 50);
+        boids.addChild(boidVariables);
+        Source source = new Source();
+        source.setPosition(new Point(50, 150));
+        source.loadImage(new File("images/sparkle1.png"));
+        boids.addChild(source);
+        Sprite sprite = new Sprite();
+        sprite.setPosition(250, 50);
+        sprite.setValue(Sprite.PORT_WIDTH, 10.0);
+        sprite.setValue(Sprite.PORT_HEIGHT, 10.0);
+        boids.addChild(sprite);
+        boids.connect(boidVariables, BoidVariables.PORT_X, sprite, Sprite.PORT_X);
+        boids.connect(boidVariables, BoidVariables.PORT_Y, sprite, Sprite.PORT_Y);
+        boids.connect(source, Source.PORT_IMAGE, sprite, Sprite.PORT_IMAGE);
         return scene;
     }
 
