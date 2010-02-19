@@ -51,6 +51,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     }
 
     public void setCurrentMacro(Macro currentMacro) {
+        resetView();
         nodeViews.clear();
         for (Node node : currentMacro.getChildren()) {
             NodeView view = new NodeView(this, node);
@@ -295,15 +296,19 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         }
     }
 
+    private void resetView() {
+        centerX = centerY = 0;
+        zoomFactor = 1.0;
+        repaint();
+    }
+
     private class ResetViewAction extends AbstractAction {
         private ResetViewAction() {
             super("Reset View");
         }
 
         public void actionPerformed(ActionEvent e) {
-            centerX = centerY = 0;
-            zoomFactor = 1.0;
-            repaint();
+            resetView();
         }
     }
 
