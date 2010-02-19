@@ -20,6 +20,7 @@ public class NodeView {
     private static final Color NODE_HEADER_COLOR = new Color(83, 83, 85, 200);
     private static final Color NODE_BODY_COLOR = new Color(39, 39, 41, 200);
     private static final Color NODE_PORT_COLOR = new Color(233, 233, 233);
+    private static final Color NODE_PUBLISHED_PORT_COLOR = new Color(250, 250, 100);
     private static final Stroke NODE_PORT_STROKE = new BasicStroke(1);
     private static final Font NODE_PORT_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
     private static final Color NODE_BORDER_COLOR = new Color(18, 18, 18);
@@ -119,24 +120,35 @@ public class NodeView {
         g2.fillRect(0, 0, totalWidth + 3, NODE_HEADER_HEIGHT); // TODO: Find out why the +3 needs to be here.
         g2.setFont(NODE_NAME_FONT);
         g2.setColor(NODE_NAME_COLOR);
-        g2.drawString(node.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString(), 10, NODE_NAME_FONT.getSize() + VERTICAL_TEXT_NUDGE);
+        g2.drawString(node.getDisplayName(), 10, NODE_NAME_FONT.getSize() + VERTICAL_TEXT_NUDGE);
         g2.setClip(originalClip);
         g2.setColor(NODE_PORT_COLOR);
         int y = NODE_HEADER_HEIGHT + NODE_PORT_FONT.getSize() + VERTICAL_TEXT_NUDGE;
         g2.setFont(NODE_PORT_FONT);
         g2.setStroke(NODE_PORT_STROKE);
+        Macro parent = node.getParent();
         Collection<Port> inputPorts = node.getInputPorts();
         for (Port port : inputPorts) {
+            if (parent != null && parent.isPublished(port)) {
+                g2.setColor(NODE_PUBLISHED_PORT_COLOR);
+                g2.fillOval(9, y - 6, 4, 4);
+                g2.setColor(NODE_PORT_COLOR);
+            }
             g2.drawOval(9, y - 6, 4, 4);
-            g2.drawString(port.getName(), 20, y);
+            g2.drawString(port.getDisplayName(), 20, y);
             y += PORT_HEIGHT;
         }
         // Reset y to draw the output ports.
         y = NODE_HEADER_HEIGHT + NODE_PORT_FONT.getSize() + VERTICAL_TEXT_NUDGE;
         Collection<Port> outputPorts = node.getOutputPorts();
         for (Port port : outputPorts) {
-            Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getName(), g);
-            g2.drawString(port.getName(), totalWidth - (int) r.getWidth() - 20, y);
+            if (parent != null && parent.isPublished(port)) {
+                g2.setColor(NODE_PUBLISHED_PORT_COLOR);
+                g2.fillOval(9, y - 6, 4, 4);
+                g2.setColor(NODE_PORT_COLOR);
+            }
+            Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getDisplayName(), g);
+            g2.drawString(port.getDisplayName(), totalWidth - (int) r.getWidth() - 20, y);
             g2.drawOval(totalWidth - 13, y - 6, 4, 4);
             y += PORT_HEIGHT;
         }

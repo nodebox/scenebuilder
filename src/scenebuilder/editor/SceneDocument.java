@@ -5,9 +5,11 @@ import scenebuilder.library.device.Mouse;
 import scenebuilder.library.image.generator.Source;
 import scenebuilder.library.render.Clear;
 import scenebuilder.library.render.Sprite;
+import scenebuilder.library.util.Variable;
 import scenebuilder.library.util.color.HSVToColor;
 import scenebuilder.model.Macro;
 import scenebuilder.model.Node;
+import scenebuilder.model.Port;
 import scenebuilder.model.Scene;
 import scenebuilder.render.SceneRenderer;
 
@@ -140,16 +142,67 @@ public class SceneDocument extends JFrame {
         return scene;
     }
 
-    public static Scene macroScene() {
+    public static Scene pongMacroScene() {
         final Scene scene = new Scene();
         Macro root = scene.getRootMacro();
+        Mouse mouse = new Mouse();
+        mouse.setPosition(50, 200);
         Node clear = new Clear();
-        clear.setPosition(new Point(50, 50));
+        clear.setPosition(new Point(250, 50));
         clear.setValue(Clear.PORT_COLOR, Color.DARK_GRAY);
-        Macro macro = new Macro();
-        macro.setPosition(new Point(50, 200));
+        Macro pongMacro = new Macro();
+        pongMacro.setDisplayName("Pong Macro");
+        pongMacro.setPosition(new Point(250, 200));
+        Variable xVariable = Variable.numericVariable("X");
+        xVariable.setPosition(50, 50);
+        Variable periodVariable = Variable.numericVariable("Period");
+        periodVariable.setPosition(50, 200);
+        scenebuilder.library.util.numeric.Math math1 = new scenebuilder.library.util.numeric.Math();
+        math1.setPosition(250, 50);
+        math1.setValue("operation", "+");
+        math1.setValue("v2", 40.0);
+        LFO lfo1 = new LFO();
+        lfo1.setPosition(250, 140);
+        scenebuilder.library.util.numeric.Math math2 = new scenebuilder.library.util.numeric.Math();
+        math2.setPosition(250, 250);
+        math2.setValue("operation", "-");
+        math2.setValue("v2", 40.0);
+        LFO lfo2 = new LFO();
+        lfo2.setPosition(250, 340);
+        lfo2.setValue(LFO.PORT_PHASE, 0.5);
+        Sprite sprite1 = new Sprite();
+        sprite1.setPosition(450, 50);
+        sprite1.setValue(Sprite.PORT_COLOR, Color.RED);
+        sprite1.setValue(Sprite.PORT_WIDTH, 20.0);
+        Sprite sprite2 = new Sprite();
+        sprite2.setPosition(450, 250);
+        sprite2.setValue(Sprite.PORT_COLOR, Color.BLUE);
+        sprite2.setValue(Sprite.PORT_WIDTH, 20.0);
+        pongMacro.addChild(periodVariable);
+        pongMacro.addChild(xVariable);
+        pongMacro.addChild(math1);
+        pongMacro.addChild(lfo1);
+        pongMacro.addChild(math2);
+        pongMacro.addChild(lfo2);
+        pongMacro.addChild(sprite1);
+        pongMacro.addChild(sprite2);
+        pongMacro.connect(xVariable, Variable.PORT_OUTPUT, math1, "v1");
+        pongMacro.connect(xVariable, Variable.PORT_OUTPUT, math2, "v1");
+        pongMacro.connect(periodVariable, Variable.PORT_OUTPUT, lfo1, LFO.PORT_PERIOD);
+        pongMacro.connect(periodVariable, Variable.PORT_OUTPUT, lfo2, LFO.PORT_PERIOD);
+        pongMacro.connect(math1, "result", sprite1, Sprite.PORT_X);
+        pongMacro.connect(lfo1, LFO.PORT_RESULT, sprite1, Sprite.PORT_Y);
+        pongMacro.connect(math2, "result", sprite2, Sprite.PORT_X);
+        pongMacro.connect(lfo2, LFO.PORT_RESULT, sprite2, Sprite.PORT_Y);
+        Port xPort = pongMacro.publishPort(xVariable.getPort(Variable.PORT_INPUT));
+        Port periodPort = pongMacro.publishPort(periodVariable.getPort(Variable.PORT_INPUT));
+        periodPort.setValue(0.5);
+
+        root.addChild(mouse);
         root.addChild(clear);
-        root.addChild(macro);
+        root.addChild(pongMacro);
+        root.connect(mouse, Mouse.PORT_X, pongMacro, xPort.getName());
+
         return scene;
     }
 
@@ -219,13 +272,13 @@ public class SceneDocument extends JFrame {
         JMenu sceneMenu = new JMenu("Scene");
         sceneMenu.add(new SwitchSceneAction("Basic Animation", basicLFOScene()));
         sceneMenu.add(new SwitchSceneAction("Mouse Input", mouseScene()));
-        sceneMenu.add(new SwitchSceneAction("Macros", macroScene()));
+        sceneMenu.add(new SwitchSceneAction("Pong Macro", pongMacroScene()));
         sceneMenu.add(new SwitchSceneAction("Creatures Layers", creaturesScene()));
         sceneMenuBar.add(sceneMenu);
         // Initialize scene
         //Scene scene = basicLFOScene();
         //Scene scene = mouseScene();
-        Scene scene = macroScene();
+        Scene scene = pongMacroScene();
         //Scene scene = creaturesScene();
         // Start document
         documentWindow = new SceneDocument(scene);

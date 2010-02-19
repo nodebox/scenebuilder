@@ -1,9 +1,6 @@
 package scenebuilder.editor;
 
-import scenebuilder.model.Connection;
-import scenebuilder.model.Macro;
-import scenebuilder.model.Node;
-import scenebuilder.model.Scene;
+import scenebuilder.model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -177,7 +174,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     public void mouseClicked(MouseEvent e) {
         NodeView view = getNodeAt(e.getPoint());
         if (view == null) return;
-        if (e.getClickCount() != 2) {
+        if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
             new RenameAction(getNode(view)).actionPerformed(null);
         }
     }
@@ -246,8 +243,26 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     public boolean checkForNodeViewPopup(MouseEvent e) {
         if (!e.isPopupTrigger()) return false;
         NodeView view = getNodeAt(e.getPoint());
+        if (view == null) return false;
         Node node = getNode(view);
         nodeViewPopup.removeAll();
+
+        JMenu publishInputsMenu = new JMenu("Publish Inputs");
+        publishInputsMenu.setEnabled(false);
+        for (Port p : node.getInputPorts()) {
+            publishInputsMenu.setEnabled(true);
+            publishInputsMenu.add(new PublishPortAction(p));
+        }
+        nodeViewPopup.add(publishInputsMenu);
+        JMenu publishOutputsMenu = new JMenu("Publish Outputs");
+        publishOutputsMenu.setEnabled(false);
+        for (Port p : node.getOutputPorts()) {
+            publishOutputsMenu.setEnabled(true);
+            publishOutputsMenu.add(new PublishPortAction(p));
+        }
+        nodeViewPopup.add(publishOutputsMenu);
+
+
         if (node instanceof Macro)
             nodeViewPopup.add(new EditMacroAction((Macro) node));
         nodeViewPopup.add(new RenameAction(node));
@@ -316,6 +331,26 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
 
         public void actionPerformed(ActionEvent e) {
             document.setCurrentMacro(macro);
+        }
+    }
+
+    private class PublishPortAction extends AbstractAction {
+        private Port port;
+
+        private PublishPortAction(Port port) {
+            super(port.getName());
+            this.port = port;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            Macro parent = port.getNode().getParent();
+            if (parent == null) return;
+            if (parent.isPublished(port)) {
+                parent.unPublishPort(port);
+            } else {
+                parent.publishPort(port);
+            }
+            repaint();
         }
     }
 

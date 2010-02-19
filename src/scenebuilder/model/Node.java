@@ -76,6 +76,17 @@ public abstract class Node {
         return name;
     }
 
+    public String getDisplayName() {
+        return getAttribute(DISPLAY_NAME_ATTRIBUTE).toString();
+    }
+
+    public void setDisplayName(String displayName) {
+        if (displayName == null || displayName.trim().length() == 0) {
+            displayName = StringUtils.humanizeName(name);
+        }
+        setAttribute(DISPLAY_NAME_ATTRIBUTE, displayName);
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -86,6 +97,10 @@ public abstract class Node {
 
     public void setPosition(Point position) {
         this.position = position;
+    }
+
+    public void setPosition(int x, int y) {
+        this.position = new Point(x, y);
     }
 
     //// Attributes ////
@@ -103,6 +118,10 @@ public abstract class Node {
     }
 
     //// Ports ////
+
+    public java.util.List<Port> getPorts() {
+        return new LinkedList<Port>(ports.values());
+    }
 
     public java.util.List<Port> getInputPorts() {
         LinkedList<Port> inputPorts = new LinkedList<Port>();
@@ -124,18 +143,29 @@ public abstract class Node {
         return inputPorts;
     }
 
-    public void addInputPort(Port.Type type, String name, Object value) {
+    public Port addPort(Port port) {
+        ports.put(port.getName(), port);
+        return port;
+    }
+
+    public void removePort(String name) {
+        ports.remove(name);
+    }
+
+    public Port addInputPort(Port.Type type, String name, Object value) {
         Port port = new Port(this, name, type, Port.Direction.INPUT, value);
         ports.put(name, port);
+        return port;
     }
 
     public void removeInputPort(String name) {
         ports.remove(name);
     }
 
-    public void addOutputPort(Port.Type type, String name) {
+    public Port addOutputPort(Port.Type type, String name) {
         Port port = new Port(this, name, type, Port.Direction.OUTPUT, null);
         ports.put(name, port);
+        return port;
     }
 
     public void removeOutputPort(String name) {
@@ -248,4 +278,9 @@ public abstract class Node {
      * @return false if the node did not execute successfully. The renderer will then stop rendering the current frame.
      */
     public abstract boolean execute(Context context, double time);
+
+    @Override
+    public String toString() {
+        return String.format("%s(%s)", getClass().getSimpleName(), getDisplayName(), getName());
+    }
 }

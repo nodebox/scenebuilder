@@ -1,5 +1,7 @@
 package scenebuilder.model;
 
+import scenebuilder.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +30,7 @@ public class Port {
     public Port(Node node, String name, Type type, Direction direction, Object value) {
         this.node = node;
         this.name = name.intern();
-        setAttribute(DISPLAY_NAME_ATTRIBUTE, name);
+        setAttribute(DISPLAY_NAME_ATTRIBUTE, StringUtils.humanizeName(name));
         this.type = type;
         this.direction = direction;
         this.value = value;
@@ -40,6 +42,17 @@ public class Port {
 
     public String getName() {
         return name;
+    }
+
+    public String getDisplayName() {
+        return getAttribute(DISPLAY_NAME_ATTRIBUTE).toString();
+    }
+
+    public void setDisplayName(String displayName) {
+        if (displayName == null || displayName.trim().length() == 0) {
+            displayName = StringUtils.humanizeName(name);
+        }
+        setAttribute(DISPLAY_NAME_ATTRIBUTE, displayName);
     }
 
     public Direction getDirection() {
