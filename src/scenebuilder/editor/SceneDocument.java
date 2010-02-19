@@ -12,6 +12,7 @@ import scenebuilder.model.Node;
 import scenebuilder.model.Port;
 import scenebuilder.model.Scene;
 import scenebuilder.render.SceneRenderer;
+import scenebuilder.util.StringUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -207,44 +208,56 @@ public class SceneDocument extends JFrame {
     }
 
     public static void imageMacro(Macro root, Mouse mouse, String fileName, double parallax, int y) {
+        Macro imageMacro = new Macro();
+        imageMacro.setPosition(250, y);
+        String displayName = StringUtils.humanizeName(new File(fileName).getName().split("\\.")[0]);
+        imageMacro.setDisplayName(displayName);
         // Background image
         Source source = new Source();
-        source.setPosition(new Point(250, y));
+        source.setPosition(new Point(50, 150));
         source.loadImage(new File(fileName));
         scenebuilder.library.util.numeric.Math math = new scenebuilder.library.util.numeric.Math();
-        math.setPosition(new Point(250, y + 50));
+        math.setPosition(new Point(50, 50));
         math.setValue("operation", "*");
         math.setValue("v2", parallax);
         Sprite sprite = new Sprite();
-        sprite.setPosition(new Point(450, y));
+        sprite.setPosition(new Point(250, 50));
         sprite.setValue(Sprite.PORT_WIDTH, 851.0 / 500.0 * 200.0);
         sprite.setValue(Sprite.PORT_HEIGHT, 200.0);
-        root.addChild(source);
-        root.addChild(sprite);
-        root.addChild(math);
-        root.connect(source, Source.PORT_IMAGE, sprite, Sprite.PORT_IMAGE);
-        root.connect(mouse, Mouse.PORT_X, math, "v1");
-        root.connect(math, "result", sprite, Sprite.PORT_X);
+        imageMacro.addChild(source);
+        imageMacro.addChild(sprite);
+        imageMacro.addChild(math);
+        imageMacro.connect(source, Source.PORT_IMAGE, sprite, Sprite.PORT_IMAGE);
+        //root.connect(mouse, Mouse.PORT_X, math, "v1");
+        imageMacro.connect(math, "result", sprite, Sprite.PORT_X);
+        Port xPort = imageMacro.publishPort(math.getPort("v1"));
+        xPort.setDisplayName("X");
+        Port parallaxPort = imageMacro.publishPort(math.getPort("v2"));
+        parallaxPort.setDisplayName("Parallax");
+        imageMacro.publishPort(sprite.getPort("enable"));
+        root.addChild(imageMacro);
+        root.connect(mouse, Mouse.PORT_X, imageMacro, xPort.getName());
     }
 
     public static Scene creaturesScene() {
         // Load full scene.
         int y = 50;
+        int macroHeight = 90;
         Scene scene = new Scene();
         Macro root = scene.getRootMacro();
         Node clear = new Clear();
-        clear.setPosition(new Point(450, 10));
+        clear.setPosition(new Point(250, 50));
         clear.setValue(Clear.PORT_COLOR, Color.BLACK);
         root.addChild(clear);
         Mouse mouse = new Mouse();
-        mouse.setPosition(new Point(50, 50));
+        mouse.setPosition(new Point(50, 400));
         root.addChild(mouse);
-        imageMacro(root, mouse, "images/background.png", 0.5, y += 200);
-        imageMacro(root, mouse, "images/middle.png", 1.0, y += 200);
-        imageMacro(root, mouse, "images/colors.png", 1.1, y += 200);
-        imageMacro(root, mouse, "images/creatures.png", 1.1, y += 200);
-        imageMacro(root, mouse, "images/foreground.png", 1.5, y += 200);
-        imageMacro(root, mouse, "images/manysparkles.png", 2.0, y += 200);
+        imageMacro(root, mouse, "images/background.png", 0.5, y += macroHeight);
+        imageMacro(root, mouse, "images/middle.png", 1.0, y += macroHeight);
+        imageMacro(root, mouse, "images/colors.png", 1.1, y += macroHeight);
+        imageMacro(root, mouse, "images/creatures.png", 1.1, y += macroHeight);
+        imageMacro(root, mouse, "images/foreground.png", 1.5, y += macroHeight);
+        imageMacro(root, mouse, "images/manysparkles.png", 2.0, y += macroHeight);
         return scene;
     }
 
@@ -273,12 +286,12 @@ public class SceneDocument extends JFrame {
         sceneMenu.add(new SwitchSceneAction("Basic Animation", basicLFOScene()));
         sceneMenu.add(new SwitchSceneAction("Mouse Input", mouseScene()));
         sceneMenu.add(new SwitchSceneAction("Pong Macro", pongMacroScene()));
-        sceneMenu.add(new SwitchSceneAction("Creatures Layers", creaturesScene()));
+        sceneMenu.add(new SwitchSceneAction("Creatures", creaturesScene()));
         sceneMenuBar.add(sceneMenu);
         // Initialize scene
-        //Scene scene = basicLFOScene();
+        Scene scene = basicLFOScene();
         //Scene scene = mouseScene();
-        Scene scene = pongMacroScene();
+        //Scene scene = pongMacroScene();
         //Scene scene = creaturesScene();
         // Start document
         documentWindow = new SceneDocument(scene);
