@@ -26,6 +26,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
     private Map<JComponent, Port> components = new HashMap<JComponent, Port>();
     private SceneDocument document;
+    private Set<Node> selection;
 
     public ParameterPanel(SceneDocument document) {
         this.document = document;
@@ -34,6 +35,8 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         setMinimumSize(d);
         setPreferredSize(d);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        Timer updateValuesTimer = new Timer(100, new UpdateValues());
+        updateValuesTimer.start();
     }
 
     /**
@@ -42,7 +45,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
      * @param evt
      */
     public void propertyChange(PropertyChangeEvent evt) {
-        Set<Node> selection = (Set<Node>) evt.getNewValue();
+        selection = (Set<Node>) evt.getNewValue();
         clearInterface();
         for (Node node : selection) {
             makeInterfaceForNode(node);
@@ -128,6 +131,23 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         repaint();
     }
 
+    private void updateValuesForNode(Node node) {
+        for (Map.Entry<JComponent, Port> entry : components.entrySet()) {
+            JComponent c = entry.getKey();
+            Port port = entry.getValue();
+            if (!port.isConnected()) continue;
+            if (c instanceof JCheckBox) {
+                ((JCheckBox) c).setSelected(node.asBoolean(port.getName()));
+            } else if (c instanceof DraggableNumber) {
+                ((DraggableNumber) c).setValue(node.asNumber(port.getName()));
+            } else if (c instanceof ColorWell) {
+                ((ColorWell) c).setColor(node.asColor(port.getName()));
+            } else if (c instanceof JTextField) {
+                ((JTextField) c).setText(node.asString(port.getName()));
+            }
+        }
+    }
+
     private Port getPort(JComponent c) {
         return components.get(c);
     }
@@ -156,6 +176,16 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         } else if (e.getSource() instanceof ColorWell) {
             ColorWell well = (ColorWell) e.getSource();
             p.setValue(well.getColor());
+        }
+    }
+
+
+    private class UpdateValues implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            if (selection == null) return;
+            for (Node node : selection) {
+                updateValuesForNode(node);
+            }
         }
     }
 }
