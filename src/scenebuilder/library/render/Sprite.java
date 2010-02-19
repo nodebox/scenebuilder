@@ -15,6 +15,7 @@ public class Sprite extends Node {
     public static final String PORT_X = "x";
     public static final String PORT_Y = "y";
     public static final String PORT_Z = "z";
+    public static final String PORT_ROTATION = "rotation";
     public static final String PORT_WIDTH = "width";
     public static final String PORT_HEIGHT = "height";
     public static final String PORT_COLOR = "color";
@@ -28,6 +29,7 @@ public class Sprite extends Node {
         addInputPort(Port.Type.NUMBER, PORT_X, 0.0);
         addInputPort(Port.Type.NUMBER, PORT_Y, 0.0);
         addInputPort(Port.Type.NUMBER, PORT_Z, 0.0);
+        addInputPort(Port.Type.NUMBER, PORT_ROTATION, 0.0);
         addInputPort(Port.Type.NUMBER, PORT_WIDTH, 100.0);
         addInputPort(Port.Type.NUMBER, PORT_HEIGHT, 100.0);
         addInputPort(Port.Type.COLOR, PORT_COLOR, Color.WHITE);
@@ -39,12 +41,13 @@ public class Sprite extends Node {
         if (!asBoolean(PORT_ENABLE)) return true;
         GL11.glPushMatrix();
         GL11.glTranslated(asNumber(PORT_X), asNumber(PORT_Y), asNumber(PORT_Z));
+        GL11.glRotatef((float) asNumber(PORT_ROTATION), 0, 0, 1);
         double width = asNumber(PORT_WIDTH);
         double height = asNumber(PORT_HEIGHT);
-        double left = asNumber(PORT_X) - asNumber(PORT_WIDTH) / 2;
-        double top = asNumber(PORT_Y) - asNumber(PORT_HEIGHT) / 2;
-        double right = asNumber(PORT_X) + asNumber(PORT_WIDTH) / 2;
-        double bottom = asNumber(PORT_Y) + asNumber(PORT_HEIGHT) / 2;
+        double left = -width / 2;
+        double top = -height / 2;
+        double right = width / 2;
+        double bottom = height/ 2;
 
         if (getPort(PORT_IMAGE).isConnected()) {
             GL11.glColor4f(1f, 1f, 1f, 1f);
