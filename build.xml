@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SceneBuilder" default="dist-mac" basedir=".">
+
+
+    <target name="properties">
+        <property file="build.properties"/>
+        <property file="version.properties"/>
+        <fail unless="app.version" message="File version.properties should specify app.version."/>
+        <property name="src" value="src"/>
+        <property name="res" value="res"/>
+        <property name="images" value="images"/>
+        <property name="test" value="test"/>
+        <property name="lib" value="lib"/>
+        <property name="build" value="build"/>
+        <property name="build.prod" location="${build}/prod"/>
+        <property name="build.test" location="${build}/test"/>
+        <property name="dist" value="dist"/>
+        <property name="dist.mac" value="${dist}/mac"/>
+        <property name="dist.mac.app" value="${dist.mac}/${ant.project.name}.app"/>
+        <property name="dist.windows" value="${dist}/windows"/>
+        <property name="dist.windows.app" value="${dist.windows}/${ant.project.name}"/>
+        <property name="dist.windows.nodebox.jre" value="${dist.windows}/${ant.project.name}/jre"/>
+        <property name="apple.appstub"
+                  location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
+        <property name="reports" value="reports"/>
+
+        <!-- Determine the platform family: windows, mac or linux. -->
+        <condition property="platform.windows" value="true">
+            <or>
+                <equals arg1="${os.name}" arg2="Windows XP"/>
+            </or>
+        </condition>
+        <condition property="platform.mac" value="true">
+            <equals arg1="${os.name}" arg2="Mac OS X"/>
+        </condition>
+        <condition property="platform.linux" value="true">
+            <equals arg1="${os.name}" arg2="Linux"/>
+        </condition>
+        <condition property="platform" value="mac">
+            <isset property="platform.mac"/>
+        </condition>
+        <condition property="platform" value="windows">
+            <isset property="platform.windows"/>
+        </condition>
+        <condition property="platform" value="linux">
+            <isset property="platform.linux"/>
+        </condition>
+
+        <property name="platform.dir" location="platform/${platform}"/>
+        <property name="platform.src" location="${platform.dir}/src"/>
+        <property name="platform.lib" location="${platform.dir}/lib"/>
+        <property name="platform.res" location="${platform.dir}/res"/>
+        <property name="native.lib" location="native/${platform}"/>
+
+        <path id="project.classpath">
+            <pathelement location="${build.prod}"/>
+            <pathelement location="${build.test}"/>
+            <!-- <pathelement location="${platform.lib}"/> -->
+            <fileset dir="${lib}">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
+    </target>
+
+    <target name="init" depends="properties">
+        <mkdir dir="${build.prod}"/>
+        <mkdir dir="${build.test}"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac destdir="${build.prod}" source="1.5" target="1.5">
+            <src path="${src}"/>
+            <!--<src path="${platform.src}"/> -->
+            <classpath refid="project.classpath"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="${dist}/lib"/>
+        <jar jarfile="${dist}/lib/app.jar" basedir="${build.prod}"/>
+    </target>
+
+    <target name="dist-mac" depends="jar" description="Make a double-clickable Mac OS X application">
+        <mkdir dir="${dist.mac}"/>
+        <mkdir dir="${dist.mac.app}/Contents/MacOS"/>
+        <mkdir dir="${dist.mac.app}/Contents/Resources/Java"/>
+        <mkdir dir="${dist.mac.app}/Contents/Resources/res"/>
+        <mkdir dir="${dist.mac.app}/Contents/Resources/images"/>
+        <!-- Copy library and program archives-->
+        <copy todir="${dist.mac.app}/Contents/Resources/Java">
+            <fileset dir="${lib}">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </fileset>
+            <fileset dir="${dist}/lib">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </fileset>
+        </copy>
+        <!-- Copy native libraries -->
+        <copy todir="${dist.mac.app}/Contents/Resources/Java">
+             <fileset dir="${native.lib}">
+                <include name="*"/>
+            </fileset>
+        </copy>
+        <!-- Copy resources-->
+        <copy todir="${dist.mac.app}/Contents/Resources/res">
+            <fileset dir="${res}"/>
+        </copy>
+        <!-- Copy images -->
+        <copy todir="${dist.mac.app}/Contents/Resources/images">
+            <fileset dir="${images}"/>
+        </copy>
+        <!-- Copy application stub -->
+        <copy file="${apple.appstub}" toFile="${dist.mac.app}/Contents/MacOS/${ant.project.name}"/>
+        <!-- fix stub permissions -->
+        <chmod file="${dist.mac.app}/Contents/MacOS/${ant.project.name}" perm="755"/>
+        <!-- copy additional Mac contents -->
+        <copy todir="${dist.mac.app}/Contents/">
+            <fileset dir="${platform.res}"/>
+        </copy>
+        <!-- Replace version number -->
+        <replace file="${dist.mac.app}/Contents/Info.plist" token="@@VERSION@@" value="${app.version}"/>
+        <!-- Copy version number -->
+        <copy file="version.properties" todir="${dist.mac.app}/Contents/Resources"/>
+        <!-- Make directory into a bundle -->
+        <exec executable="/Developer/Tools/SetFile">
+            <arg line="-a B ${dist.mac.app}"/>
+        </exec>
+    </target>
+
+    <target name="clean" depends="properties">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+        <delete dir="${reports}"/>
+    </target>
+
+
+</project>
