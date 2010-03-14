@@ -1,6 +1,5 @@
 package scenebuilder.render;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
@@ -82,7 +81,7 @@ public class SceneRenderer {
     public void run() {
         while (!finished) {
             Display.update();
-            if (Display.isCloseRequested() || Thread.currentThread().isInterrupted())
+            if (Display.isCloseRequested())
                 finished = true;
             else if (Display.isActive() || true) { // TODO: only needs to be inactive if the app is no longer in front.
                 // The window is in the foreground, so we should play the game
@@ -106,13 +105,13 @@ public class SceneRenderer {
         cleanup();
     }
 
+    public void stop() {
+        finished = true;
+
+    }
+
     public void cleanup() {
         AL.destroy();
-        try {
-            Display.releaseContext();
-        } catch (LWJGLException e) {
-            throw new RuntimeException(e);
-        }
         Display.destroy();
     }
 

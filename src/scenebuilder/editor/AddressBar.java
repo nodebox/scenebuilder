@@ -91,6 +91,10 @@ public class AddressBar extends JPanel implements MouseListener {
             g2.drawImage(addressArrow, x, 1, null);
             x += 15;
         }
+
+        String version = Application.getInstance().getVersion();
+
+        SwingUtils.drawShadowText(g2, version, getWidth() - g2.getFontMetrics().stringWidth(version) - 10, 16);
     }
 
     public void mouseClicked(MouseEvent e) {
