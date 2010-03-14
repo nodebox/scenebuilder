@@ -51,9 +51,13 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     }
 
     public void setCurrentMacro(Macro currentMacro) {
+        updateView();
+    }
+
+    public void updateView() {
         resetView();
         nodeViews.clear();
-        for (Node node : currentMacro.getChildren()) {
+        for (Node node : getCurrentMacro().getChildren()) {
             NodeView view = new NodeView(this, node);
             nodeViews.put(node, view);
         }

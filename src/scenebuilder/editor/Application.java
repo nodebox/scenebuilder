@@ -9,10 +9,8 @@ import scenebuilder.library.render.Clear;
 import scenebuilder.library.render.Sprite;
 import scenebuilder.library.util.Variable;
 import scenebuilder.library.util.color.HSVToColor;
-import scenebuilder.model.Macro;
-import scenebuilder.model.Node;
-import scenebuilder.model.Port;
-import scenebuilder.model.Scene;
+import scenebuilder.library.util.numeric.Constant;
+import scenebuilder.model.*;
 import scenebuilder.util.PlatformUtils;
 import scenebuilder.util.StringUtils;
 
@@ -40,8 +38,8 @@ public class Application {
 
     private Application() {
         readVersion();
-
         registerForMacOSXEvents();
+        registerNodes();
     }
 
     private void readVersion() {
@@ -63,6 +61,21 @@ public class Application {
         } catch (Exception e) {
             throw new RuntimeException("Error while loading the OS X Adapter.", e);
         }
+    }
+
+    private void registerNodes() {
+        NodeManager m = NodeManager.getInstance();
+        m.addNodeClass(LFO.class, "Animation");
+        m.addNodeClass(Boids.class, "Behavior");
+        m.addNodeClass(BoidVariables.class, "Behavior");
+        m.addNodeClass(Mouse.class, "Device");
+        m.addNodeClass(Source.class, "Image");
+        m.addNodeClass(Clear.class, "Render");
+        m.addNodeClass(Sprite.class, "Render");
+        m.addNodeClass(HSVToColor.class, "Color");
+        m.addNodeClass(Constant.class, "Numeric");
+        m.addNodeClass(scenebuilder.library.util.numeric.Math.class, "Numeric");
+        m.addNodeClass(Variable.class, "Utility");
     }
 
     public boolean quit() {

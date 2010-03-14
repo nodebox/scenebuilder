@@ -1,6 +1,8 @@
 package scenebuilder.editor;
 
 import scenebuilder.model.Macro;
+import scenebuilder.model.Node;
+import scenebuilder.model.NodeManager;
 import scenebuilder.model.Scene;
 import scenebuilder.render.SceneRenderer;
 
@@ -68,6 +70,16 @@ public class SceneDocument extends JFrame {
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Pong Macro", "pongMacroScene"));
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Creatures", "creaturesScene"));
         sceneMenuBar.add(sceneMenu);
+        JMenu createMenu = new JMenu("Create");
+        NodeManager m = NodeManager.getInstance();
+        for (String category : m.getNodeCategories()) {
+            JMenu categoryMenu = new JMenu(category);
+            for (Class<? extends Node> nodeClass : m.getNodeClasses(category)) {
+                categoryMenu.add(new CreateNodeAction(nodeClass.getSimpleName(), nodeClass));
+            }
+            createMenu.add(categoryMenu);
+        }
+        sceneMenuBar.add(createMenu);
         setJMenuBar(sceneMenuBar);
     }
 
@@ -84,6 +96,17 @@ public class SceneDocument extends JFrame {
         viewer.setCurrentMacro(currentMacro);
         addressBar.repaint();
 
+    }
+
+    private void createNode(Class nodeClass) {
+        try {
+            Node n = (Node) nodeClass.newInstance();
+            scene.getRootMacro().addChild(n);
+            n.setPosition((int) Math.random() * 300, (int) Math.random() * 300);
+            viewer.updateView();
+        } catch (Exception e1) {
+            throw new RuntimeException(e1);
+        }
     }
 
     public void close() {
@@ -110,5 +133,17 @@ public class SceneDocument extends JFrame {
         }
     }
 
+    public class CreateNodeAction extends AbstractAction {
+        public final Class nodeClass;
+
+        public CreateNodeAction(String name, Class nodeClass) {
+            super(name);
+            this.nodeClass = nodeClass;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            createNode(nodeClass);
+        }
+    }
 
 }
