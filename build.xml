@@ -15,7 +15,7 @@
         <property name="build.prod" location="${build}/prod"/>
         <property name="build.test" location="${build}/test"/>
         <property name="dist" value="dist"/>
-        <property name="dist.mac" value="${dist}/mac"/>
+        <property name="dist.mac" value="${dist}/${ant.project.name}"/>
         <property name="dist.mac.app" value="${dist.mac}/${ant.project.name}.app"/>
         <property name="dist.windows" value="${dist}/windows"/>
         <property name="dist.windows.app" value="${dist.windows}/${ant.project.name}"/>
@@ -81,6 +81,13 @@
         <jar jarfile="${dist}/lib/app.jar" basedir="${build.prod}"/>
     </target>
 
+    <target name="run" depends="compile">
+        <java classname="scenebuilder.editor.Application" fork="true">
+            <classpath refid="project.classpath"/>
+            <jvmarg value="-Djava.library.path=${native.lib}"/>
+        </java>
+    </target>
+
     <target name="dist-mac" depends="jar" description="Make a double-clickable Mac OS X application">
         <mkdir dir="${dist.mac}"/>
         <mkdir dir="${dist.mac.app}/Contents/MacOS"/>
@@ -100,7 +107,7 @@
         </copy>
         <!-- Copy native libraries -->
         <copy todir="${dist.mac.app}/Contents/Resources/Java">
-             <fileset dir="${native.lib}">
+            <fileset dir="${native.lib}">
                 <include name="*"/>
             </fileset>
         </copy>
@@ -127,6 +134,14 @@
         <!-- Make directory into a bundle -->
         <exec executable="/Developer/Tools/SetFile">
             <arg line="-a B ${dist.mac.app}"/>
+        </exec>
+        <!-- Bundle into DMG -->
+        <exec executable="hdiutil">
+            <arg line="create -srcfolder ${dist.mac}  ${dist}/${ant.project.name}-${app.version}.dmg"/>
+        </exec>
+        <!-- Internet-enable DMG -->
+        <exec executable="hdiutil">
+            <arg line="internet-enable ${dist}/${ant.project.name}-${app.version}.dmg"/>
         </exec>
     </target>
 
