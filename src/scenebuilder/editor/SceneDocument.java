@@ -69,6 +69,7 @@ public class SceneDocument extends JFrame {
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Mouse Input", "mouseScene"));
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Pong Macro", "pongMacroScene"));
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Iterator", "iteratorScene"));
+        sceneMenu.add(new SceneDocument.SwitchSceneAction("Tree", "treeScene"));
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Creatures", "creaturesScene"));
         sceneMenuBar.add(sceneMenu);
         JMenu createMenu = new JMenu("Create");

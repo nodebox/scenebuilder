@@ -30,6 +30,6 @@ public class Iterator extends Macro {
             boolean success = super.execute(childContext, time);
             if (!success) return false;
         }
-        return true;        
+        return true;
     }
 }
