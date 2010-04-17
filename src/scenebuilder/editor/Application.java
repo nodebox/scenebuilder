@@ -7,6 +7,8 @@ import scenebuilder.library.device.Mouse;
 import scenebuilder.library.image.generator.Source;
 import scenebuilder.library.render.Clear;
 import scenebuilder.library.render.Sprite;
+import scenebuilder.library.util.Iterator;
+import scenebuilder.library.util.IteratorVariables;
 import scenebuilder.library.util.Variable;
 import scenebuilder.library.util.color.HSVToColor;
 import scenebuilder.library.util.numeric.Constant;
@@ -349,6 +351,64 @@ public class Application {
         return scene;
     }
 
+    public static Scene iteratorScene() {
+        Scene scene = new Scene();
+        Macro root = scene.getRootMacro();
+
+        Node clear = new Clear();
+        clear.setPosition(new Point(50, 50));
+        clear.setValue(Clear.PORT_COLOR, new Color(0.2f, 0.2f, 0.3f));
+        root.addChild(clear);
+
+        Macro iterator = new Iterator();
+        iterator.setPosition(new Point(50, 150));
+        iterator.setValue(Iterator.PORT_AMOUNT, 1000);
+        root.addChild(iterator);
+
+        Node iteratorVariables = new IteratorVariables();
+        iteratorVariables.setPosition(20, 50);
+        iterator.addChild(iteratorVariables);
+
+        scenebuilder.library.util.numeric.Math math1 = new scenebuilder.library.util.numeric.Math();
+        math1.setPosition(new Point(200, 50));
+        math1.setValue("operation", "*");
+        math1.setValue("v2", -100.0);
+        iterator.addChild(math1);
+
+        scenebuilder.library.util.numeric.Math math2 = new scenebuilder.library.util.numeric.Math();
+        math2.setPosition(new Point(200, 150));
+        math2.setValue("operation", "*");
+        math2.setValue("v2", 1500.0);
+        iterator.addChild(math2);
+
+        scenebuilder.library.util.numeric.Math math3 = new scenebuilder.library.util.numeric.Math();
+        math3.setPosition(new Point(200, 250));
+        math3.setValue("operation", "*");
+        math3.setValue("v2", 4.0);
+        iterator.addChild(math3);
+
+        LFO lfo = new LFO();
+        lfo.setPosition(450, 450);
+        iterator.addChild(lfo);
+
+        Node sprite = new Sprite();
+        sprite.setPosition(650, 150);
+        sprite.setValue(Sprite.PORT_WIDTH, 0.8);
+        sprite.setValue(Sprite.PORT_HEIGHT, 50.0);
+        sprite.setValue(Sprite.PORT_COLOR, new Color(0.5f, 0.3f, 0.3f, 0.5f));
+        iterator.addChild(sprite);
+
+        iterator.connect(iteratorVariables, IteratorVariables.PORT_POSITION, math1, math1.PORT_V1);
+        iterator.connect(iteratorVariables, IteratorVariables.PORT_POSITION, math2, math2.PORT_V1);
+        iterator.connect(iteratorVariables, IteratorVariables.PORT_POSITION, math3, math2.PORT_V1);
+//        iterator.connect(iteratorVariables, IteratorVariables.PORT_INDEX, lfo, LFO.PORT_OFFSET);
+        iterator.connect(math1, math2.PORT_RESULT, sprite, Sprite.PORT_X);
+        iterator.connect(math3, math2.PORT_RESULT, lfo, LFO.PORT_PHASE);
+        iterator.connect(math2, math2.PORT_RESULT, sprite, Sprite.PORT_ROTATION);
+        iterator.connect(lfo, LFO.PORT_RESULT, sprite, Sprite.PORT_Y);
+
+        return scene;
+    }
 
     public static void main(String[] args) {
         Application.getInstance().loadScene("basicLFOScene");
