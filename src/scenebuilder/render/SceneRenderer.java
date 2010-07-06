@@ -1,11 +1,6 @@
 package scenebuilder.render;
 
-import org.lwjgl.input.Mouse;
-import org.lwjgl.openal.AL;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.Timer;
+import processing.core.PApplet;
 import scenebuilder.library.animation.LFO;
 import scenebuilder.library.render.Clear;
 import scenebuilder.library.render.Sprite;
@@ -14,106 +9,42 @@ import scenebuilder.model.Macro;
 import scenebuilder.model.Node;
 import scenebuilder.model.Scene;
 
+import javax.swing.*;
 import java.awt.*;
 
 
-public class SceneRenderer {
+public class SceneRenderer extends PApplet {
     private static final int FRAME_RATE = 60;
     private boolean finished = false;
     private Scene scene;
-    private Timer timer;
     private int screenWidth, screenHeight;
     private double width, height;
+    private long startMillis;
+    private double time;
 
     public SceneRenderer(Scene scene) {
         this.scene = scene;
     }
 
-    public void init() throws Exception {
-        // Initialize LWJGL
-        DisplayMode mode = new DisplayMode(800, 600);
-        screenWidth = mode.getWidth();
-        screenHeight = mode.getHeight();
-        Display.setTitle("Viewer");
-        Display.setDisplayMode(mode);
-        Display.setFullscreen(false);
-        Display.setVSyncEnabled(true);
-        Display.create();
-        AL.create();
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-
-        double factor = mode.getWidth() / (double) mode.getHeight();
-        if (mode.getWidth() < mode.getHeight()) {
-            width = 100.0;
-            height = factor * 100.0;
-        } else {
-            width = factor * 100.0;
-            height = 100.0;
-        }
-        GL11.glOrtho(-width, width, -height, height, -1.0, 1.0);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
-        GL11.glViewport(0, 0, screenWidth, screenHeight);
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-        timer = new Timer();
+    @Override
+    public void setup() {
+        startMillis = System.currentTimeMillis();
+        size(800, 600, "processing.core.PGraphicsJava2D");
+        frameRate(60);
+        smooth();
     }
 
-    public void update() {
-        Timer.tick();
-        //scene.update();
+    @Override
+    public void draw() {
+        double time = (System.currentTimeMillis() - startMillis) / 1000.0;
+        Context context = new Context(this);
+        //double relativeX = Mouse.getX() / (double) screenWidth;
+        //double relativeY = Mouse.getY() / (double) screenHeight;
+        //context.setMouseX((relativeX - 0.5) * width);
+        //context.setMouseY((relativeY - 0.5) * height);
+        scene.execute(context, time);
     }
 
-    public void render() {
-        GL11.glPushMatrix();
-        Context context = new Context();
-        double relativeX = Mouse.getX() / (double) screenWidth;
-        double relativeY = Mouse.getY() / (double) screenHeight;
-        context.setMouseX((relativeX - 0.5) * width);
-        context.setMouseY((relativeY - 0.5) * height);
-        scene.execute(context, timer.getTime());
-        GL11.glPopMatrix();
-    }
-
-    public void run() {
-        while (!finished) {
-            Display.update();
-            if (Display.isCloseRequested())
-                finished = true;
-            else if (Display.isActive() || true) { // TODO: only needs to be inactive if the app is no longer in front.
-                // The window is in the foreground, so we should play the game
-                update();
-                render();
-                Display.sync(FRAME_RATE);
-            } else {
-                // The window is not in the foreground, so we can allow other stuff to run and
-                // infrequently update
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                update();
-                if (Display.isVisible() || Display.isDirty())
-                    // Only bother rendering if the window is visible or dirty
-                    render();
-            }
-        }
-        cleanup();
-    }
-
-    public void stop() {
-        finished = true;
-
-    }
-
-    public void cleanup() {
-        AL.destroy();
-        Display.destroy();
-    }
 
     public static void main(String[] args) {
         // Initialize scene
@@ -122,21 +53,23 @@ public class SceneRenderer {
         Node clear = new Clear();
         clear.setValue(Clear.PORT_COLOR, Color.DARK_GRAY);
         Node lfo = new LFO();
+        lfo.setValue(LFO.PORT_OFFSET, 200.0);
         Node sprite = new Sprite();
         sprite.setValue(Sprite.PORT_COLOR, Color.RED);
+        sprite.setValue(Sprite.PORT_Y, 100.0);
         root.addChild(clear);
         root.addChild(lfo);
         root.addChild(sprite);
         root.connect(lfo, LFO.PORT_RESULT, sprite, Sprite.PORT_X);
 
         SceneRenderer renderer = new SceneRenderer(scene);
-        try {
-            renderer.init();
-            renderer.run();
-            renderer.cleanup();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        System.exit(0);
+        renderer.init();
+        JFrame frame = new JFrame("Test Renderer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().add(renderer);
+        frame.setSize(800, 600);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        renderer.requestFocus();
     }
 }

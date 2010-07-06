@@ -1,10 +1,9 @@
 package scenebuilder.library.render;
 
-import org.lwjgl.opengl.GL11;
+import processing.core.PApplet;
 import scenebuilder.model.Context;
 import scenebuilder.model.Port;
 import scenebuilder.model.RenderingNode;
-import scenebuilder.util.GLUtils;
 
 import java.awt.*;
 
@@ -23,8 +22,9 @@ public class Clear extends RenderingNode {
     @Override
     public boolean execute(Context context, double time) {
         if (!asBoolean(PORT_ENABLE)) return true;
-        GLUtils.setClearColor(asColor(PORT_COLOR));
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        PApplet g = context.getApplet();
+        Color c = asColor(PORT_COLOR);
+        g.background(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         return true;
     }
 }

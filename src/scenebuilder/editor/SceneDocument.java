@@ -28,32 +28,23 @@ public class SceneDocument extends JFrame {
         this.scene = scene;
         currentMacro = scene.getRootMacro();
         initMenu();
-        setSize(800, 600);
-        JPanel content = new JPanel(new BorderLayout(0, 0));
+        setSize(800, 800);
+        renderer = new SceneRenderer(scene);
+        JPanel networkPanel = new JPanel(new BorderLayout(0, 0));
         addressBar = new AddressBar(this);
         viewer = new SceneViewer(this, scene);
         parameters = new ParameterPanel(this);
         viewer.addPropertyChangeListener(SceneViewer.SELECT_PROPERTY, parameters);
-        content.add(addressBar, BorderLayout.NORTH);
-        content.add(viewer, BorderLayout.CENTER);
-        content.add(parameters, BorderLayout.WEST);
-        setContentPane(content);
+        networkPanel.add(addressBar, BorderLayout.NORTH);
+        networkPanel.add(viewer, BorderLayout.CENTER);
+        networkPanel.add(parameters, BorderLayout.WEST);
+        JSplitPane mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, renderer, networkPanel);
+        mainSplitter.setDividerSize(2);
+        mainSplitter.setDividerLocation(400);
+        setContentPane(mainSplitter);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Setup renderer
-        rendererThread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    renderer = new SceneRenderer(SceneDocument.this.scene);
-                    renderer.init();
-                    renderer.run();
-                    System.out.println("renderer finished");
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
-        rendererThread.start();
+        renderer.init();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -65,6 +56,7 @@ public class SceneDocument extends JFrame {
     private void initMenu() {
         sceneMenuBar = new JMenuBar();
         JMenu sceneMenu = new JMenu("Scene");
+        sceneMenu.getPopupMenu().setLightWeightPopupEnabled(false);
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Basic Animation", "basicLFOScene"));
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Mouse Input", "mouseScene"));
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Pong Macro", "pongMacroScene"));
@@ -81,6 +73,7 @@ public class SceneDocument extends JFrame {
             }
             createMenu.add(categoryMenu);
         }
+        createMenu.getPopupMenu().setLightWeightPopupEnabled(false);
         sceneMenuBar.add(createMenu);
         setJMenuBar(sceneMenuBar);
     }
@@ -120,7 +113,6 @@ public class SceneDocument extends JFrame {
         }
         dispose();
     }
-
 
     public static class SwitchSceneAction extends AbstractAction {
         public final String sceneId;

@@ -1,5 +1,6 @@
 package scenebuilder.model;
 
+import processing.core.PImage;
 import scenebuilder.util.StringUtils;
 
 import java.awt.*;
@@ -107,8 +108,8 @@ public class Port {
                     throw new IllegalArgumentException(this + ": Value is not a string.");
                 break;
             case IMAGE:
-                if (!(value instanceof GLImage))
-                    throw new IllegalArgumentException(this + ": Value is not a GLImage.");
+                if (!(value instanceof PImage))
+                    throw new IllegalArgumentException(this + ": Value is not a PImage.");
                 break;
         }
         if (getType() == Type.NUMBER && value instanceof Integer) {

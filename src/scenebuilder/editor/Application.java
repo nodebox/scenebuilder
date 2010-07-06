@@ -16,6 +16,7 @@ import scenebuilder.model.*;
 import scenebuilder.util.PlatformUtils;
 import scenebuilder.util.StringUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -412,6 +413,11 @@ public class Application {
 
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         Application.getInstance().loadScene("basicLFOScene");
     }
 

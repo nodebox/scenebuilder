@@ -1,5 +1,7 @@
 package scenebuilder.model;
 
+import processing.core.PApplet;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -8,32 +10,24 @@ import java.util.Set;
 public class Context {
 
     private Set<Node> executedNodes = new HashSet<Node>();
-    private double mouseX, mouseY;
     private HashMap<Node, HashMap<String, Object>> nodeValues = new HashMap<Node, HashMap<String, Object>>();
+    private PApplet applet;
 
-    public Context() {
+    public Context(PApplet applet) {
+        this.applet = applet;
     }
 
     public Context(Context parentContext) {
-        mouseX = parentContext.mouseX;
-        mouseY = parentContext.mouseY;
+        this.applet = parentContext.applet;
         nodeValues = new HashMap<Node, HashMap<String, Object>>(parentContext.nodeValues);
     }
 
-    public double getMouseX() {
-        return mouseX;
+    public int getMouseX() {
+        return applet.mouseX;
     }
 
-    public void setMouseX(double mouseX) {
-        this.mouseX = mouseX;
-    }
-
-    public double getMouseY() {
-        return mouseY;
-    }
-
-    public void setMouseY(double mouseY) {
-        this.mouseY = mouseY;
+    public int getMouseY() {
+        return applet.mouseY;
     }
 
     public boolean hasExecuted(Node node) {
@@ -72,4 +66,7 @@ public class Context {
 
     }
 
+    public PApplet getApplet() {
+        return applet;
+    }
 }

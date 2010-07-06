@@ -31,7 +31,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
     public ParameterPanel(SceneDocument document) {
         this.document = document;
-        Dimension d = new Dimension(300, 600);
+        Dimension d = new Dimension(300, 100);
         //setSize(d.width, d.height);
         setMinimumSize(d);
         setPreferredSize(d);

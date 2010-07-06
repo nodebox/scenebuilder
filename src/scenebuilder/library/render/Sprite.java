@@ -1,11 +1,9 @@
 package scenebuilder.library.render;
 
-import org.lwjgl.opengl.GL11;
+import processing.core.PApplet;
 import scenebuilder.model.Context;
-import scenebuilder.model.GLImage;
 import scenebuilder.model.Port;
 import scenebuilder.model.RenderingNode;
-import scenebuilder.util.GLUtils;
 
 import java.awt.*;
 
@@ -38,9 +36,10 @@ public class Sprite extends RenderingNode {
     @Override
     public boolean execute(Context context, double time) {
         if (!asBoolean(PORT_ENABLE)) return true;
-        GL11.glPushMatrix();
-        GL11.glTranslated(asNumber(PORT_X), asNumber(PORT_Y), asNumber(PORT_Z));
-        GL11.glRotatef((float) asNumber(PORT_ROTATION), 0, 0, 1);
+        PApplet g = context.getApplet();
+        g.pushMatrix();
+        g.translate((float)asNumber(PORT_X), (float)asNumber(PORT_Y));
+        g.rotate((float) asNumber(PORT_ROTATION));
         double width = asNumber(PORT_WIDTH);
         double height = asNumber(PORT_HEIGHT);
         double left = -width / 2;
@@ -49,41 +48,34 @@ public class Sprite extends RenderingNode {
         double bottom = height / 2;
 
         if (getPort(PORT_IMAGE).isConnected()) {
-            GL11.glColor4f(1f, 1f, 1f, 1f);
-
-            GLImage image = asImage(PORT_IMAGE);
-            if (image == null) return false;
-            image.bind();
-
-            // draw a quad textured to match the sprite
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glTexCoord2f(0, 0);
-                GL11.glVertex2d(left, bottom);
-
-                GL11.glTexCoord2f(0, image.getHeight());
-                GL11.glVertex2d(left, top);
-
-                GL11.glTexCoord2f(image.getWidth(), image.getHeight());
-                GL11.glVertex2d(right, top);
-
-                GL11.glTexCoord2f(image.getWidth(), 0);
-                GL11.glVertex2d(right, bottom);
-            }
-            GL11.glEnd();
-            GLImage.unbind();
+//            GL11.glColor4f(1f, 1f, 1f, 1f);
+//
+//            PImage image = asImage(PORT_IMAGE);
+//            if (image == null) return false;
+//            image.bind();
+//
+//            // draw a quad textured to match the sprite
+//            GL11.glBegin(GL11.GL_QUADS);
+//            {
+//                GL11.glTexCoord2f(0, 0);
+//                GL11.glVertex2d(left, bottom);
+//
+//                GL11.glTexCoord2f(0, image.getHeight());
+//                GL11.glVertex2d(left, top);
+//
+//                GL11.glTexCoord2f(image.getWidth(), image.getHeight());
+//                GL11.glVertex2d(right, top);
+//
+//                GL11.glTexCoord2f(image.getWidth(), 0);
+//                GL11.glVertex2d(right, bottom);
+//            }
+//            GL11.glEnd();
         } else {
-            GLUtils.setColor(asColor(PORT_COLOR));
-            GL11.glBegin(GL11.GL_QUADS);
-            {
-                GL11.glVertex2d(left, top);
-                GL11.glVertex2d(left, bottom);
-                GL11.glVertex2d(right, bottom);
-                GL11.glVertex2d(right, top);
-                GL11.glEnd();
-            }
+            Color c = asColor(PORT_COLOR);
+            g.fill(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+            g.rect((float)left, (float)top, (float)width, (float)height);
         }
-        GL11.glPopMatrix();
+        g.popMatrix();
         return true;
     }
 }

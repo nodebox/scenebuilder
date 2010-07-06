@@ -1,8 +1,8 @@
 package scenebuilder.library.image.generator;
 
+import processing.core.PImage;
 import scenebuilder.gui.FilePicker;
 import scenebuilder.model.Context;
-import scenebuilder.model.GLImage;
 import scenebuilder.model.Node;
 import scenebuilder.model.Port;
 
@@ -38,7 +38,8 @@ public class Source extends Node implements ActionListener {
     @Override
     public boolean execute(Context context, double time) {
         if (fileToLoad != null) {
-            setValue(PORT_IMAGE, GLImage.load(fileToLoad));
+            PImage image = context.getApplet().loadImage(fileToLoad.getAbsolutePath());
+            setValue(PORT_IMAGE, image);
             fileToLoad = null;
         }
         return true;

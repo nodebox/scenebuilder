@@ -1,5 +1,6 @@
 package scenebuilder.model;
 
+import processing.core.PImage;
 import scenebuilder.util.StringUtils;
 
 import javax.swing.*;
@@ -218,9 +219,9 @@ public abstract class Node {
         }
     }
 
-    public GLImage asImage(String name) {
+    public PImage asImage(String name) {
         try {
-            return (GLImage) getValue(name);
+            return (PImage) getValue(name);
         } catch (ClassCastException e) {
             throw new IllegalArgumentException(String.format("%s: port %s is not of type image.", this, name));
         }
