@@ -11,17 +11,11 @@ import java.util.Map;
 
 public abstract class Node {
 
-
-    public static enum Function {
-        Generator, Filter, Renderer
-    }
-
     public static final String DISPLAY_NAME_ATTRIBUTE = "displayName";
     public static final String DESCRIPTION_ATTRIBUTE = "description";
 
     public static final HashMap<Class, Integer> instanceCounts = new HashMap<Class, Integer>();
 
-    private Function function = Function.Generator;
     private Macro parent;
     private String name = "";
     private Point position = new Point(0, 0);
@@ -49,19 +43,14 @@ public abstract class Node {
     }
 
 
-    public Node(Function function) {
-        this.function = function;
+    public Node() {
         name = getClass().getSimpleName() + createInstance(getClass());
         setAttribute(DISPLAY_NAME_ATTRIBUTE, StringUtils.humanizeName(name));
         setAttribute(DESCRIPTION_ATTRIBUTE, "Generic node.");
     }
 
-    public Function getFunction() {
-        return function;
-    }
-
-    public void setFunction(Function function) {
-        this.function = function;
+    public boolean isRendering() {
+        return false;
     }
 
     public Macro getParent() {

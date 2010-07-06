@@ -2,19 +2,18 @@ package scenebuilder.library.render;
 
 import org.lwjgl.opengl.GL11;
 import scenebuilder.model.Context;
-import scenebuilder.model.Node;
 import scenebuilder.model.Port;
+import scenebuilder.model.RenderingNode;
 import scenebuilder.util.GLUtils;
 
 import java.awt.*;
 
-public class Clear extends Node {
+public class Clear extends RenderingNode {
 
     public static final String PORT_ENABLE = "enable";
     public static final String PORT_COLOR = "color";
 
     public Clear() {
-        super(Function.Renderer);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Clear");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Fill the display with a constant color.");
         addInputPort(Port.Type.BOOLEAN, PORT_ENABLE, true);

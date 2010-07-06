@@ -11,7 +11,6 @@ public class Constant extends Node {
     private double value = 0.0;
 
     public Constant() {
-        super(Function.Generator);
         setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, "Constant Value");
         setAttribute(Node.DESCRIPTION_ATTRIBUTE, "This node stores a constant value in the output port. This can be used for variables for example, where the same value is used in many places.");
         addInputPort(Port.Type.NUMBER, PORT_VALUE, 0.0);

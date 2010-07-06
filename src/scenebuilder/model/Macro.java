@@ -9,12 +9,16 @@ public class Macro extends Node {
     private Set<Port> publishedPorts;
 
     public Macro() {
-        super(Function.Renderer);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Macro Node");
         setAttribute(DESCRIPTION_ATTRIBUTE, "A Node that can contain other nodes.");
         children = new LinkedList<Node>();
         connections = new LinkedList<Connection>();
         publishedPorts = new LinkedHashSet<Port>();
+    }
+
+    @Override
+    public boolean isRendering() {
+        return true;
     }
 
     //// Children ////
@@ -103,7 +107,7 @@ public class Macro extends Node {
     @Override
     public boolean execute(Context context, double time) {
         for (Node child : children) {
-            if (child.getFunction() == Function.Renderer) {
+            if (child.isRendering()) {
                 if (!updateChildDependencies(child, context, time))
                     return false;
                 if (!child.execute(context, time))

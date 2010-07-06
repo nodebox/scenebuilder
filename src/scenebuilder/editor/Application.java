@@ -4,7 +4,6 @@ import scenebuilder.library.animation.LFO;
 import scenebuilder.library.behavior.BoidVariables;
 import scenebuilder.library.behavior.Boids;
 import scenebuilder.library.device.Mouse;
-import scenebuilder.library.image.generator.RandomImageFromDirectory;
 import scenebuilder.library.image.generator.Source;
 import scenebuilder.library.render.Clear;
 import scenebuilder.library.render.Sprite;
@@ -411,50 +410,6 @@ public class Application {
         return scene;
     }
 
-    public static Scene treeScene() {
-        Scene scene = new Scene();
-        Macro root = scene.getRootMacro();
-
-        Node clear = new Clear();
-        clear.setPosition(new Point(50, 50));
-        clear.setValue(Clear.PORT_COLOR, new Color(1f, 1f, 1f));
-        root.addChild(clear);
-
-        Macro iterator = new Iterator();
-        iterator.setPosition(new Point(50, 150));
-        iterator.setValue(Iterator.PORT_AMOUNT, 10);
-        root.addChild(iterator);
-
-        Node iteratorVariables = new IteratorVariables();
-        iteratorVariables.setPosition(new Point(50, 50));
-        iteratorVariables.setPosition(20, 50);
-        iterator.addChild(iteratorVariables);
-
-        scenebuilder.library.util.numeric.Math math1 = new scenebuilder.library.util.numeric.Math();
-        math1.setPosition(new Point(250, 50));
-        math1.setValue("operation", "*");
-        math1.setValue("v2", 20.0);
-        iterator.addChild(math1);
-
-        RandomImageFromDirectory directory = new RandomImageFromDirectory();
-        directory.setPosition(new Point(250, 250));
-        directory.loadDirectory(new File("images/tree/platanus"));
-        iterator.addChild(directory);
-
-        Node sprite = new Sprite();
-        sprite.setPosition(450, 50);
-        sprite.setValue(Sprite.PORT_WIDTH, 50);
-        sprite.setValue(Sprite.PORT_HEIGHT, 50);
-        iterator.addChild(sprite);
-
-        iterator.connect(iteratorVariables, IteratorVariables.PORT_INDEX, math1, "v1");
-        iterator.connect(math1, "result", sprite, Sprite.PORT_Y);
-        iterator.connect(iteratorVariables, IteratorVariables.PORT_INDEX, directory, RandomImageFromDirectory.PORT_SEED);
-
-        iterator.connect(directory, RandomImageFromDirectory.PORT_IMAGE, sprite, Sprite.PORT_IMAGE);
-
-        return scene;
-    }
 
     public static void main(String[] args) {
         Application.getInstance().loadScene("basicLFOScene");

@@ -11,7 +11,6 @@ public class IteratorVariables extends Node {
     public static final String PORT_POSITION = "position";
 
     public IteratorVariables() {
-        super(Function.Generator);
         setDisplayName("Iterator Variables");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Per-instance variables that contain state information for every single execution.");
         addOutputPort(Port.Type.INTEGER, PORT_AMOUNT);

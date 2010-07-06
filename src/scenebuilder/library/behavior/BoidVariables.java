@@ -17,7 +17,6 @@ public class BoidVariables extends Node {
     public static final String PORT_VZ = "vz";
 
     public BoidVariables() {
-        super(Function.Generator);
         setDisplayName("Boid Variables");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Per-instance variables that contain state information for a single boid such as its position and velocity.");
         addOutputPort(Port.Type.INTEGER, PORT_AMOUNT);
@@ -28,7 +27,6 @@ public class BoidVariables extends Node {
         addOutputPort(Port.Type.NUMBER, PORT_VX);
         addOutputPort(Port.Type.NUMBER, PORT_VY);
         addOutputPort(Port.Type.NUMBER, PORT_VZ);
-
     }
 
     @Override

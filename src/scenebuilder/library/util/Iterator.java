@@ -12,7 +12,6 @@ public class Iterator extends Macro {
     public static final String KEY_POSITION = "position";
 
     public Iterator() {
-        super();
         setDisplayName("Iterator");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Run the contents of this macro multiple times.");
         addInputPort(Port.Type.INTEGER, PORT_AMOUNT, 10);

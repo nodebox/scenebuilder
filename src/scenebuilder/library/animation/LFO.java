@@ -14,7 +14,6 @@ public class LFO extends Node {
 
 
     public LFO() {
-        super(Function.Generator);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Low Frequency Oscillator");
         setAttribute(DESCRIPTION_ATTRIBUTE, "A low frequency oscillator");
         addInputPort(Port.Type.NUMBER, PORT_PERIOD, 1.0);

@@ -15,7 +15,6 @@ public class Mouse extends Node {
 
 
     public Mouse() {
-        super(Function.Generator);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Mouse");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Read the current state of the mouse.");
         addOutputPort(Port.Type.NUMBER, PORT_X);

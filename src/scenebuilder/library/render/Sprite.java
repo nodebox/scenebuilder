@@ -3,13 +3,13 @@ package scenebuilder.library.render;
 import org.lwjgl.opengl.GL11;
 import scenebuilder.model.Context;
 import scenebuilder.model.GLImage;
-import scenebuilder.model.Node;
 import scenebuilder.model.Port;
+import scenebuilder.model.RenderingNode;
 import scenebuilder.util.GLUtils;
 
 import java.awt.*;
 
-public class Sprite extends Node {
+public class Sprite extends RenderingNode {
 
     public static final String PORT_ENABLE = "enable";
     public static final String PORT_X = "x";
@@ -22,7 +22,6 @@ public class Sprite extends Node {
     public static final String PORT_IMAGE = "image";
 
     public Sprite() {
-        super(Function.Renderer);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Sprite");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Draw an image or color in the given position.");
         addInputPort(Port.Type.BOOLEAN, PORT_ENABLE, true);

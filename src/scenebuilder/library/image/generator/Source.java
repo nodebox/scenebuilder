@@ -18,7 +18,6 @@ public class Source extends Node implements ActionListener {
     private File fileToLoad;
 
     public Source() {
-        super(Node.Function.Generator);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Image");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Read an image from a file.");
         addOutputPort(Port.Type.IMAGE, PORT_IMAGE);

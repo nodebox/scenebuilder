@@ -27,7 +27,6 @@ public class Boids extends Macro {
     private Flock currentFlock;
 
     public Boids() {
-        super();
         setDisplayName("Boids");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Simulate coordinated animal motion such as bird flocks and fish schools.");
         addInputPort(Port.Type.NUMBER, PORT_X, 0.0);

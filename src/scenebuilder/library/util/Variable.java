@@ -19,7 +19,6 @@ public class Variable extends Node {
     }
 
     private Variable() {
-        super(Function.Filter);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Variable");
         setAttribute(DESCRIPTION_ATTRIBUTE, "A utility node that allows you to re-use a value multiple times.");
     }

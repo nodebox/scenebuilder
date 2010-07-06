@@ -13,7 +13,6 @@ public class Math extends Node {
 
 
     public Math() {
-        super(Function.Filter);
         setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, "Math");
         setAttribute(Node.DESCRIPTION_ATTRIBUTE, "Perform a mathematical operations on two numbers.");
         addInputPort(Port.Type.NUMBER, PORT_V1, 0.0);

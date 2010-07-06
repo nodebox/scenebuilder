@@ -15,7 +15,6 @@ public class HSVToColor extends Node {
     public static final String PORT_COLOR = "color";
 
     public HSVToColor() {
-        super(Function.Filter);
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "HSV to Color");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Generate a color from hue, saturation and value components.");
         addInputPort(Port.Type.NUMBER, PORT_H, 1.0);
