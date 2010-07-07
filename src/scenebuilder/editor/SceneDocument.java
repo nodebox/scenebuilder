@@ -40,7 +40,7 @@ public class SceneDocument extends JFrame {
         networkPanel.add(parameters, BorderLayout.WEST);
         JSplitPane mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, renderer, networkPanel);
         mainSplitter.setDividerSize(2);
-        mainSplitter.setDividerLocation(400);
+        mainSplitter.setDividerLocation(300);
         setContentPane(mainSplitter);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Setup renderer

@@ -99,6 +99,7 @@ public class Application {
             Method m = Application.class.getMethod(sceneName);
             Scene scene = (Scene) m.invoke(null);
             document = new SceneDocument(scene);
+            document.setLocationRelativeTo(null);
             document.setVisible(true);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -115,8 +116,10 @@ public class Application {
         clear.setValue(Clear.PORT_COLOR, Color.DARK_GRAY);
         Node lfo = new LFO();
         lfo.setPosition(new Point(50, 50));
+        lfo.setValue(LFO.PORT_OFFSET, 100.0);
         Node sprite = new Sprite();
         sprite.setPosition(new Point(250, 150));
+        sprite.setValue(Sprite.PORT_Y, 100.0);
         sprite.setValue(Sprite.PORT_COLOR, Color.RED);
         root.addChild(lfo);
         root.addChild(clear);
