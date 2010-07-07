@@ -3,6 +3,7 @@ package scenebuilder.editor;
 import scenebuilder.library.animation.LFO;
 import scenebuilder.library.behavior.BoidVariables;
 import scenebuilder.library.behavior.Boids;
+import scenebuilder.library.code.JavaCode;
 import scenebuilder.library.device.Mouse;
 import scenebuilder.library.image.generator.Source;
 import scenebuilder.library.render.Clear;
@@ -79,6 +80,7 @@ public class Application {
         m.addNodeClass(Constant.class, "Numeric");
         m.addNodeClass(scenebuilder.library.util.numeric.Math.class, "Numeric");
         m.addNodeClass(Variable.class, "Utility");
+        m.addNodeClass(JavaCode.class, "Code");
     }
 
     public boolean quit() {
