@@ -71,6 +71,7 @@ public class SceneDocument extends JFrame {
             for (Class<? extends Node> nodeClass : m.getNodeClasses(category)) {
                 categoryMenu.add(new CreateNodeAction(nodeClass.getSimpleName(), nodeClass));
             }
+            categoryMenu.getPopupMenu().setLightWeightPopupEnabled(false);
             createMenu.add(categoryMenu);
         }
         createMenu.getPopupMenu().setLightWeightPopupEnabled(false);
