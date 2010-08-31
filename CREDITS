@@ -1,0 +1,6 @@
+NodeBox depends on the following libraries:
+
+* Processing (http://processing.org/) by Ben Fry and Casey Reas
+* Google Collections (http://code.google.com/p/google-collections/)
+* Eclipse Java Compiler (http://www.eclipse.org/jdt/core/index.php)
+* Java Native Access (https://jna.dev.java.net/)

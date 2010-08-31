@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="NodeBox Core" default="dist">
+    <property name="src" value="src"/>
+    <property name="lib" value="../lib"/>
+    <property name="build" value="build"/>
+    <property name="dist" value="../dist"/>
+
+    <path id="build.classpath">
+        <path path="${lib}/equinox.jar"/>
+        <path path="${lib}/processing-core.jar"/>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${build}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath"/>
+    </target>
+
+    <target name="embed-dependencies" depends="init">
+        <unzip src="${lib}/processing-core.jar" dest="${build}"/>
+    </target>
+
+    <target name="dist" depends="compile,embed-dependencies">
+        <mkdir dir="${dist}"/>
+        <jar jarfile="${dist}/nodebox-core.jar" basedir="${build}" manifest="manifest.mf"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+
+</project>

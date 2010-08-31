@@ -17,5 +17,8 @@ Thumbs.db
 lib/cachedir
 *$py.class
 
+# OSGI cache
+lib/configuration
+
 # Double-underscores are also ignored.
 __*

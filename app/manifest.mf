@@ -1,0 +1,14 @@
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: nodebox.app
+Bundle-Name: Node-App
+Bundle-Version: 1.0.0
+Bundle-Activator: nodebox.app.Application
+Import-Package: org.osgi.framework,
+    org.osgi.util.tracker,
+    javax.swing,
+    javax.swing.border,
+    javax.swing.event,
+    javax.imageio,
+    processing.core,
+    nodebox.node,
+    nodebox.util

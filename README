@@ -1,1 +1,32 @@
-SceneBuilder is a node-based layer on top of Processing for visual coders.
+NodeBox is a node-based app on top of Processing for visual coders.
+
+NodeBox uses OSGI to create bundles of nodes that can be versioned, updated and restarted safely.
+
+To compile NodeBox:
+
+  ant
+
+To start NodeBox:
+
+  java -jar lib/equinox.jar -console
+
+Then at the prompt, type:
+
+osgi> install dist/nodebox-core.jar
+osgi> install dist/nodebox-builtins.jar
+osgi> install dist/nodebox-app.jar
+osgi> start nodebox.core nodebox.builtins nodebox.app
+
+To quit:
+
+osgi> exit
+
+To see all running components, type:
+
+osgi> ss
+
+id      State       Bundle
+0       ACTIVE      org.eclipse.osgi_3.6.0.v20100517
+1       ACTIVE      nodebox.core_1.0.0
+2       ACTIVE      nodebox.builtins_1.0.0
+3       ACTIVE      nodebox.app_1.0.0
