@@ -40,7 +40,7 @@ public class SceneDocument extends JFrame {
         networkPanel.add(viewer, BorderLayout.CENTER);
         networkPanel.add(parameters, BorderLayout.WEST);
         JSplitPane mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, renderer, networkPanel);
-        mainSplitter.setDividerSize(2);
+        mainSplitter.setDividerSize(7);
         mainSplitter.setDividerLocation(300);
         setContentPane(mainSplitter);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,8 +66,13 @@ public class SceneDocument extends JFrame {
         sceneMenu.add(new SceneDocument.SwitchSceneAction("Creatures", "creaturesScene"));
         sceneMenuBar.add(sceneMenu);
         JMenu createMenu = new JMenu("Create");
-        for (Class nodeClass: manager.getNodeClasses()) {
-            createMenu.add(new CreateNodeAction(nodeClass.getSimpleName(), nodeClass));
+        for (String category: manager.getNodeCategories()) {
+            JMenu categoryMenu = new JMenu(category);
+            categoryMenu.getPopupMenu().setLightWeightPopupEnabled(false);
+            for (Class nodeClass: manager.getNodeClasses(category)) {
+                categoryMenu.add(new CreateNodeAction(nodeClass.getSimpleName(), nodeClass));
+            }
+            createMenu.add(categoryMenu);
         }
         createMenu.getPopupMenu().setLightWeightPopupEnabled(false);
         sceneMenuBar.add(createMenu);
@@ -92,7 +97,7 @@ public class SceneDocument extends JFrame {
     private void createNode(Class nodeClass) {
         try {
             Node n = (Node) nodeClass.newInstance();
-            scene.getRootNetwork().addChild(n);
+            getCurrentNetwork().addChild(n);
             n.setPosition((int) Math.random() * 300, (int) Math.random() * 300);
             viewer.updateView();
         } catch (Exception e1) {

@@ -4,6 +4,9 @@ import nodebox.util.Preconditions;
 
 import java.util.*;
 
+import static nodebox.util.Preconditions.checkArgument;
+import static nodebox.util.Preconditions.checkNotNull;
+
 public class Network extends Node {
 
     private List<Node> children;
@@ -39,8 +42,26 @@ public class Network extends Node {
         child.setNetwork(null);
     }
 
-    public boolean containsChild(Node child) {
+    public Node getChild(String childName) {
+        for (Node child : children) {
+            if (child.getName().equals(childName)) {
+                return child;
+            }
+        }
+        throw new IllegalArgumentException("This network has no child node named " + childName);
+    }
+
+    public boolean hasChild(Node child) {
         return children.contains(child);
+    }
+
+    public boolean hasChild(String childName) {
+        for (Node child : children) {
+            if (child.getName().equals(childName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //// Connections ////
@@ -50,10 +71,10 @@ public class Network extends Node {
     }
 
     public void connect(Port output, Port input) {
-        Preconditions.checkNotNull(output);
-        Preconditions.checkNotNull(input);
-        Preconditions.checkArgument(output.getNode().getNetwork() == this, "Output %s is not a child of this network.", output);
-        Preconditions.checkArgument(input.getNode().getNetwork() == this, "Input %s is not a child of this network.", input);
+        checkNotNull(output);
+        checkNotNull(input);
+        checkArgument(output.getNode().getNetwork() == this, "Output %s is not a child of this network.", output);
+        checkArgument(input.getNode().getNetwork() == this, "Input %s is not a child of this network.", input);
         connections.add(new Connection(this, output, input));
     }
 
@@ -70,7 +91,7 @@ public class Network extends Node {
     //// Published Ports ////
 
     public Port publishPort(Port port) {
-        if (!containsChild(port.getNode()))
+        if (!hasChild(port.getNode()))
             throw new IllegalArgumentException(String.format("Node %s is not a child of this network.", port.getNode()));
         PublishedPort publishedPort = new PublishedPort(this, port);
         addPort(publishedPort);
@@ -78,13 +99,13 @@ public class Network extends Node {
     }
 
     public void unPublishPort(Port port) {
-        if (!containsChild(port.getNode()))
+        if (!hasChild(port.getNode()))
             throw new IllegalArgumentException(String.format("Node %s is not a child of this network.", port.getNode()));
         removePort(port.getName());
     }
 
     public boolean isPublished(Port port) {
-        if (!containsChild(port.getNode()))
+        if (!hasChild(port.getNode()))
             throw new IllegalArgumentException(String.format("Node %s is not a child of this network.", port.getNode()));
         for (Port p : getPorts()) {
             if (p instanceof PublishedPort) {
@@ -125,7 +146,7 @@ public class Network extends Node {
                 updateChildDependencies(n, context, time);
                 if (!n.execute(context, time)) return false;
             }
-            // TODO child.setValue(c.getInputPort().getName(), n.getValue(c.getOutputPort().getName()));
+            c.getInputPort().setValue(c.getOutputPort().getValue());
         }
         return true;
     }

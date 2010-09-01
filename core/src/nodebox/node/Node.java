@@ -7,6 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
+import static nodebox.util.Preconditions.checkArgument;
+import static nodebox.util.Preconditions.checkNotNull;
+
 public abstract class Node {
 
     public static final String DISPLAY_NAME_ATTRIBUTE = "displayName";
@@ -139,8 +142,8 @@ public abstract class Node {
      * @return the given port
      */
     public Port addPort(Port port) {
-        Preconditions.checkArgument(port.getNode() == this, "Port.node should be set to this.");
-        Preconditions.checkArgument(!hasPort(port.getName()), "This node already has a port named %s", port.getName());
+        checkArgument(port.getNode() == this, "Port.node should be set to this.");
+        checkArgument(!hasPort(port.getName()), "This node already has a port named %s", port.getName());
         ports.add(port);
         return port;
     }
@@ -186,11 +189,11 @@ public abstract class Node {
      * @throws IllegalArgumentException if a port with the given name does not exist.
      */
     public Port getPort(String name) throws IllegalArgumentException {
-        Preconditions.checkNotNull(name);
+        checkNotNull(name);
         for (Port p : ports) {
             if (p.getName().equals(name)) return p;
         }
-        throw new IllegalArgumentException("This node has no part named " + name);
+        throw new IllegalArgumentException("This node has no port named " + name);
     }
 
     //// Port values ////
@@ -206,7 +209,7 @@ public abstract class Node {
     }
 
     public Object parseValue(String portName, String value) {
-        Preconditions.checkNotNull(value);
+        checkNotNull(value);
         Port port = getPort(portName);
         return port.parseValue(value);
     }

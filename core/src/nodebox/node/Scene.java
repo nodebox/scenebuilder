@@ -1,5 +1,14 @@
 package nodebox.node;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.*;
+
 public class Scene {
 
     private Network rootNetwork;
@@ -17,4 +26,223 @@ public class Scene {
     public void execute(Context context, double time) {
         rootNetwork.execute(context, time);
     }
+
+    /**
+     * Load a scene from the given file.
+     * <p/>
+     * The manager is used only to look up node classes.
+     *
+     * @param f       the file to load
+     * @param manager the manager used to look up node classes.
+     * @return a new node scene
+     * @throws RuntimeException When the file could not be found, or parsing failed.
+     */
+    public static Scene load(File f, NodeManager manager) throws RuntimeException {
+        try {
+            // The library name is the file name without the ".ndbx" extension.
+            // Chop off the .ndbx
+            return load(new FileInputStream(f), manager);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Error in the XML parser configuration", e);
+        } catch (SAXException e) {
+            throw new RuntimeException("Error while parsing: " + e.getMessage(), e);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found " + f, e);
+        } catch (IOException e) {
+            throw new RuntimeException("I/O error while parsing " + f, e);
+        }
+    }
+
+    public static Scene load(InputStream is, NodeManager manager) throws IOException, ParserConfigurationException, SAXException {
+        SAXParserFactory spf = SAXParserFactory.newInstance();
+        SAXParser parser = spf.newSAXParser();
+        NDBXHandler handler = new NDBXHandler(manager);
+        parser.parse(is, handler);
+        return handler.scene;
+    }
+
+    private static class NDBXHandler extends DefaultHandler {
+
+        enum ParseState {
+            INVALID, IN_PORT
+        }
+
+        private NodeManager manager;
+        private Scene scene = new Scene();
+        private Node currentNode = scene.getRootNetwork();
+        private Port currentPort;
+        private ParseState state = ParseState.INVALID;
+        private StringBuffer characterData;
+
+        public NDBXHandler(NodeManager manager) {
+            this.manager = manager;
+            resetState();
+        }
+
+        @Override
+        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+            if (qName.equals("ndbx")) {
+                startNdbxTag(attributes);
+            } else if (qName.equals("node")) {
+                startNodeTag(attributes);
+            } else if (qName.equals("port")) {
+                startPortTag(attributes);
+            } else if (qName.equals("conn")) {
+                startConnectionTag(attributes);
+            } else {
+                throw new SAXException("Unknown tag " + qName);
+            }
+        }
+
+        @Override
+        public void endElement(String uri, String localName, String qName) throws SAXException {
+            if (qName.equals("ndbx")) {
+                // Top level element -- parsing finished.
+            } else if (qName.equals("node")) {
+                // Traverse up to the parent.
+                // This can result in currentNode being null if we traversed all the way up
+                currentNode = currentNode.getNetwork();
+            } else if (qName.equals("port")) {
+                setPortValue(characterData.toString());
+                currentPort = null;
+                resetState();
+            } else if (qName.equals("conn")) {
+                // Do nothing after conn tag
+            } else {
+                // This should never happen, since the SAX parser has already formally validated the document.
+                // Unknown tags should be caught in startElement.
+                throw new AssertionError("Unknown end tag " + qName);
+            }
+        }
+
+        @Override
+        public void characters(char[] ch, int start, int length) throws SAXException {
+            switch (state) {
+                case IN_PORT:
+                    if (currentPort == null)
+                        throw new SAXException("Port value encountered, but no current port.");
+                    break;
+                default:
+                    // Bail out when we don't recognize this state.
+                    return;
+            }
+            // We have a valid character state, so we can safely append to characterData.
+            characterData.append(ch, start, length);
+        }
+
+        /**
+         * Called after valid character data was processed.
+         * <p/>
+         * This makes sure no extraneous data is added.
+         */
+        private void resetState() {
+            state = ParseState.INVALID;
+            characterData = new StringBuffer();
+        }
+
+        private void startNdbxTag(Attributes attributes) throws SAXException {
+            // Make sure we use the correct format.
+            String formatVersion = attributes.getValue("formatVersion");
+            if (formatVersion == null)
+                throw new SAXException("NodeBox file does not have required attribute formatVersion.");
+            if (!formatVersion.equals("3"))
+                throw new SAXException("Unknown formatVersion " + formatVersion);
+        }
+
+        private void startNodeTag(Attributes attributes) throws SAXException {
+            // Since we're going to be adding a child node, check that the current node is a network.
+            if (!(currentNode instanceof Network)) {
+                throw new SAXException("Trying to add child node to " + currentNode + ", which is not a network.");
+            }
+            String name = parseString(attributes, "name", "Name attribute is required in node tags.");
+            String type = parseString(attributes, "type", "Type attribute is required in node tags.");
+            // Create the child at the root of the node library or the current parent
+            Node newNode = manager.createNode(type);
+            // Set node attributes.
+            newNode.setName(name);
+            int x = parseInt(attributes, "x");
+            int y = parseInt(attributes, "y");
+            newNode.setPosition(x, y);
+            // Add the node to the network.
+            // We checked if the current node is a Network at the top of this method.
+            Network currentNetwork = (Network) currentNode;
+            currentNetwork.addChild(newNode);
+            // Go down into the current node; this will now become the current node.
+            currentNode = newNode;
+        }
+
+        private void startPortTag(Attributes attributes) throws SAXException {
+            state = ParseState.IN_PORT;
+            String name = parseString(attributes, "name", "Name attribute is required in port tags.");
+            try {
+                currentPort = currentNode.getPort(name);
+            } catch (IllegalArgumentException e) {
+                throw new SAXException("The port " + name + " on node" + currentNode + " could not be found.", e);
+            }
+        }
+
+        private void startConnectionTag(Attributes attributes) throws SAXException {
+            // Since we're going to be adding a child connection, check that the current node is a network.
+            if (!(currentNode instanceof Network)) {
+                throw new SAXException("Trying to make a connection node in " + currentNode + ", which is not a network.");
+            }
+            String outputString = parseString(attributes, "output", "Output attribute is required in connection tags.");
+            String outputPortString = parseString(attributes, "outputPort", "Output port attribute is required in connection tags.");
+            String inputString = parseString(attributes, "input", "Input attribute is required in connection tags.");
+            String inputPortString = parseString(attributes, "inputPort", "Input port attribute is required in connection tags.");
+            Network network = (Network) currentNode;
+
+            Node outputNode = network.getChild(outputString);
+            Node inputNode = network.getChild(inputString);
+            Port output = outputNode.getPort(outputPortString);
+            Port input = inputNode.getPort(inputPortString);
+
+            network.connect(output, input);
+        }
+
+        /**
+         * Sets the value on the current port.
+         *
+         * @param stringValue the value of the parameter, to be parsed.
+         * @throws org.xml.sax.SAXException when there is no current port or if the value could not be parsed.
+         */
+        private void setPortValue(String stringValue) throws SAXException {
+            if (currentPort == null) throw new SAXException("There is no current port.");
+            Object value = currentPort.parseValue(stringValue);
+            currentPort.setValue(value);
+        }
+
+        /**
+         * Get a string from the attributes. Throw an error if the requested attribute could not be found.
+         *
+         * @param attributes    the list of attributes
+         * @param attributeName the requested attribute
+         * @param errorMessage  the error to throw if the attribute could not be found
+         * @return the attribute value
+         * @throws SAXException if the attribute could not be found
+         */
+        private String parseString(Attributes attributes, String attributeName, String errorMessage) throws SAXException {
+            String s = attributes.getValue(attributeName);
+            if (s != null) {
+                return s;
+            } else {
+                throw new SAXException(errorMessage);
+            }
+        }
+
+        /**
+         * Get an integer from the attributes. Return a default value of zero if the requested attribute could not be found.
+         *
+         * @param attributes    the list of attributes
+         * @param attributeName the requested attribute
+         * @return the attribute value or 0 if the attribute could not be found
+         */
+        private int parseInt(Attributes attributes, String attributeName) {
+            String s = attributes.getValue(attributeName);
+            if (s == null) return 0;
+            return Integer.parseInt(s);
+        }
+
+    }
+
 }

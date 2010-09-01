@@ -11,8 +11,6 @@ import java.awt.*;
 public class Clear extends RenderingNode {
 
     public final ColorPort pColor;
-    public static final String PORT_ENABLE = "enable";
-    public static final String PORT_COLOR = "color";
 
     public Clear() {
         setAttribute(DISPLAY_NAME_ATTRIBUTE, "Clear");

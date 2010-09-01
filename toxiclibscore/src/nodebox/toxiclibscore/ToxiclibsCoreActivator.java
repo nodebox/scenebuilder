@@ -9,12 +9,12 @@ public class ToxiclibsCoreActivator implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
-        m.addNodeClass(VoronoiDrawer.class, "Toxiclibs 2D");
+        m.registerNodeClass(VoronoiDrawer.class, "Toxiclibs 2D");
     }
 
     public void stop(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
-        m.removeNodeClass(VoronoiDrawer.class);
+        m.unregisterNodeClass(VoronoiDrawer.class);
     }
 
     private NodeManager getNodeManager(BundleContext context) {

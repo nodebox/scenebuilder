@@ -1,5 +1,7 @@
 package nodebox.builtins;
 
+import nodebox.builtins.looper.Looper;
+import nodebox.builtins.looper.LooperVariables;
 import nodebox.builtins.render.Clear;
 import nodebox.builtins.render.Rect;
 import nodebox.node.NodeManager;
@@ -11,18 +13,19 @@ public class BuiltinsActivator implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
-        m.addNodeClass(Clear.class, "Clear");
-        m.addNodeClass(Rect.class, "Render");
+        m.registerNodeClass(Clear.class, "Render");
+        m.registerNodeClass(Rect.class, "Render");
+        m.registerNodeClass(Looper.class, "Utility");
+        m.registerNodeClass(LooperVariables.class, "Utility");
     }
 
     public void stop(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
-        m.removeNodeClass(Clear.class);
-        m.removeNodeClass(Rect.class);
+        m.unregisterNodeClass(Clear.class);
+        m.unregisterNodeClass(Rect.class);
     }
 
     private NodeManager getNodeManager(BundleContext context) {
-        System.out.println("GET NODE MAN "+ NodeManager.class.getName());
         ServiceReference ref = context.getServiceReference(NodeManager.class.getName());
         return (NodeManager) context.getService(ref);
     }
