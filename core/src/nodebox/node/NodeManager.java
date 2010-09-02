@@ -26,12 +26,14 @@ public class NodeManager {
         System.out.println("Adding node class " + nodeId(nodeClass));
         NodeInfo info = new NodeInfo(nodeClass, category);
         nodeInfoMap.put(nodeId(nodeClass), info);
+        invalidateCategoryMap();
     }
 
     public void unregisterNodeClass(Class<? extends Node> nodeClass) {
         checkNotNull(nodeClass);
         System.out.println("Removing node class " + nodeClass);
         nodeInfoMap.remove(nodeClass.getName());
+        invalidateCategoryMap();
     }
 
     public Class<? extends Node> getNodeClass(String nodeId) {
@@ -42,6 +44,10 @@ public class NodeManager {
         } else {
             return null;
         }
+    }
+
+    private void invalidateCategoryMap() {
+        categoryMap = null;
     }
 
     private void updateCategoryMap() {

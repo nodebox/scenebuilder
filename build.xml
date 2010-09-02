@@ -3,18 +3,21 @@
 
     <property name="module.core" value="core"/>
     <property name="module.builtins" value="builtins"/>
+    <property name="module.toxiclibscore" value="toxiclibscore"/>
     <property name="module.app" value="app"/>
 
     <target name="dist">
-        <ant dir="${module.core}" antfile="build.xml" target="dist" />
-        <ant dir="${module.builtins}" antfile="build.xml" target="dist" />
-        <ant dir="${module.app}" antfile="build.xml" target="dist" />
+        <ant dir="${module.core}" antfile="build.xml" target="dist"/>
+        <ant dir="${module.builtins}" antfile="build.xml" target="dist"/>
+        <ant dir="${module.toxiclibscore}" antfile="build.xml" target="dist"/>
+        <ant dir="${module.app}" antfile="build.xml" target="dist"/>
     </target>
 
     <target name="clean">
-        <ant dir="${module.core}" antfile="build.xml" target="clean" />
-        <ant dir="${module.builtins}" antfile="build.xml" target="clean" />
-        <ant dir="${module.app}" antfile="build.xml" target="clean" />
+        <ant dir="${module.core}" antfile="build.xml" target="clean"/>
+        <ant dir="${module.builtins}" antfile="build.xml" target="clean"/>
+        <ant dir="${module.toxiclibscore}" antfile="build.xml" target="clean"/>
+        <ant dir="${module.app}" antfile="build.xml" target="clean"/>
     </target>
 
 </project>
