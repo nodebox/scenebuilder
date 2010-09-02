@@ -34,8 +34,25 @@ public class SceneTest extends TestCase {
         assertTrue(output1.getPort("output").isConnected());
         assertTrue(input1.getPort("input").isConnected());
         assertEquals(0, input1.getValue("input"));
-        root.execute(new Context((PApplet)null), 0);
+        root.execute(new Context((PApplet) null), 0);
         assertEquals(99, input1.getValue("input"));
+    }
+
+    public void testSaveLoad() {
+        Scene scene = new Scene();
+        Network root = scene.getRootNetwork();
+        Node output1 = manager.createNode(NodeManager.nodeId(OutputNode.class));
+        // TODO Build API for automatically setting node name.
+        output1.setName("output1");
+        Node input1 = manager.createNode(NodeManager.nodeId(InputNode.class));
+        input1.setName("input1");
+        root.addChild(output1);
+        root.addChild(input1);
+        root.connect(output1.getPort("output"), input1.getPort("input"));
+        String xml = scene.toXML();
+        Scene newScene = Scene.load(xml, manager);
+        Network newRoot = newScene.getRootNetwork();
+        assertTrue(newRoot.getChild("output1").getPort("output").isConnected());
     }
 
     /**

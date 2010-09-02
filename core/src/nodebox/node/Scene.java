@@ -1,13 +1,23 @@
 package nodebox.node;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.awt.*;
 import java.io.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class Scene {
 
@@ -17,6 +27,10 @@ public class Scene {
         rootNetwork = new Network();
         rootNetwork.setName("root");
         rootNetwork.setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, "Root");
+    }
+
+    private Scene(Network root) {
+        rootNetwork = root;
     }
 
     public Network getRootNetwork() {
@@ -53,6 +67,18 @@ public class Scene {
         }
     }
 
+    public static Scene load(String xml, NodeManager manager) throws RuntimeException {
+        try {
+            return load(new ByteArrayInputStream(xml.getBytes("UTF8")), manager);
+        } catch (IOException e) {
+            throw new RuntimeException("I/O error while parsing.", e);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException("Error in the XML parser configuration", e);
+        } catch (SAXException e) {
+            throw new RuntimeException("Error while parsing: " + e.getMessage(), e);
+        }
+    }
+
     public static Scene load(InputStream is, NodeManager manager) throws IOException, ParserConfigurationException, SAXException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
         SAXParser parser = spf.newSAXParser();
@@ -68,8 +94,8 @@ public class Scene {
         }
 
         private NodeManager manager;
-        private Scene scene = new Scene();
-        private Node currentNode = scene.getRootNetwork();
+        private Scene scene;
+        private Node currentNode;
         private Port currentPort;
         private ParseState state = ParseState.INVALID;
         private StringBuffer characterData;
@@ -151,7 +177,8 @@ public class Scene {
 
         private void startNodeTag(Attributes attributes) throws SAXException {
             // Since we're going to be adding a child node, check that the current node is a network.
-            if (!(currentNode instanceof Network)) {
+            // The exception is if the currentNode is null, which means we're creating the root node.
+            if (currentNode != null && !(currentNode instanceof Network)) {
                 throw new SAXException("Trying to add child node to " + currentNode + ", which is not a network.");
             }
             String name = parseString(attributes, "name", "Name attribute is required in node tags.");
@@ -163,10 +190,20 @@ public class Scene {
             int x = parseInt(attributes, "x");
             int y = parseInt(attributes, "y");
             newNode.setPosition(x, y);
-            // Add the node to the network.
-            // We checked if the current node is a Network at the top of this method.
-            Network currentNetwork = (Network) currentNode;
-            currentNetwork.addChild(newNode);
+            if (currentNode == null) {
+                if (newNode instanceof Network) {
+                    // We're creating the root node and scene.
+                    scene = new Scene((Network) newNode);
+                } else {
+                    throw new SAXException("The root node is not a Network.");
+                }
+            } else {
+                // Add the node to the network.
+                // We checked if the current node is a Network at the top of this method.
+                Network currentNetwork;
+                currentNetwork = (Network) currentNode;
+                currentNetwork.addChild(newNode);
+            }
             // Go down into the current node; this will now become the current node.
             currentNode = newNode;
         }
@@ -243,6 +280,98 @@ public class Scene {
             return Integer.parseInt(s);
         }
 
+    }
+
+    public void save(File f) {
+        StreamResult streamResult = new StreamResult(f);
+        write(this, streamResult);
+    }
+
+    public String toXML() {
+        StringWriter writer = new StringWriter();
+        StreamResult streamResult = new StreamResult(writer);
+        write(this, streamResult);
+        return writer.toString();
+    }
+
+    private static void write(Scene scene, StreamResult streamResult) {
+        try {
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = builder.newDocument();
+
+            // Build the header.
+            Element rootElement = doc.createElement("ndbx");
+            doc.appendChild(rootElement);
+            rootElement.setAttribute("formatVersion", "3");
+
+            // Write out the root node.
+            writeNode(doc, rootElement, scene.getRootNetwork());
+
+            // Convert the document to XML.
+            DOMSource domSource = new DOMSource(doc);
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer serializer = tf.newTransformer();
+            serializer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            serializer.setOutputProperty(OutputKeys.INDENT, "yes");
+            serializer.transform(domSource, streamResult);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static void writeNode(Document doc, Element parent, Node node) {
+        Element el = doc.createElement("node");
+        parent.appendChild(el);
+        el.setAttribute("name", node.getName());
+        el.setAttribute("type", NodeManager.nodeId(node.getClass()));
+        Point position = node.getPosition();
+        el.setAttribute("x", Integer.toString(position.x));
+        el.setAttribute("y", Integer.toString(position.y));
+
+        // Add the ports
+        for (Port port : node.getPorts()) {
+            writePort(doc, el, port);
+        }
+
+        if (node instanceof Network) {
+            Network network = (Network) node;
+
+            // Add all child nodes
+            List<Node> children = network.getChildren();
+            Collections.sort(children, new NodeNameComparator());
+            for (Node child : children) {
+                writeNode(doc, el, child);
+            }
+
+            // Add all child connections
+            for (Connection conn : network.getConnections()) {
+                writeConnection(doc, el, conn);
+            }
+        }
+    }
+
+    private static void writePort(Document doc, Element parent, Port port) {
+        Element el = doc.createElement("port");
+        parent.appendChild(el);
+        el.setAttribute("name", port.getName());
+        el.appendChild(doc.createTextNode(port.getValueAsString()));
+    }
+
+    private static void writeConnection(Document doc, Element parent, Connection connection) {
+        Element el = doc.createElement("conn");
+        parent.appendChild(el);
+        el.setAttribute("output", connection.getOutputNode().getName());
+        el.setAttribute("outputPort", connection.getOutputPort().getName());
+        el.setAttribute("input", connection.getInputNode().getName());
+        el.setAttribute("inputPort", connection.getInputPort().getName());
+    }
+
+    private static class NodeNameComparator implements Comparator<Node> {
+        public int compare(Node node1, Node node2) {
+            return node1.getName().compareTo(node2.getName());
+        }
     }
 
 }

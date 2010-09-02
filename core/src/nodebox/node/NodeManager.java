@@ -10,7 +10,12 @@ public class NodeManager {
 
     private transient HashMap<String, Set<NodeInfo>> categoryMap = null;
 
-    private static String nodeId(Class<? extends Node> nodeClass) {
+    public static String nodeId(Node node) {
+        checkNotNull(node);
+        return nodeId(node.getClass());
+    }
+
+    public static String nodeId(Class<? extends Node> nodeClass) {
         checkNotNull(nodeClass);
         return nodeClass.getName();
     }

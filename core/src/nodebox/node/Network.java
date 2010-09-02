@@ -1,7 +1,5 @@
 package nodebox.node;
 
-import nodebox.util.Preconditions;
-
 import java.util.*;
 
 import static nodebox.util.Preconditions.checkArgument;
@@ -28,8 +26,8 @@ public class Network extends Node {
 
     //// Children ////
 
-    public Collection<Node> getChildren() {
-        return children;
+    public List<Node> getChildren() {
+        return new ArrayList<Node>(children);
     }
 
     public void addChild(Node child) {
