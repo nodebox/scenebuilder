@@ -12,7 +12,11 @@ import java.util.Collection;
 
 public class NodeView {
 
-    private static final int PORT_HEIGHT = 20;
+    public static final int PORT_WIDTH = 20;
+    public static final int PORT_HEIGHT = 20;
+    private static final Color NORMAL_PORT_COLOR = new Color(115, 115, 115);
+    private static final Color START_PORT_COLOR = new Color(107, 95, 172);
+    private static final Color END_PORT_COLOR = new Color(166, 162, 95);
     private static final int NODE_HEADER_HEIGHT = 20;
     private static final int NODE_MINIMUM_WIDTH = 150;
     private static final Color NODE_NAME_COLOR = new Color(233, 233, 233);
@@ -29,7 +33,7 @@ public class NodeView {
     private static final Stroke NODE_SELECTION_BORDER_STROKE = new BasicStroke(3);
     private static final int VERTICAL_TEXT_NUDGE = 6;
 
-    private final SceneViewer sceneViewer;
+    private final NetworkViewer networkViewer;
     private final Node node;
     private Shape nodeRect;
     private int totalWidth;
@@ -37,8 +41,8 @@ public class NodeView {
     private int px, py;
     private Rectangle bounds;
 
-    public NodeView(SceneViewer sceneViewer, Node node) {
-        this.sceneViewer = sceneViewer;
+    public NodeView(NetworkViewer networkViewer, Node node) {
+        this.networkViewer = networkViewer;
         this.node = node;
         calculateBounds();
     }
@@ -103,8 +107,28 @@ public class NodeView {
     }
 
     public int getPortPosition(Port p) {
-        return NODE_HEADER_HEIGHT + PORT_HEIGHT * getPortIndex(p) + 15;
+        return NODE_HEADER_HEIGHT + PORT_HEIGHT * getPortIndex(p);
     }
+
+    public Rectangle getPortBounds(Port p) {
+        int y = getPortPosition(p) + bounds.y;
+        int x = bounds.x;
+        if (p.getDirection() == Port.Direction.OUTPUT) {
+            x = totalWidth - PORT_WIDTH;
+        }
+        return new Rectangle(x, y, PORT_WIDTH, PORT_HEIGHT);
+    }
+
+    public Port getPortAt(Point p) {
+        for (Port port : node.getPorts()) {
+            Rectangle portBounds = getPortBounds(port);
+            if (portBounds.contains(p)) {
+                return port;
+            }
+        }
+        return null;
+    }
+
 
     public void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
@@ -123,37 +147,41 @@ public class NodeView {
         g2.drawString(node.getDisplayName(), 10, NODE_NAME_FONT.getSize() + VERTICAL_TEXT_NUDGE);
         g2.setClip(originalClip);
         g2.setColor(NODE_PORT_COLOR);
-        int y = NODE_HEADER_HEIGHT + NODE_PORT_FONT.getSize() + VERTICAL_TEXT_NUDGE;
+        int y = NODE_HEADER_HEIGHT;
         g2.setFont(NODE_PORT_FONT);
         g2.setStroke(NODE_PORT_STROKE);
         Network network = node.getNetwork();
         Collection<Port> inputPorts = node.getInputPorts();
         for (Port port : inputPorts) {
+            g2.setColor(getPortColor(port));
+            g2.fillRect(3, y, PORT_WIDTH, PORT_HEIGHT);
             if (network != null && network.isPublished(port)) {
                 g2.setColor(NODE_PUBLISHED_PORT_COLOR);
                 g2.fillOval(9, y - 6, 4, 4);
                 g2.setColor(NODE_PORT_COLOR);
             }
             g2.drawOval(9, y - 6, 4, 4);
-            g2.drawString(port.getDisplayName(), 20, y);
+            g2.drawString(port.getDisplayName(), 20, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
             y += PORT_HEIGHT;
         }
         // Reset y to draw the output ports.
-        y = NODE_HEADER_HEIGHT + NODE_PORT_FONT.getSize() + VERTICAL_TEXT_NUDGE;
+        y = NODE_HEADER_HEIGHT;
         Collection<Port> outputPorts = node.getOutputPorts();
         for (Port port : outputPorts) {
+            g2.setColor(getPortColor(port));
+            g2.fillRect(totalWidth - 3 - PORT_WIDTH, y, PORT_WIDTH, PORT_HEIGHT);
             if (network != null && network.isPublished(port)) {
                 g2.setColor(NODE_PUBLISHED_PORT_COLOR);
                 g2.fillOval(9, y - 6, 4, 4);
                 g2.setColor(NODE_PORT_COLOR);
             }
             Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getDisplayName(), g);
-            g2.drawString(port.getDisplayName(), totalWidth - (int) r.getWidth() - 20, y);
+            g2.drawString(port.getDisplayName(), totalWidth - (int) r.getWidth() - 20, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
             g2.drawOval(totalWidth - 13, y - 6, 4, 4);
             y += PORT_HEIGHT;
         }
 
-        if (sceneViewer.isSelected(this)) {
+        if (networkViewer.isSelected(this)) {
             g2.setColor(NODE_SELECTION_BORDER_COLOR);
             g2.setStroke(NODE_SELECTION_BORDER_STROKE);
         } else {
@@ -162,6 +190,19 @@ public class NodeView {
         }
         g2.draw(nodeRect);
         g2.setTransform(originalTransform);
+    }
+
+    /**
+     * Get the port color depending on if it's the starting port, end port or a normal port.
+     */
+    private Color getPortColor(Port p) {
+        if (networkViewer.isConnectionStartPort(p)) {
+            return START_PORT_COLOR;
+        } else if (networkViewer.isConnectionEndPort(p)) {
+            return END_PORT_COLOR;
+        } else {
+            return NORMAL_PORT_COLOR;
+        }
     }
 
 }

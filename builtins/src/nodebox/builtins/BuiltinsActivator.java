@@ -1,5 +1,6 @@
 package nodebox.builtins;
 
+import nodebox.builtins.device.Mouse;
 import nodebox.builtins.looper.Looper;
 import nodebox.builtins.looper.LooperVariables;
 import nodebox.builtins.render.Clear;
@@ -13,6 +14,7 @@ public class BuiltinsActivator implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
+        m.registerNodeClass(Mouse.class, "Device");
         m.registerNodeClass(Clear.class, "Render");
         m.registerNodeClass(Rect.class, "Render");
         m.registerNodeClass(Looper.class, "Utility");
@@ -21,6 +23,7 @@ public class BuiltinsActivator implements BundleActivator {
 
     public void stop(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
+        m.unregisterNodeClass(Mouse.class);
         m.unregisterNodeClass(Clear.class);
         m.unregisterNodeClass(Rect.class);
     }

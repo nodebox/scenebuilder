@@ -21,7 +21,9 @@ public class FloatPort extends Port {
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
         if (value instanceof Float) {
-            set((Float)value);
+            set((Float) value);
+        } else if (value instanceof Integer) {
+            set((float) (Integer) value);
         } else {
             throw new IllegalArgumentException("The given value is not a float.");
         }

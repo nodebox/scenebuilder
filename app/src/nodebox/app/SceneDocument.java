@@ -7,7 +7,6 @@ import nodebox.node.Scene;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -21,7 +20,7 @@ public class SceneDocument extends JFrame {
 
     private final NodeManager manager;
     private final Scene scene;
-    private SceneViewer viewer;
+    private NetworkViewer viewer;
     private ParameterPanel parameters;
     private AddressBar addressBar;
     private Network currentNetwork;
@@ -41,7 +40,7 @@ public class SceneDocument extends JFrame {
     }
 
     public SceneDocument(NodeManager manager, Scene scene) throws HeadlessException {
-        super("Editor");
+        super("NodeBox");
         this.manager = manager;
         this.scene = scene;
         currentNetwork = scene.getRootNetwork();
@@ -49,9 +48,9 @@ public class SceneDocument extends JFrame {
         renderer = new SceneRenderer(scene);
         JPanel networkPanel = new JPanel(new BorderLayout(0, 0));
         addressBar = new AddressBar(this);
-        viewer = new SceneViewer(this, scene);
+        viewer = new NetworkViewer(this, scene);
         parameters = new ParameterPanel(this);
-        viewer.addPropertyChangeListener(SceneViewer.SELECT_PROPERTY, parameters);
+        viewer.addPropertyChangeListener(NetworkViewer.SELECT_PROPERTY, parameters);
         networkPanel.add(addressBar, BorderLayout.NORTH);
         networkPanel.add(viewer, BorderLayout.CENTER);
         networkPanel.add(parameters, BorderLayout.WEST);

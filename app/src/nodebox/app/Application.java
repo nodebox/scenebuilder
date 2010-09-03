@@ -33,12 +33,14 @@ public class Application implements BundleActivator {
         instance = this;
         version = context.getBundle().getVersion().toString();
         manager = getNodeManager(context);
-        loadScene("basicLFOScene");
+        createNewDocument();
     }
 
     public void stop(BundleContext context) throws Exception {
         System.out.println("Shutting down application.");
-        document.close();
+        for (SceneDocument document:documents) {
+            document.close();
+        }
         instance = null;
     }
 

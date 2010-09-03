@@ -5,9 +5,11 @@ import nodebox.util.Strings;
 import java.util.HashMap;
 import java.util.Map;
 
+import static nodebox.util.Preconditions.checkNotNull;
+
 /**
  * A port is a connection point on a node. It contains the values that influence the behavior of the node.
- * 
+ * <p/>
  * It is a good design practice to name the native accessors (the ones that return/set the internal data type) get/set.
  */
 public abstract class Port {
@@ -109,9 +111,31 @@ public abstract class Port {
 
     //// Connections ////
 
+    /**
+     * Check if this port is connected to another port.
+     *
+     * @return true if this port is connected.
+     */
     public boolean isConnected() {
         Network parent = node.getNetwork();
         return parent != null && parent.isConnected(this);
+    }
+
+    /**
+     * Check if this port can connect to the given port.
+     * <p/>
+     * The default implementation checks to see if both port classes are exactly the same.
+     *
+     * @param port the port to connect to.
+     * @return true if this port can connect to the given port.
+     */
+    public boolean canConnectTo(Port port) {
+        checkNotNull(port);
+        // One port needs to be input, the other output.
+        // The direction can thus not be the same.
+        if (this.direction == port.direction) return false;
+        // Check if port classes are exactly the same.
+        return port.getClass().equals(getClass());
     }
 
     @Override

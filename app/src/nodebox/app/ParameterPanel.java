@@ -38,7 +38,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     }
 
     /**
-     * Listen to selection change events from the SceneViewer.
+     * Listen to selection change events from the NetworkViewer.
      *
      * @param evt
      */
@@ -153,7 +153,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             if (c instanceof JCheckBox) {
                 ((JCheckBox) c).setSelected((Boolean) port.getValue());
             } else if (c instanceof DraggableNumber) {
-                ((DraggableNumber) c).setValue((Double) port.getValue());
+                ((DraggableNumber) c).setValue((Float) port.getValue());
             } else if (c instanceof ColorWell) {
                 ((ColorWell) c).setColor((Color) port.getValue());
             } else if (c instanceof JTextField) {

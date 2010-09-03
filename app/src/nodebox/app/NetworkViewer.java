@@ -11,16 +11,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class SceneViewer extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class NetworkViewer extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
 
-    public static final String SELECT_PROPERTY = "SceneViewer.select";
+    public static final String SELECT_PROPERTY = "NetworkViewer.select";
 
     private static final Color BACKGROUND_COLOR = new Color(50, 50, 50);
     private static final Color GRID_COLOR = new Color(64, 64, 64);
     private static final int GRID_SPACING = 50;
     private static final Color CONNECTION_COLOR = new Color(200, 120, 70);
     private static final Stroke CONNECTION_STROKE = new BasicStroke(2);
-
 
     private final Scene scene;
     private double zoomFactor = 1.0;
@@ -33,8 +32,11 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     private JPopupMenu viewerPopup;
     private SceneDocument document;
     private JPopupMenu nodeViewPopup;
+    private boolean isConnecting = false;
+    private Port connectionStartPort;
+    private Port connectionEndPort;
 
-    public SceneViewer(SceneDocument document, Scene scene) {
+    public NetworkViewer(SceneDocument document, Scene scene) {
         this.document = document;
         this.scene = scene;
         setCurrentNetwork(scene.getRootNetwork());
@@ -116,7 +118,10 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     public void dragSelection(int dx, int dy) {
         for (Node node : selection) {
             NodeView view = getNodeView(node);
-            view.setLocation(view.getX() + dx, view.getY() + dy);
+            int x = view.getX() + dx;
+            int y = view.getY() + dy;
+            view.setLocation(x, y);
+            node.setPosition(x, y);
         }
         repaint();
     }
@@ -143,6 +148,12 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         g2.translate(centerX, centerY);
 
         paintConnections(g2);
+        if (isConnecting()) {
+            Port port = connectionStartPort;
+            NodeView nv = getNodeView(port.getNode());
+            int y = nv.getPortPosition(connectionStartPort);
+            g2.drawLine(nv.getX() + nv.getWidth(), nv.getY() + y + NodeView.PORT_HEIGHT / 2, px, py);
+        }
 
         for (NodeView view : nodeViews.values()) {
             view.paintComponent(g);
@@ -154,9 +165,9 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
             NodeView outputView = nodeViews.get(c.getOutputNode());
             NodeView inputView = nodeViews.get(c.getInputNode());
             float outputX = outputView.getX() + outputView.getWidth() - 10;
-            float outputY = outputView.getY() + outputView.getPortPosition(c.getOutputPort());
+            float outputY = outputView.getY() + outputView.getPortPosition(c.getOutputPort()) + NodeView.PORT_HEIGHT / 2;
             float inputX = inputView.getX() + 13;
-            float inputY = inputView.getY() + inputView.getPortPosition(c.getInputPort());
+            float inputY = inputView.getY() + inputView.getPortPosition(c.getInputPort()) + NodeView.PORT_HEIGHT / 2;
             float dx = Math.abs(inputX - outputX) / 2;
             GeneralPath p = new GeneralPath();
             p.moveTo(outputX, outputY);
@@ -176,6 +187,12 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         return null;
     }
 
+    private Port getPortAt(Point p) {
+        NodeView view = getNodeAt(p);
+        if (view == null) return null;
+        return view.getPortAt(p);
+    }
+
     public void mouseClicked(MouseEvent e) {
         NodeView view = getNodeAt(e.getPoint());
         if (view == null) return;
@@ -190,6 +207,10 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         NodeView view = getNodeAt(e.getPoint());
         if (view != null) {
             singleSelect(view);
+            Port port = view.getPortAt(e.getPoint());
+            if (port != null) {
+                startConnection(port);
+            }
         } else {
             deselectAll();
         }
@@ -197,8 +218,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     }
 
     public void mouseReleased(MouseEvent e) {
-        NodeView view = getNodeAt(e.getPoint());
-        if (view == null) return;
+        endConnection();
     }
 
     public void mouseEntered(MouseEvent e) {
@@ -210,9 +230,18 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
     public void mouseDragged(MouseEvent e) {
         int dx = e.getX() - px;
         int dy = e.getY() - py;
+        px = e.getX();
+        py = e.getY();
         if (spaceDown) {
             centerX += dx;
             centerY += dy;
+            repaint();
+        } else if (isConnecting()) {
+            connectionEndPort = null;
+            Port p = getPortAt(e.getPoint());
+            if (p != null && connectionStartPort.canConnectTo(p)) {
+                connectionEndPort = p;
+            }
             repaint();
         } else {
             NodeView view = getNodeAt(e.getPoint());
@@ -222,13 +251,12 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
                 // Drag rectangle
             }
         }
-        px = e.getX();
-        py = e.getY();
     }
 
     public void mouseMoved(MouseEvent e) {
+        connectionStartPort = getPortAt(e.getPoint());
+        repaint();
     }
-
 
     public void keyTyped(KeyEvent e) {
     }
@@ -267,14 +295,64 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         }
         nodeViewPopup.add(publishOutputsMenu);
 
-
         if (node instanceof Network)
             nodeViewPopup.add(new EditNetworkAction((Network) node));
         nodeViewPopup.add(new RenameAction(node));
-        nodeViewPopup.show(SceneViewer.this, e.getX(), e.getY());
+        nodeViewPopup.show(NetworkViewer.this, e.getX(), e.getY());
         return true;
     }
 
+    //// Connections ////
+
+
+    /**
+     * This method gets called when we start dragging a connection line from a port on a node view.
+     *
+     * @param port the port where we start from.
+     */
+    public void startConnection(Port port) {
+        System.out.println("start connection port = " + port);
+        connectionStartPort = port;
+        isConnecting = true;
+    }
+
+    /**
+     * This method gets called when a dragging operation ends.
+     * <p/>
+     * We don't care if a connection was established or not.
+     */
+    public void endConnection() {
+        if (connectionStartPort != null && connectionEndPort != null && connectionStartPort.canConnectTo(connectionEndPort)) {
+            Port input = connectionStartPort.getDirection() == Port.Direction.INPUT ? connectionStartPort : connectionEndPort;
+            Port output = connectionStartPort.getDirection() == Port.Direction.OUTPUT ? connectionStartPort : connectionEndPort;
+            Network network = input.getNode().getNetwork();
+            if (network != null) {
+                network.connect(output, input);
+                repaint();
+            }
+        }
+        connectionStartPort = null;
+        connectionEndPort = null;
+        isConnecting = false;
+        repaint();
+    }
+
+    /**
+     * Return true if we are in the middle of a connection drag operation.
+     *
+     * @return true if we are connecting nodes together.
+     */
+    public boolean isConnecting() {
+        return isConnecting;
+    }
+
+    public boolean isConnectionStartPort(Port port) {
+        return connectionStartPort == port;
+    }
+
+    public boolean isConnectionEndPort(Port port) {
+        return connectionEndPort == port;
+    }
 
     private class PopupHandler extends MouseAdapter {
 
@@ -295,7 +373,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
                 if (getCurrentNetwork().getNetwork() != null)
                     viewerPopup.add(new EditParentNetworkAction(getCurrentNetwork().getNetwork()));
                 viewerPopup.add(new ResetViewAction());
-                viewerPopup.show(SceneViewer.this, e.getX(), e.getY());
+                viewerPopup.show(NetworkViewer.this, e.getX(), e.getY());
             }
         }
     }
@@ -372,7 +450,7 @@ public class SceneViewer extends JPanel implements MouseListener, MouseMotionLis
         }
 
         public void actionPerformed(ActionEvent e) {
-            String s = JOptionPane.showInputDialog(SceneViewer.this, "New name:", node.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString());
+            String s = JOptionPane.showInputDialog(NetworkViewer.this, "New name:", node.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString());
             if (s == null || s.length() == 0)
                 return;
             node.setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, s);
