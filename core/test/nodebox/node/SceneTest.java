@@ -28,7 +28,7 @@ public class SceneTest extends TestCase {
         assertEquals(11, types1.getValue("int"));
         assertEquals(22.22f, types1.getValue("float"));
         assertEquals("33-33-33", types1.getValue("string"));
-        assertEquals(Color.decode("#44444444"), types1.getValue("color"));
+        assertEquals(new Color(68, 68, 68, 68), types1.getValue("color"));
         Node output1 = root.getChild("output1");
         Node input1 = root.getChild("input1");
         assertTrue(output1.getPort("output").isConnected());

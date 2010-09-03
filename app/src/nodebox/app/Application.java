@@ -4,20 +4,25 @@ import nodebox.node.Network;
 import nodebox.node.Node;
 import nodebox.node.NodeManager;
 import nodebox.node.Scene;
+import org.eclipse.osgi.framework.internal.core.BundleContextImpl;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Properties;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Application implements BundleActivator {
 
     private static Application instance;
+    private static Logger logger = Logger.getLogger(Application.class.getName());
 
     public static Application getInstance() {
         return instance;
@@ -40,8 +45,15 @@ public class Application implements BundleActivator {
     private String version;
     private SceneDocument document;
     private NodeManager manager;
+    private java.util.List<SceneDocument> documents = new ArrayList<SceneDocument>();
+    private SceneDocument currentDocument;
 
     public Application() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         registerForMacOSXEvents();
     }
 
@@ -91,38 +103,79 @@ public class Application implements BundleActivator {
         }
     }
 
-     private NodeManager getNodeManager(BundleContext context) {
+    private NodeManager getNodeManager(BundleContext context) {
         ServiceReference ref = context.getServiceReference(NodeManager.class.getName());
         return (NodeManager) context.getService(ref);
     }
 
-    //// Hard-coded demo scenes ////
+    //// Document management ////
 
-    public Scene basicLFOScene() {
-        Scene scene = new Scene();
-        Network root = scene.getRootNetwork();
-        Node clear = manager.createNode("nodebox.builtins.render.Clear");
-        clear.setPosition(new Point(250, 50));
-        clear.setValue("color", Color.DARK_GRAY);
-        //Node lfo = new LFO();
-        //lfo.setPosition(new Point(50, 50));
-        //lfo.setValue(LFO.PORT_OFFSET, 100.0);
-        Node rect = manager.createNode("nodebox.builtins.render.Rect");
-        rect.setPosition(new Point(250, 150));
-        //root.addChild(lfo);
-        root.addChild(clear);
-        root.addChild(rect);
-        //root.connect(lfo, LFO.PORT_RESULT, rect, Rect.PORT_X);
-        return scene;
+    public java.util.List<SceneDocument> getDocuments() {
+        return documents;
     }
 
-    public static void main(String[] args) {
+    public int getDocumentCount() {
+        return documents.size();
+    }
+
+    public void removeDocument(SceneDocument document) {
+        documents.remove(document);
+    }
+
+    public SceneDocument createNewDocument() {
+        SceneDocument doc = new SceneDocument(manager, new Scene());
+        addDocument(doc);
+        return doc;
+    }
+
+    public boolean openDocument(File file) {
+        // Check if the document is already open.
+        String path;
         try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            path = file.getCanonicalPath();
+            for (SceneDocument doc : Application.getInstance().getDocuments()) {
+                try {
+                    if (doc.getDocumentFile() == null) continue;
+                    if (doc.getDocumentFile().getCanonicalPath().equals(path)) {
+                        // The document is already open. Bring it to the front.
+                        doc.toFront();
+                        doc.requestFocus();
+                        MenuBar.addRecentFile(file);
+                        return true;
+                    }
+                } catch (IOException e) {
+                    logger.log(Level.WARNING, "The document " + doc.getDocumentFile() + " refers to path with errors", e);
+                }
+            }
+        } catch (IOException e) {
+            logger.log(Level.WARNING, "The document " + file + " refers to path with errors", e);
         }
-        Application.getInstance().loadScene("basicLFOScene");
+
+        try {
+            SceneDocument doc = new SceneDocument(manager, file);
+            addDocument(doc);
+            MenuBar.addRecentFile(file);
+            return true;
+        } catch (RuntimeException e) {
+            logger.log(Level.SEVERE, "Error while loading " + file, e);
+            ExceptionDialog d = new ExceptionDialog(null, e);
+            d.setVisible(true);
+            return false;
+        }
+    }
+    private void addDocument(SceneDocument doc) {
+        doc.setVisible(true);
+        doc.requestFocus();
+        documents.add(doc);
+        currentDocument = doc;
+    }
+
+    public SceneDocument getCurrentDocument() {
+        return currentDocument;
+    }
+
+    void setCurrentDocument(SceneDocument document) {
+        currentDocument = document;
     }
 
 }

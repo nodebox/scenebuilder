@@ -10,8 +10,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class SceneDocument extends JFrame {
+
+    private static Logger logger = Logger.getLogger(SceneDocument.class.getName());
+    public static String lastFilePath;
 
     private final NodeManager manager;
     private final Scene scene;
@@ -22,13 +28,23 @@ public class SceneDocument extends JFrame {
     private Thread rendererThread;
     private JMenuBar sceneMenuBar;
     private SceneRenderer renderer;
+    private File documentFile;
+    private boolean documentChanged;
+
+    public static SceneDocument getCurrentDocument() {
+        return Application.getInstance().getCurrentDocument();
+    }
+
+    public SceneDocument(NodeManager manager, File file) {
+        this(manager, Scene.load(file, manager));
+        setDocumentFile(file);
+    }
 
     public SceneDocument(NodeManager manager, Scene scene) throws HeadlessException {
         super("Editor");
         this.manager = manager;
         this.scene = scene;
         currentNetwork = scene.getRootNetwork();
-        initMenu();
         setSize(800, 800);
         renderer = new SceneRenderer(scene);
         JPanel networkPanel = new JPanel(new BorderLayout(0, 0));
@@ -44,6 +60,7 @@ public class SceneDocument extends JFrame {
         mainSplitter.setDividerLocation(300);
         setContentPane(mainSplitter);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setJMenuBar(new MenuBar(this, manager));
         // Setup renderer
         renderer.init();
         addWindowListener(new WindowAdapter() {
@@ -54,30 +71,107 @@ public class SceneDocument extends JFrame {
         });
     }
 
-    private void initMenu() {
-        sceneMenuBar = new JMenuBar();
-        JMenu sceneMenu = new JMenu("Scene");
-        sceneMenu.getPopupMenu().setLightWeightPopupEnabled(false);
-        sceneMenu.add(new SceneDocument.SwitchSceneAction("Basic Animation", "basicLFOScene"));
-        sceneMenu.add(new SceneDocument.SwitchSceneAction("Mouse Input", "mouseScene"));
-        sceneMenu.add(new SceneDocument.SwitchSceneAction("Pong Network", "pongMacroScene"));
-        sceneMenu.add(new SceneDocument.SwitchSceneAction("Iterator", "iteratorScene"));
-        sceneMenu.add(new SceneDocument.SwitchSceneAction("Tree", "treeScene"));
-        sceneMenu.add(new SceneDocument.SwitchSceneAction("Creatures", "creaturesScene"));
-        sceneMenuBar.add(sceneMenu);
-        JMenu createMenu = new JMenu("Create");
-        for (String category: manager.getNodeCategories()) {
-            JMenu categoryMenu = new JMenu(category);
-            categoryMenu.getPopupMenu().setLightWeightPopupEnabled(false);
-            for (Class nodeClass: manager.getNodeClasses(category)) {
-                categoryMenu.add(new CreateNodeAction(nodeClass.getSimpleName(), nodeClass));
-            }
-            createMenu.add(categoryMenu);
+    private void updateTitle() {
+        String postfix = "";
+        if (!PlatformUtils.isMac()) { // todo: mac only code
+            postfix = (documentChanged ? " *" : "");
+        } else {
+            getRootPane().putClientProperty("Window.documentModified", documentChanged);
         }
-        createMenu.getPopupMenu().setLightWeightPopupEnabled(false);
-        sceneMenuBar.add(createMenu);
-        setJMenuBar(sceneMenuBar);
+        if (documentFile == null) {
+            setTitle("Untitled" + postfix);
+        } else {
+            setTitle(documentFile.getName() + postfix);
+            getRootPane().putClientProperty("Window.documentFile", documentFile);
+        }
     }
+
+    //// Document file management ////
+
+    public File getDocumentFile() {
+        return documentFile;
+    }
+
+    public void setDocumentFile(File documentFile) {
+        this.documentFile = documentFile;
+        updateTitle();
+    }
+
+    public boolean isChanged() {
+        return documentChanged;
+    }
+
+    public void close() {
+        if (shouldClose()) {
+            renderer.stop();
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+            Application.getInstance().removeDocument(this);
+            dispose();
+            // On Mac the application does not close if the last window is closed.
+//            if (PlatformUtils.isMac()) return;
+//            // If there are no more documents, exit the application.
+//            if (Application.getInstance().getDocumentCount() == 0) {
+//                System.exit(0);
+//            }
+        }
+    }
+
+    public boolean shouldClose() {
+        if (isChanged()) {
+            SaveDialog sd = new SaveDialog();
+            int retVal = sd.show(this);
+            if (retVal == JOptionPane.YES_OPTION) {
+                return save();
+            } else if (retVal == JOptionPane.NO_OPTION) {
+                return true;
+            } else if (retVal == JOptionPane.CANCEL_OPTION) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean save() {
+        if (documentFile == null) {
+            return saveAs();
+        } else {
+            return saveToFile(documentFile);
+        }
+    }
+
+    public boolean saveAs() {
+        File chosenFile = FileUtils.showSaveDialog(this, lastFilePath, "ndbx", "NodeBox File");
+        if (chosenFile != null) {
+            if (!chosenFile.getAbsolutePath().endsWith(".ndbx")) {
+                chosenFile = new File(chosenFile.getAbsolutePath() + ".ndbx");
+            }
+            lastFilePath = chosenFile.getParentFile().getAbsolutePath();
+            setDocumentFile(chosenFile);
+            MenuBar.addRecentFile(documentFile);
+            return saveToFile(documentFile);
+        }
+        return false;
+    }
+
+    public boolean saveToFile(File file) {
+        try {
+            scene.save(file);
+        } catch (RuntimeException e) {
+            JOptionPane.showMessageDialog(this, "An error occurred while saving the file.", "NodeBox", JOptionPane.ERROR_MESSAGE);
+            logger.log(Level.SEVERE, "An error occurred while saving the file.", e);
+            return false;
+        }
+        documentChanged = false;
+        updateTitle();
+        return true;
+    }
+
+    //// Scene management ////
 
     public Scene getScene() {
         return scene;
@@ -94,7 +188,7 @@ public class SceneDocument extends JFrame {
 
     }
 
-    private void createNode(Class nodeClass) {
+    public void createNode(Class nodeClass) {
         try {
             Node n = (Node) nodeClass.newInstance();
             getCurrentNetwork().addChild(n);
@@ -102,42 +196,6 @@ public class SceneDocument extends JFrame {
             viewer.updateView();
         } catch (Exception e1) {
             throw new RuntimeException(e1);
-        }
-    }
-
-    public void close() {
-        renderer.stop();
-        try {
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        dispose();
-    }
-
-    public static class SwitchSceneAction extends AbstractAction {
-        public final String sceneId;
-
-        public SwitchSceneAction(String name, String id) {
-            super(name);
-            sceneId = id;
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            Application.getInstance().loadScene(sceneId);
-        }
-    }
-
-    public class CreateNodeAction extends AbstractAction {
-        public final Class nodeClass;
-
-        public CreateNodeAction(String name, Class nodeClass) {
-            super(name);
-            this.nodeClass = nodeClass;
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            createNode(nodeClass);
         }
     }
 

@@ -20,4 +20,8 @@
         <ant dir="${module.app}" antfile="build.xml" target="clean"/>
     </target>
 
+    <target  name="run">
+        <java fork="true" jar="lib/equinox.jar" args="-console"/>
+    </target>
+
 </project>
