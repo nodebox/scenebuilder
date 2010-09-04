@@ -7,18 +7,15 @@ import nodebox.node.*;
  */
 public class Mouse extends Node {
 
-    public final FloatPort pX;
-    public final FloatPort pY;
+    public final FloatPort pX = new FloatPort(this, "x", Port.Direction.OUTPUT);
+    public final FloatPort pY = new FloatPort(this, "y", Port.Direction.OUTPUT);
 
     public Mouse() {
-        pX = (FloatPort) addPort(new FloatPort(this, "x", Port.Direction.OUTPUT, 0f));
-        pY = (FloatPort) addPort(new FloatPort(this, "y", Port.Direction.OUTPUT, 0f));
     }
 
     @Override
-    public boolean execute(Context context, double time) {
+    public void execute(Context context, double time) {
         pX.set((float) context.getApplet().mouseX);
         pY.set((float) context.getApplet().mouseY);
-        return true;
     }
 }

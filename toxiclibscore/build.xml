@@ -7,6 +7,7 @@
 
     <path id="build.classpath">
         <path path="${dist}/nodebox-core.jar"/>
+        <path path="${dist}/nodebox-builtins.jar"/>
         <path path="${lib}/processing-core.jar"/>
         <path path="${lib}/equinox.jar"/>
         <path path="${lib}/toxiclibscore.jar"/>

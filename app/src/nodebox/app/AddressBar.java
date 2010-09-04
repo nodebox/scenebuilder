@@ -81,7 +81,7 @@ public class AddressBar extends JPanel implements MouseListener {
             } else {
                 g2.setColor(TEXT_NORMAL_COLOR);
             }
-            String displayName = part.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString();
+            String displayName = part.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE);
             SwingUtils.drawShadowText(g2, displayName, x, 16);
 
             int width = (int) g2.getFontMetrics().stringWidth(displayName);
@@ -112,7 +112,6 @@ public class AddressBar extends JPanel implements MouseListener {
         if (partIndex == -1) return;
         java.util.List<Network> networks = getNetworkParts();
         Network selectedNetwork = networks.get(partIndex);
-        //System.out.println("part = " + selectedNetwork);
         if (selectedNetwork != null)
             document.setCurrentNetwork(selectedNetwork);
         repaint();

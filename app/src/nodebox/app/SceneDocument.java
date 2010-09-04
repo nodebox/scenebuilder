@@ -44,7 +44,7 @@ public class SceneDocument extends JFrame {
         this.manager = manager;
         this.scene = scene;
         currentNetwork = scene.getRootNetwork();
-        setSize(800, 800);
+        setSize(1000, 800);
         renderer = new SceneRenderer(scene);
         JPanel networkPanel = new JPanel(new BorderLayout(0, 0));
         addressBar = new AddressBar(this);

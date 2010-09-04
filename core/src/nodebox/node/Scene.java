@@ -245,8 +245,11 @@ public class Scene {
          */
         private void setPortValue(String stringValue) throws SAXException {
             if (currentPort == null) throw new SAXException("There is no current port.");
-            Object value = currentPort.parseValue(stringValue);
-            currentPort.setValue(value);
+            if (currentPort.isPersistable()) {
+                PersistablePort persistablePort = (PersistablePort) currentPort;
+                Object value = persistablePort.parseValue(stringValue);
+                currentPort.setValue(value);
+            }
         }
 
         /**
@@ -330,8 +333,8 @@ public class Scene {
         el.setAttribute("x", Integer.toString(position.x));
         el.setAttribute("y", Integer.toString(position.y));
 
-        // Add the ports
-        for (Port port : node.getPorts()) {
+        // Add the input ports
+        for (Port port : node.getInputPorts()) {
             writePort(doc, el, port);
         }
 
@@ -353,10 +356,13 @@ public class Scene {
     }
 
     private static void writePort(Document doc, Element parent, Port port) {
-        Element el = doc.createElement("port");
-        parent.appendChild(el);
-        el.setAttribute("name", port.getName());
-        el.appendChild(doc.createTextNode(port.getValueAsString()));
+        if (port.isPersistable()) {
+            PersistablePort persistablePort = (PersistablePort) port;
+            Element el = doc.createElement("port");
+            parent.appendChild(el);
+            el.setAttribute("name", port.getName());
+            el.appendChild(doc.createTextNode(persistablePort.getValueAsString()));
+        }
     }
 
     private static void writeConnection(Document doc, Element parent, Connection connection) {

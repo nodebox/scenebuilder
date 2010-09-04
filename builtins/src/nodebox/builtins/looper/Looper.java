@@ -13,19 +13,17 @@ import nodebox.node.Port;
  */
 public class Looper extends Network {
 
-    public final IntPort pAmount;
+    public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.INPUT, 10);
     public static final String KEY_AMOUNT = "amount";
     public static final String KEY_INDEX = "index";
     public static final String KEY_POSITION = "position";
 
     public Looper() {
-        setDisplayName("Looper");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Run the contents of this network multiple times.");
-        pAmount = (IntPort) addPort(new IntPort(this, "amount", Port.Direction.INPUT, 10));
     }
 
     @Override
-    public boolean execute(Context context, double time) {
+    public void execute(Context context, double time) {
         int amount = pAmount.get();
         float position;
         for (int i = 0; i < amount; i++) {
@@ -34,9 +32,7 @@ public class Looper extends Network {
             childContext.setValueForNodeKey(this, KEY_AMOUNT, amount);
             childContext.setValueForNodeKey(this, KEY_INDEX, i);
             childContext.setValueForNodeKey(this, KEY_POSITION, position);
-            boolean success = super.execute(childContext, time);
-            if (!success) return false;
+            super.execute(childContext, time);
         }
-        return true;
     }
 }

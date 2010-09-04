@@ -1,8 +1,12 @@
 package nodebox.node;
 
-public class BooleanPort extends Port {
+public class BooleanPort extends Port implements PersistablePort {
 
     private boolean value;
+
+    public BooleanPort(Node node, String name, Direction direction) {
+        super(node, name, direction);
+    }
 
     public BooleanPort(Node node, String name, Direction direction, boolean value) {
         super(node, name, direction);
@@ -31,12 +35,10 @@ public class BooleanPort extends Port {
         this.value = value;
     }
 
-    @Override
     public Object parseValue(String value) throws IllegalArgumentException {
         return Boolean.parseBoolean(value);
     }
 
-    @Override
     public String getValueAsString() {
         return Boolean.toString(value);
     }

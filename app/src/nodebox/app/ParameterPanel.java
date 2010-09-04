@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
+public class
+        ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
 
     private static final Font NODE_LABEL_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
     private static final Font PORT_LABEL_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
@@ -153,7 +154,12 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             if (c instanceof JCheckBox) {
                 ((JCheckBox) c).setSelected((Boolean) port.getValue());
             } else if (c instanceof DraggableNumber) {
-                ((DraggableNumber) c).setValue((Float) port.getValue());
+                Object value = port.getValue();
+                if (value instanceof Float) {
+                    ((DraggableNumber) c).setValue((Float) value);
+                } else if (value instanceof Integer) {
+                    ((DraggableNumber) c).setValue((Integer) value);
+                }
             } else if (c instanceof ColorWell) {
                 ((ColorWell) c).setColor((Color) port.getValue());
             } else if (c instanceof JTextField) {

@@ -9,7 +9,6 @@ public class CoreActivator implements BundleActivator {
     private ServiceRegistration nodeManagerRegistration;
 
     public void start(BundleContext context) throws Exception {
-        System.out.println("registering " + NodeManager.class.getName());
         nodeManagerRegistration = context.registerService(NodeManager.class.getName(), new NodeManager(), null);
     }
 

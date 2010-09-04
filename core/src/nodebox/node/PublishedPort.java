@@ -22,14 +22,4 @@ public class PublishedPort extends Port {
     public void setValue(Object value) {
         originalPort.setValue(value);
     }
-
-    @Override
-    public Object parseValue(String value) throws IllegalArgumentException {
-        return originalPort.parseValue(value);
-    }
-
-    @Override
-    public String getValueAsString() {
-        return originalPort.getValueAsString();
-    }
 }

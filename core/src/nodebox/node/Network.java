@@ -123,30 +123,26 @@ public class Network extends Node {
      * @return true if all children returned true.
      */
     @Override
-    public boolean execute(Context context, double time) {
+    public void execute(Context context, double time) {
         for (Node child : children) {
             if (child.isRendering()) {
-                if (!updateChildDependencies(child, context, time))
-                    return false;
-                if (!child.execute(context, time))
-                    return false;
+                updateChildDependencies(child, context, time);
+                child.execute(context, time);
             }
         }
-        return true;
     }
 
-    private boolean updateChildDependencies(Node child, Context context, double time) {
+    private void updateChildDependencies(Node child, Context context, double time) {
         // Update all
         for (Connection c : getInputConnections(child)) {
             Node n = c.getOutputNode();
             if (!context.hasExecuted(n)) {
                 context.addToExecutedNodes(n);
                 updateChildDependencies(n, context, time);
-                if (!n.execute(context, time)) return false;
+                n.execute(context, time);
             }
             c.getInputPort().setValue(c.getOutputPort().getValue());
         }
-        return true;
     }
 
     public boolean isConnected(Port port) {

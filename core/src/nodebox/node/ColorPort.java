@@ -4,10 +4,14 @@ import java.awt.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ColorPort extends Port {
+public class ColorPort extends Port implements PersistablePort {
 
     private Color value;
     private static final Pattern COLOR_PATTERN = Pattern.compile("^#([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])([0-9a-fA-F][0-9a-fA-F])$");
+
+    public ColorPort(Node node, String name, Direction direction) {
+        super(node, name, direction);
+    }
 
     public ColorPort(Node node, String name, Direction direction, Color value) {
         super(node, name, direction);
@@ -36,7 +40,6 @@ public class ColorPort extends Port {
         this.value = value;
     }
 
-    @Override
     public Object parseValue(String value) throws IllegalArgumentException {
         try {
             Matcher m = COLOR_PATTERN.matcher(value);
@@ -53,7 +56,6 @@ public class ColorPort extends Port {
         }
     }
 
-    @Override
     public String getValueAsString() {
         return String.format("#%02x%02x%02x%02x", value.getRed(), value.getGreen(), value.getBlue(), value.getAlpha());
     }

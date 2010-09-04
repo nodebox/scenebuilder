@@ -29,7 +29,7 @@ public class Application implements BundleActivator {
     }
 
     public void start(BundleContext context) throws Exception {
-        System.out.println("Starting up application!");
+        System.out.println("Starting up application.");
         instance = this;
         version = context.getBundle().getVersion().toString();
         manager = getNodeManager(context);

@@ -1,11 +1,13 @@
 package nodebox.node;
 
-import nodebox.util.Preconditions;
 import nodebox.util.Strings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
@@ -20,15 +22,8 @@ public abstract class Node {
     private Network network;
     private String name = "";
     private Point position = new Point(0, 0);
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private Map<String, String> attributes = new HashMap<String, String>();
     private LinkedList<Port> ports = new LinkedList<Port>();
-
-    public static Map<String, Object> createAttributes(String displayName, String description) {
-        Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(DISPLAY_NAME_ATTRIBUTE, displayName);
-        attributes.put(DESCRIPTION_ATTRIBUTE, description);
-        return attributes;
-    }
 
     public static int createInstance(Class c) {
         synchronized (instanceCounts) {
@@ -65,15 +60,15 @@ public abstract class Node {
         return name;
     }
 
-    public String getDisplayName() {
-        return getAttribute(DISPLAY_NAME_ATTRIBUTE).toString();
-    }
-
     public void setDisplayName(String displayName) {
         if (displayName == null || displayName.trim().length() == 0) {
             displayName = Strings.humanizeName(name);
         }
         setAttribute(DISPLAY_NAME_ATTRIBUTE, displayName);
+    }
+
+    public String getDisplayName() {
+        return getAttribute(Node.DISPLAY_NAME_ATTRIBUTE);
     }
 
     public void setName(String name) {
@@ -94,16 +89,17 @@ public abstract class Node {
 
     //// Attributes ////
 
-    public Map<String, Object> getAttributes() {
+    public Map<String, String> getAttributes() {
         return attributes;
     }
 
-    public void setAttribute(String attribute, Object value) {
+    public void setAttribute(String attribute, String value) {
         attributes.put(attribute, value);
     }
 
-    public Object getAttribute(String attribute) {
-        return attributes.get(attribute);
+    public String getAttribute(String attribute) {
+        String v = attributes.get(attribute);
+        return v != null ? v : "";
     }
 
     //// Ports ////
@@ -122,7 +118,7 @@ public abstract class Node {
         return inputPorts;
     }
 
-     public java.util.List<Port> getOutputPorts() {
+    public java.util.List<Port> getOutputPorts() {
         ArrayList<Port> inputPorts = new ArrayList<Port>();
         for (Port port : ports) {
             if (port.getDirection() == Port.Direction.OUTPUT) {
@@ -131,15 +127,15 @@ public abstract class Node {
         }
         return inputPorts;
     }
-    
+
     /**
      * Add a port to this node.
      * <p/>
      * The port.node should be set to this node, and the port name should be unique.
      *
      * @param port the port to add.
-     * @throws IllegalArgumentException if the port name is not unique or the node is not set to this node.
      * @return the given port
+     * @throws IllegalArgumentException if the port name is not unique or the node is not set to this node.
      */
     public Port addPort(Port port) {
         checkArgument(port.getNode() == this, "Port.node should be set to this.");
@@ -211,7 +207,12 @@ public abstract class Node {
     public Object parseValue(String portName, String value) {
         checkNotNull(value);
         Port port = getPort(portName);
-        return port.parseValue(value);
+        if (port.isPersistable()) {
+            PersistablePort persistablePort = (PersistablePort) port;
+            return persistablePort.parseValue(value);
+        } else {
+            return null;
+        }
     }
 
     //// Custom interface ////
@@ -235,9 +236,8 @@ public abstract class Node {
      *
      * @param context the rendering context
      * @param time    the current time
-     * @return false if the node did not execute successfully. The renderer will then stop rendering the current frame.
      */
-    public abstract boolean execute(Context context, double time);
+    public abstract void execute(Context context, double time);
 
     @Override
     public String toString() {

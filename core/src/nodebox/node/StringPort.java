@@ -1,8 +1,12 @@
 package nodebox.node;
 
-public class StringPort extends Port {
+public class StringPort extends Port implements PersistablePort {
 
     private String value;
+
+    public StringPort(Node node, String name, Direction direction) {
+        super(node, name, direction);
+    }
 
     public StringPort(Node node, String name, Direction direction, String value) {
         super(node, name, direction);
@@ -31,12 +35,10 @@ public class StringPort extends Port {
         this.value = value;
     }
 
-    @Override
     public Object parseValue(String value) throws IllegalArgumentException {
         return value;
     }
 
-    @Override
     public String getValueAsString() {
         return value;
     }

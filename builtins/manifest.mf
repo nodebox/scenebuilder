@@ -3,4 +3,4 @@ Bundle-SymbolicName: nodebox.builtins
 Bundle-Name: Node-Builtins
 Bundle-Version: 1.0.0
 Bundle-Activator: nodebox.builtins.BuiltinsActivator
-Import-Package: org.osgi.framework, org.osgi.util.tracker, processing.core, nodebox.node
+Import-Package: org.osgi.framework, org.osgi.util.tracker, processing.core, nodebox.node, nodebox.util

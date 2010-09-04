@@ -135,7 +135,7 @@ public class NodeView {
         AffineTransform originalTransform = g2.getTransform();
         g2.translate(bounds.x, bounds.y);
         Shape originalClip = g2.getClip();
-        g2.translate(3, 3);
+        //g2.translate(3, 3);
         g2.setColor(NODE_BODY_COLOR);
 
         g2.fill(nodeRect);
@@ -154,14 +154,14 @@ public class NodeView {
         Collection<Port> inputPorts = node.getInputPorts();
         for (Port port : inputPorts) {
             g2.setColor(getPortColor(port));
-            g2.fillRect(3, y, PORT_WIDTH, PORT_HEIGHT);
+            g2.fillRect(0, y, PORT_WIDTH, PORT_HEIGHT);
             if (network != null && network.isPublished(port)) {
                 g2.setColor(NODE_PUBLISHED_PORT_COLOR);
                 g2.fillOval(9, y - 6, 4, 4);
                 g2.setColor(NODE_PORT_COLOR);
             }
             g2.drawOval(9, y - 6, 4, 4);
-            g2.drawString(port.getDisplayName(), 20, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
+            g2.drawString(port.getDisplayName(), PORT_WIDTH + 5, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
             y += PORT_HEIGHT;
         }
         // Reset y to draw the output ports.
@@ -169,14 +169,14 @@ public class NodeView {
         Collection<Port> outputPorts = node.getOutputPorts();
         for (Port port : outputPorts) {
             g2.setColor(getPortColor(port));
-            g2.fillRect(totalWidth - 3 - PORT_WIDTH, y, PORT_WIDTH, PORT_HEIGHT);
+            g2.fillRect(totalWidth - PORT_WIDTH, y, PORT_WIDTH, PORT_HEIGHT);
             if (network != null && network.isPublished(port)) {
                 g2.setColor(NODE_PUBLISHED_PORT_COLOR);
                 g2.fillOval(9, y - 6, 4, 4);
                 g2.setColor(NODE_PORT_COLOR);
             }
             Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getDisplayName(), g);
-            g2.drawString(port.getDisplayName(), totalWidth - (int) r.getWidth() - 20, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
+            g2.drawString(port.getDisplayName(), totalWidth - (int) r.getWidth() - PORT_WIDTH - 5, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
             g2.drawOval(totalWidth - 13, y - 6, 4, 4);
             y += PORT_HEIGHT;
         }

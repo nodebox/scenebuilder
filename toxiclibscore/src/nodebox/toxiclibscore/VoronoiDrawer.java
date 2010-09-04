@@ -11,25 +11,19 @@ import java.util.Random;
 
 public class VoronoiDrawer extends RenderingNode {
 
-    public final FloatPort pX;
-    public final FloatPort pY;
-    public final FloatPort pSize;
-    public final IntPort pAmount;
-    public final IntPort pSeed;
+    public final FloatPort pX =new FloatPort(this, "x", Port.Direction.INPUT, 0f);
+    public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT, 0f);
+    public final FloatPort pSize = new FloatPort(this, "size", Port.Direction.INPUT, 500f);
+    public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.INPUT, 100);
+    public final IntPort pSeed = new IntPort(this, "seed", Port.Direction.INPUT, 100);
 
     public VoronoiDrawer() {
-        setAttribute(DISPLAY_NAME_ATTRIBUTE, "Voronoi Drawer");
         setAttribute(DESCRIPTION_ATTRIBUTE, "Draws a voronoi shape at the given position.");
-        pX = (FloatPort) addPort(new FloatPort(this, "x", Port.Direction.INPUT, 0f));
-        pY = (FloatPort) addPort(new FloatPort(this, "y", Port.Direction.INPUT, 0f));
-        pSize = (FloatPort) addPort(new FloatPort(this, "size", Port.Direction.INPUT, 500f));
-        pAmount = (IntPort) addPort(new IntPort(this, "amount", Port.Direction.INPUT, 100));
-        pSeed = (IntPort) addPort(new IntPort(this, "seed", Port.Direction.INPUT, 100));
     }
 
     @Override
-    public boolean execute(Context context, double time) {
-        if (!pEnabled.get()) return true;
+    public void execute(Context context, double time) {
+        if (!pEnabled.get()) return;
         // Construct Voronoi
         float voronoiSize = pSize.get();
         Voronoi voronoi = new Voronoi();
@@ -56,6 +50,5 @@ public class VoronoiDrawer extends RenderingNode {
         }
         g.popMatrix();
         g.popStyle();
-        return true;
     }
 }

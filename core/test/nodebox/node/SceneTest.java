@@ -60,23 +60,22 @@ public class SceneTest extends TestCase {
      */
     public static class TestNode extends RenderingNode {
         @Override
-        public boolean execute(Context context, double time) {
-            return true;
+        public void execute(Context context, double time) {
         }
     }
 
     public static class AllTypesNode extends TestNode {
-        private IntPort pInt = (IntPort) addPort(new IntPort(this, "int", Port.Direction.INPUT, 42));
-        private FloatPort pFloat = (FloatPort) addPort(new FloatPort(this, "float", Port.Direction.INPUT, 1.23f));
-        private StringPort pString = (StringPort) addPort(new StringPort(this, "string", Port.Direction.INPUT, "hello"));
-        private ColorPort pColor = (ColorPort) addPort(new ColorPort(this, "color", Port.Direction.INPUT, Color.RED));
+        public final IntPort pInt = new IntPort(this, "int", Port.Direction.INPUT, 42);
+        public final FloatPort pFloat = new FloatPort(this, "float", Port.Direction.INPUT, 1.23f);
+        public final StringPort pString = new StringPort(this, "string", Port.Direction.INPUT, "hello");
+        public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.INPUT, Color.RED);
     }
 
     public static class OutputNode extends TestNode {
-        private IntPort pOutput = (IntPort) addPort(new IntPort(this, "output", Port.Direction.OUTPUT, 99));
+        public final IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT, 99);
     }
 
     public static class InputNode extends TestNode {
-        private IntPort pInput = (IntPort) addPort(new IntPort(this, "input", Port.Direction.INPUT, 0));
+        public final IntPort pInput = new IntPort(this, "input", Port.Direction.INPUT, 0);
     }
 }

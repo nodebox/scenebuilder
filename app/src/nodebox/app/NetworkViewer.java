@@ -311,7 +311,6 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
      * @param port the port where we start from.
      */
     public void startConnection(Port port) {
-        System.out.println("start connection port = " + port);
         connectionStartPort = port;
         isConnecting = true;
     }

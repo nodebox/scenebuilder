@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="Clear1" type="nodebox.builtins.render.Clear" x="126" y="28">
+            <port name="enabled">true</port>
+            <port name="color">#00000031</port>
+        </node>
+        <node name="VoronoiLooper1" type="nodebox.toxiclibscore.VoronoiLooper" x="57" y="138">
+            <port name="x">154.0</port>
+            <port name="y">-67.0</port>
+            <port name="size">500.0</port>
+            <port name="amount">100</port>
+            <port name="seed">109</port>
+            <node name="Polygon2DDrawer1" type="nodebox.toxiclibscore.Polygon2DDrawer" x="456" y="42">
+                <port name="enabled">true</port>
+                <port name="color">#f1faffe6</port>
+                <port name="stroke">#00002c9f</port>
+                <port name="strokeWeight">10.014062</port>
+            </node>
+            <node name="RandomFloat1" type="nodebox.builtins.random.RandomFloat" x="223" y="135">
+                <port name="minimum">0.5</port>
+                <port name="maximum">21.0</port>
+                <port name="seed">56</port>
+            </node>
+            <node name="VoronoiVariables1" type="nodebox.toxiclibscore.VoronoiVariables" x="5" y="26"/>
+            <conn input="Polygon2DDrawer1" inputPort="polygon" output="VoronoiVariables1" outputPort="polygon"/>
+            <conn input="RandomFloat1" inputPort="seed" output="VoronoiVariables1" outputPort="index"/>
+            <conn input="Polygon2DDrawer1" inputPort="strokeWeight" output="RandomFloat1" outputPort="value"/>
+        </node>
+    </node>
+</ndbx>

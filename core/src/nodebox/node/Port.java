@@ -33,6 +33,7 @@ public abstract class Port {
         this.name = name.intern();
         setAttribute(DISPLAY_NAME_ATTRIBUTE, Strings.humanizeName(name));
         this.direction = direction;
+        node.addPort(this);
     }
 
     public Node getNode() {
@@ -91,23 +92,19 @@ public abstract class Port {
     public abstract void setValue(Object value) throws IllegalArgumentException;
 
     /**
-     * Parse the given string value and return a value that can be used with setValue.
+     * Check if this port can write and read its value as a string.
      * <p/>
-     * If the value is inappropriate or cannot be parsed, throw an IllegalArgumentException.
+     * If it can't, the port value is not persisted in the file.
+     * <p/>
+     * The default implementation checks if the port is an instance of PersistablePort.
+     * <p/>
+     * Ports that can be persisted are required to implement this interface.
      *
-     * @param value the string value to parse
-     * @return a value in the correct format.
-     * @throws IllegalArgumentException if the value cannot be parsed.
+     * @return true if the port can persist itself.
      */
-    public abstract Object parseValue(String value) throws IllegalArgumentException;
-
-    /**
-     * Return the current port value as a string, ready to be serialized.
-     * The returned string will be used with parseValue when loading a scene file.
-     *
-     * @return the value as a string representation.
-     */
-    public abstract String getValueAsString();
+    public boolean isPersistable() {
+        return this instanceof PersistablePort;
+    }
 
     //// Connections ////
 

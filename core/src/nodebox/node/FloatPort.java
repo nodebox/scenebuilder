@@ -1,8 +1,12 @@
 package nodebox.node;
 
-public class FloatPort extends Port {
+public class FloatPort extends Port implements PersistablePort {
 
     private float value;
+
+    public FloatPort(Node node, String name, Direction direction) {
+        super(node, name, direction);
+    }
 
     public FloatPort(Node node, String name, Direction direction, float value) {
         super(node, name, direction);
@@ -33,12 +37,10 @@ public class FloatPort extends Port {
         this.value = value;
     }
 
-    @Override
     public Object parseValue(String value) throws IllegalArgumentException {
         return Float.parseFloat(value);
     }
 
-    @Override
     public String getValueAsString() {
         return Float.toString(value);
     }

@@ -21,7 +21,6 @@ public class NodeManager {
     }
 
     public NodeManager() {
-        System.out.println("Constructing new node manager.");
         registerNodeClass(Network.class, "Utility");
     }
 
