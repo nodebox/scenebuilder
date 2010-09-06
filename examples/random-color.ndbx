@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="Mouse1" type="nodebox.builtins.device.Mouse" x="6" y="185"/>
+        <node name="RGBColor1" type="nodebox.builtins.color.RGBColor" x="347" y="44">
+            <port name="red">225.3911</port>
+            <port name="green">225.3911</port>
+            <port name="blue">225.3911</port>
+            <port name="alpha">210.0</port>
+            <port name="range">255.0</port>
+        </node>
+        <node name="RandomFloat1" type="nodebox.builtins.random.RandomFloat" x="136" y="24">
+            <port name="minimum">0.0</port>
+            <port name="maximum">255.0</port>
+            <port name="seed">1</port>
+        </node>
+        <node name="Rect1" type="nodebox.builtins.draw.Rect" x="604" y="125">
+            <port name="enabled">true</port>
+            <port name="x">0.0</port>
+            <port name="y">0.0</port>
+            <port name="width">100.0</port>
+            <port name="height">352.0</port>
+            <port name="fill">#e1e1e1d2</port>
+            <port name="stroke">#000000ff</port>
+            <port name="strokeWeight">1.0</port>
+        </node>
+        <conn input="Rect1" inputPort="fill" output="RGBColor1" outputPort="color"/>
+        <conn input="RGBColor1" inputPort="red" output="RandomFloat1" outputPort="value"/>
+        <conn input="RGBColor1" inputPort="green" output="RandomFloat1" outputPort="value"/>
+        <conn input="RGBColor1" inputPort="blue" output="RandomFloat1" outputPort="value"/>
+        <conn input="RandomFloat1" inputPort="seed" output="Mouse1" outputPort="x"/>
+        <conn input="Rect1" inputPort="x" output="Mouse1" outputPort="x"/>
+    </node>
+</ndbx>

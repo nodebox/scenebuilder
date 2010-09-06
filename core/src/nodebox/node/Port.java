@@ -126,13 +126,34 @@ public abstract class Port {
      * @param port the port to connect to.
      * @return true if this port can connect to the given port.
      */
-    public boolean canConnectTo(Port port) {
+    public final boolean canConnectTo(Port port) {
         checkNotNull(port);
         // One port needs to be input, the other output.
         // The direction can thus not be the same.
         if (this.direction == port.direction) return false;
+        if (this.direction == Direction.INPUT) {
+            return this.canReceiveFrom(port);
+        } else if (port.direction == Direction.INPUT) {
+            return this.canReceiveFrom(port);
+        } else {
+            throw new AssertionError("No input ports. This should never happen.");
+        }
+    }
+
+    /**
+     * Check whether this input port can receive values from the given output port.
+     * <p/>
+     * This method is called by canConnectTo. It is guaranteed to be called only on input ports,
+     * and the given port is guaranteed to be an output port.
+     * <p/>
+     * The default implementation checks to see if both port classes are exactly the same.
+     *
+     * @param output the output port
+     * @return true if this port can receive data from the given output port
+     */
+    protected boolean canReceiveFrom(Port output) {
         // Check if port classes are exactly the same.
-        return port.getClass().equals(getClass());
+        return this.getClass().equals(output.getClass());
     }
 
     @Override

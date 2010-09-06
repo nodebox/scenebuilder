@@ -1,5 +1,11 @@
 package nodebox.node;
 
+/**
+ * A float port holds a floating-point number.
+ *
+ * Float ports support both floating-point data and integer data. Integers are automatically cast to floats.
+ */
+
 public class FloatPort extends Port implements PersistablePort {
 
     private float value;
@@ -43,5 +49,11 @@ public class FloatPort extends Port implements PersistablePort {
 
     public String getValueAsString() {
         return Float.toString(value);
+    }
+
+    @Override
+    protected boolean canReceiveFrom(Port output) {
+        // Float ports can receive data from integer ports as well.
+        return (output instanceof FloatPort) || (output instanceof IntPort);
     }
 }

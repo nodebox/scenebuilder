@@ -6,7 +6,7 @@ import processing.core.PApplet;
 
 import java.awt.*;
 
-@Description("Draw a rectangle at the given position.")
+@Description("Draw a rectangle.")
 public class Rect extends DrawingNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
@@ -19,9 +19,7 @@ public class Rect extends DrawingNode {
 
     @Override
     public void draw(PApplet g, Context context, double time) {
-        g.pushStyle();
         ProcessingSupport.setStyle(g, pFill, pStroke, pStrokeWeight);
         g.rect(pX.get(), pY.get(), pWidth.get(), pHeight.get());
-        g.popStyle();
     }
 }

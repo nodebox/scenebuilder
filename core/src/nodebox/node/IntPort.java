@@ -1,5 +1,10 @@
 package nodebox.node;
 
+/**
+ * An integer port holds an integer number.
+ *
+ * Integer ports support both integer data and floating-point data. Floating-point data is rounded.
+ */
 public class IntPort extends Port implements PersistablePort {
 
     private int value;
@@ -24,6 +29,8 @@ public class IntPort extends Port implements PersistablePort {
     public void setValue(Object value) {
         if (value instanceof Integer) {
             set((Integer) value);
+        } else if (value instanceof Float) {
+            set(Math.round((Float) value));
         } else {
             throw new IllegalArgumentException(this + ": Value is not an integer.");
         }
@@ -44,4 +51,11 @@ public class IntPort extends Port implements PersistablePort {
     public String getValueAsString() {
         return Integer.toString(value);
     }
+
+    @Override
+    protected boolean canReceiveFrom(Port output) {
+        // Int ports can receive data from float ports as well. The value is rounded.
+        return (output instanceof IntPort) || (output instanceof FloatPort);
+    }
+
 }
