@@ -95,7 +95,7 @@ public class NodeManager {
     /**
      * Create a node instance.
      *
-     * @param nodeId the node class name, e.g. nodebox.builtins.render.Clear
+     * @param nodeId the node class name, e.g. nodebox.builtins.draw.Clear
      * @return a node instance
      * @throws RuntimeException If the node class could not be found or could not be instantiated.
      */

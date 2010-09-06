@@ -1,14 +1,14 @@
-package nodebox.builtins.render;
+package nodebox.builtins.draw;
 
 import nodebox.node.ColorPort;
 import nodebox.node.Context;
+import nodebox.node.DrawingNode;
 import nodebox.node.Port;
-import nodebox.node.RenderingNode;
 import processing.core.PApplet;
 
 import java.awt.*;
 
-public class Clear extends RenderingNode {
+public class Clear extends DrawingNode {
 
     public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.INPUT, Color.BLACK);
 

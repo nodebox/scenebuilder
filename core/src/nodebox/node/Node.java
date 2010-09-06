@@ -44,7 +44,7 @@ public abstract class Node {
         setAttribute(DESCRIPTION_ATTRIBUTE, "Generic node.");
     }
 
-    public boolean isRendering() {
+    public boolean canDraw() {
         return false;
     }
 
@@ -234,7 +234,7 @@ public abstract class Node {
     /**
      * Process the node and update the values of the output ports.
      *
-     * @param context the rendering context
+     * @param context the drawing context
      * @param time    the current time
      */
     public abstract void execute(Context context, double time);

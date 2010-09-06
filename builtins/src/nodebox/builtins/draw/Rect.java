@@ -1,4 +1,4 @@
-package nodebox.builtins.render;
+package nodebox.builtins.draw;
 
 import nodebox.node.*;
 import nodebox.util.ProcessingSupport;
@@ -6,7 +6,7 @@ import processing.core.PApplet;
 
 import java.awt.*;
 
-public class Rect extends RenderingNode {
+public class Rect extends DrawingNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
     public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT, 0f);

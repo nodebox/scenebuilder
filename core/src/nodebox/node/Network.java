@@ -20,7 +20,7 @@ public class Network extends Node {
     }
 
     @Override
-    public boolean isRendering() {
+    public boolean canDraw() {
         return true;
     }
 
@@ -125,7 +125,7 @@ public class Network extends Node {
     @Override
     public void execute(Context context, double time) {
         for (Node child : children) {
-            if (child.isRendering()) {
+            if (child.canDraw()) {
                 updateChildDependencies(child, context, time);
                 child.execute(context, time);
             }

@@ -58,7 +58,7 @@ public class SceneTest extends TestCase {
     /**
      * TestNode is a rendering node since we want them to execute.
      */
-    public static class TestNode extends RenderingNode {
+    public static class TestNode extends DrawingNode {
         @Override
         public void execute(Context context, double time) {
         }

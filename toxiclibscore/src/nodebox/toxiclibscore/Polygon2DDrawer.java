@@ -10,7 +10,7 @@ import toxi.geom.Vec2D;
 import java.awt.*;
 import java.util.Iterator;
 
-public class Polygon2DDrawer extends RenderingNode {
+public class Polygon2DDrawer extends DrawingNode {
 
     public final Polygon2DPort pPolygon = new Polygon2DPort(this, "polygon", Port.Direction.INPUT);
     public final ColorPort pFill = new ColorPort(this, "color", Port.Direction.INPUT, Color.WHITE);
