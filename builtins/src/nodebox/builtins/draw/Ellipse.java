@@ -6,8 +6,8 @@ import processing.core.PApplet;
 
 import java.awt.*;
 
-@Description("Draw a rectangle at the given position.")
-public class Rect extends DrawingNode {
+@Description("Draw an ellipse at the given position.")
+public class Ellipse extends DrawingNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
     public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT, 0f);
@@ -23,7 +23,8 @@ public class Rect extends DrawingNode {
         PApplet g = context.getApplet();
         g.pushStyle();
         ProcessingSupport.setStyle(g, pFill, pStroke, pStrokeWeight);
-        g.rect(pX.get(), pY.get(), pWidth.get(), pHeight.get());
+        g.ellipse(pX.get(), pY.get(), pWidth.get(), pHeight.get());
         g.popStyle();
     }
+
 }

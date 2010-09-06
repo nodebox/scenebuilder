@@ -8,6 +8,7 @@ import toxi.geom.mesh2d.Voronoi;
 import java.util.List;
 import java.util.Random;
 
+@Description("Run the contents of this network for each region of the voronoi.")
 public class VoronoiLooper extends Network {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
@@ -19,10 +20,6 @@ public class VoronoiLooper extends Network {
     public static final String KEY_INDEX = "index";
     public static final String KEY_POSITION = "position";
     public static final String KEY_POLYGON = "polygon";
-
-    public VoronoiLooper() {
-        setAttribute(DESCRIPTION_ATTRIBUTE, "Run the contents of this network for each region of the voronoi.");
-    }
 
     @Override
     public void execute(Context context, double time) {

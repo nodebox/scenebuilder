@@ -9,16 +9,13 @@ import toxi.geom.Polygon2D;
  * For each iteration, the looper variables provide the index, the total amount of executions,
  * the position (between 0.0-1.0) and the current polygon.
  */
+@Description("Variables that contain information for every voronoi region.")
 public class VoronoiVariables extends Node {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.OUTPUT);
     public final IntPort pIndex = new IntPort(this, "index", Port.Direction.OUTPUT, 0);
     public final FloatPort pPosition = new FloatPort(this, "position", Port.Direction.OUTPUT, 0f);
     public final Polygon2DPort pPolygon = new Polygon2DPort(this, "polygon", Port.Direction.OUTPUT);
-
-    public VoronoiVariables() {
-        setAttribute(DESCRIPTION_ATTRIBUTE, "Variables that contain information for every voronoi region.");
-    }
 
     @Override
     public void execute(Context context, double time) {

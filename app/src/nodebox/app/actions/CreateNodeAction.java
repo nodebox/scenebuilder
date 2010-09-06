@@ -1,8 +1,10 @@
 package nodebox.app.actions;
 
 import nodebox.app.SceneDocument;
+import nodebox.node.Description;
 import nodebox.node.Node;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class CreateNodeAction extends AbstractDocumentAction {
@@ -13,6 +15,8 @@ public class CreateNodeAction extends AbstractDocumentAction {
         super(document);
         putValue(NAME, name);
         this.nodeClass = nodeClass;
+        Description description = nodeClass.getAnnotation(Description.class);
+        putValue(SHORT_DESCRIPTION, description);
     }
 
     public void actionPerformed(ActionEvent e) {

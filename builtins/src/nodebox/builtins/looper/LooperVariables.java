@@ -8,15 +8,12 @@ import nodebox.node.*;
  * For each iteration, the looper variables provide the index, the total amount of executions,
  * and the position (between 0.0-1.0).
  */
+@Description("Variables that contain information for every loop execution.")
 public class LooperVariables extends Node {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.OUTPUT);
     public final IntPort pIndex = new IntPort(this, "index", Port.Direction.OUTPUT, 0);
     public final FloatPort pPosition = new FloatPort(this, "position", Port.Direction.OUTPUT, 0f);
-
-    public LooperVariables() {
-        setAttribute(DESCRIPTION_ATTRIBUTE, "Variables that contain information for every loop execution.");
-    }
 
     @Override
     public void execute(Context context, double time) {

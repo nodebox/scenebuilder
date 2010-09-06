@@ -67,12 +67,21 @@ public abstract class Node {
         setAttribute(DISPLAY_NAME_ATTRIBUTE, displayName);
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDisplayName() {
         return getAttribute(Node.DISPLAY_NAME_ATTRIBUTE);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getDescription() {
+        Description description = getClass().getAnnotation(Description.class);
+        if (description != null) {
+            return description.value();
+        } else {
+            return "";
+        }
     }
 
     public Point getPosition() {

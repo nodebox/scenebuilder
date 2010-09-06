@@ -1,21 +1,15 @@
 package nodebox.builtins.draw;
 
-import nodebox.node.ColorPort;
-import nodebox.node.Context;
-import nodebox.node.DrawingNode;
-import nodebox.node.Port;
+import nodebox.node.*;
 import processing.core.PApplet;
 
 import java.awt.*;
 
+
+@Description("Clear the canvas.")
 public class Clear extends DrawingNode {
 
     public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.INPUT, Color.BLACK);
-
-    public Clear() {
-        setAttribute(DESCRIPTION_ATTRIBUTE, "Fill the display with a constant color.");
-    }
-    
 
     @Override
     public void execute(Context context, double time) {
