@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="Clear1" type="nodebox.builtins.draw.Clear" x="129" y="23">
+            <port name="enabled">true</port>
+            <port name="color">#c0c0c0ff</port>
+        </node>
+        <node name="Line1" type="nodebox.builtins.draw.Line" x="317" y="97">
+            <port name="enabled">false</port>
+            <port name="x1">168.0</port>
+            <port name="y1">2.0</port>
+            <port name="x2">168.0</port>
+            <port name="y2">2.0</port>
+            <port name="stroke">#000000ff</port>
+            <port name="strokeWeight">1.0</port>
+        </node>
+        <node name="Mouse1" type="nodebox.builtins.device.Mouse" x="5" y="135"/>
+        <conn input="Line1" inputPort="x1" output="Mouse1" outputPort="x"/>
+        <conn input="Line1" inputPort="y1" output="Mouse1" outputPort="y"/>
+        <conn input="Line1" inputPort="x2" output="Mouse1" outputPort="previousX"/>
+        <conn input="Line1" inputPort="y2" output="Mouse1" outputPort="previousY"/>
+        <conn input="Line1" inputPort="enabled" output="Mouse1" outputPort="mousePressed"/>
+    </node>
+</ndbx>

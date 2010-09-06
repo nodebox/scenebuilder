@@ -18,9 +18,7 @@ public class Rect extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void execute(Context context, double time) {
-        if (!pEnabled.get()) return;
-        PApplet g = context.getApplet();
+    public void draw(PApplet g, Context context, double time) {
         g.pushStyle();
         ProcessingSupport.setStyle(g, pFill, pStroke, pStrokeWeight);
         g.rect(pX.get(), pY.get(), pWidth.get(), pHeight.get());

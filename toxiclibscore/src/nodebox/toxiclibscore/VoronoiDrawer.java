@@ -19,8 +19,7 @@ public class VoronoiDrawer extends DrawingNode {
     public final IntPort pSeed = new IntPort(this, "seed", Port.Direction.INPUT, 100);
 
     @Override
-    public void execute(Context context, double time) {
-        if (!pEnabled.get()) return;
+    public void draw(PApplet g, Context context, double time) {
         // Construct Voronoi
         float voronoiSize = pSize.get();
         Voronoi voronoi = new Voronoi();
@@ -32,7 +31,6 @@ public class VoronoiDrawer extends DrawingNode {
             voronoi.addPoint(new Vec2D(x, y));
         }
         // Draw
-        PApplet g = context.getApplet();
         g.pushStyle();
         g.pushMatrix();
         g.translate(pX.get(), pY.get());

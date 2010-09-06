@@ -19,10 +19,9 @@ public class Polygon2DDrawer extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void execute(Context context, double time) {
+    public void draw(PApplet g, Context context, double time) {
         Polygon2D polygon = pPolygon.get();
         if (polygon == null) return;
-        PApplet g = context.getApplet();
         g.pushStyle();
         ProcessingSupport.setStyle(g, pFill, pStroke, pStrokeWeight);
         Iterator<? extends Vec2D> iterator = pPolygon.get().vertices.iterator();
