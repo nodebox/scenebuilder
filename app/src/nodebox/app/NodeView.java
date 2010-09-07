@@ -14,7 +14,8 @@ public class NodeView {
 
     public static final int PORT_WIDTH = 20;
     public static final int PORT_HEIGHT = 20;
-    private static final Color NORMAL_PORT_COLOR = new Color(115, 115, 115);
+    private static final Color NORMAL_PORT_COLOR = new Color(50, 50, 52);
+    private static final Color NORMAL_PORT_TEXT_COLOR = new Color(115, 115, 115);
     private static final Color START_PORT_COLOR = new Color(107, 95, 172);
     private static final Color END_PORT_COLOR = new Color(166, 162, 95);
     private static final int NODE_HEADER_HEIGHT = 20;
@@ -89,11 +90,11 @@ public class NodeView {
         totalHeight = NODE_HEADER_HEIGHT + maxAmount * PORT_HEIGHT;
         totalWidth = NODE_MINIMUM_WIDTH;
         if (node instanceof Network) {
-            nodeRect = new Rectangle2D.Float(3, 3, totalWidth, totalHeight);
+            nodeRect = new Rectangle2D.Float(0, 0, totalWidth, totalHeight);
         } else {
-            nodeRect = new RoundRectangle2D.Float(3, 3, totalWidth, totalHeight, 7, 7);
+            nodeRect = new RoundRectangle2D.Float(0, 0, totalWidth, totalHeight, 7, 7);
         }
-        setBounds(pos.x - 3, pos.y - 3, totalWidth + 6, totalHeight + 6);
+        setBounds(pos.x, pos.y, totalWidth, totalHeight);
     }
 
     public int getPortIndex(Port p) {
@@ -114,7 +115,7 @@ public class NodeView {
         int y = getPortPosition(p) + bounds.y;
         int x = bounds.x;
         if (p.getDirection() == Port.Direction.OUTPUT) {
-            x = totalWidth - PORT_WIDTH;
+            x = bounds.x + totalWidth - PORT_WIDTH;
         }
         return new Rectangle(x, y, PORT_WIDTH, PORT_HEIGHT);
     }
@@ -135,52 +136,50 @@ public class NodeView {
         AffineTransform originalTransform = g2.getTransform();
         g2.translate(bounds.x, bounds.y);
         Shape originalClip = g2.getClip();
-        //g2.translate(3, 3);
         g2.setColor(NODE_BODY_COLOR);
 
+        // Draw the node
         g2.fill(nodeRect);
+
+        // Clip to the node contents
         g2.clip(nodeRect);
+
+        // Draw the header
         g2.setColor(NODE_HEADER_COLOR);
         g2.fillRect(0, 0, totalWidth + 3, NODE_HEADER_HEIGHT); // TODO: Find out why the +3 needs to be here.
         g2.setFont(NODE_NAME_FONT);
         g2.setColor(NODE_NAME_COLOR);
         g2.drawString(node.getDisplayName(), 10, NODE_NAME_FONT.getSize() + VERTICAL_TEXT_NUDGE);
-        g2.setClip(originalClip);
-        g2.setColor(NODE_PORT_COLOR);
-        int y = NODE_HEADER_HEIGHT;
+
+        // Prepare state for drawing the ports
         g2.setFont(NODE_PORT_FONT);
-        g2.setStroke(NODE_PORT_STROKE);
-        Network network = node.getNetwork();
+
+        // Draw input ports
+        int y = NODE_HEADER_HEIGHT;
         Collection<Port> inputPorts = node.getInputPorts();
         for (Port port : inputPorts) {
             g2.setColor(getPortColor(port));
             g2.fillRect(0, y, PORT_WIDTH, PORT_HEIGHT);
-            if (network != null && network.isPublished(port)) {
-                g2.setColor(NODE_PUBLISHED_PORT_COLOR);
-                g2.fillOval(9, y - 6, 4, 4);
-                g2.setColor(NODE_PORT_COLOR);
-            }
-            g2.drawOval(9, y - 6, 4, 4);
+            g2.setColor(NORMAL_PORT_TEXT_COLOR);
             g2.drawString(port.getDisplayName(), PORT_WIDTH + 5, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
             y += PORT_HEIGHT;
         }
+
+        // Draw output ports
         // Reset y to draw the output ports.
         y = NODE_HEADER_HEIGHT;
         Collection<Port> outputPorts = node.getOutputPorts();
         for (Port port : outputPorts) {
             g2.setColor(getPortColor(port));
             g2.fillRect(totalWidth - PORT_WIDTH, y, PORT_WIDTH, PORT_HEIGHT);
-            if (network != null && network.isPublished(port)) {
-                g2.setColor(NODE_PUBLISHED_PORT_COLOR);
-                g2.fillOval(9, y - 6, 4, 4);
-                g2.setColor(NODE_PORT_COLOR);
-            }
+            g2.setColor(NORMAL_PORT_TEXT_COLOR);
             Rectangle2D r = g2.getFontMetrics().getStringBounds(port.getDisplayName(), g);
             g2.drawString(port.getDisplayName(), totalWidth - (int) r.getWidth() - PORT_WIDTH - 5, y + VERTICAL_TEXT_NUDGE + NODE_PORT_FONT.getSize());
-            g2.drawOval(totalWidth - 13, y - 6, 4, 4);
             y += PORT_HEIGHT;
         }
 
+        // Draw the border
+        g2.setClip(originalClip);
         if (networkViewer.isSelected(this)) {
             g2.setColor(NODE_SELECTION_BORDER_COLOR);
             g2.setStroke(NODE_SELECTION_BORDER_STROKE);
