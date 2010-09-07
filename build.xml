@@ -23,8 +23,15 @@
         <ant dir="${module.launcher}" antfile="build.xml" target="clean"/>
     </target>
 
-    <target  name="run">
-        <java fork="true" jar="lib/equinox.jar" args="-console"/>
+    <target  name="prepare-run" depends="dist">
+        <!-- Remove Equinox OSGi configuration. -->
+        <delete dir="lib/configuration"/>
+    </target>
+
+    <target name="run" depends="prepare-run">
+        <java fork="true" classpath="dist/nodebox-launcher.jar;lib/equinox.jar" classname="nodebox.launcher.Launcher">
+            <arg value="-console"/>
+        </java>
     </target>
 
 </project>
