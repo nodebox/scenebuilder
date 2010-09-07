@@ -36,6 +36,7 @@ public class Network extends Node {
     }
 
     public void removeChild(Node child) {
+        disconnect(child);
         children.remove(child);
         child.setNetwork(null);
     }
@@ -87,14 +88,28 @@ public class Network extends Node {
         return cs;
     }
 
+    public void disconnect(Node node) {
+        checkNotNull(node);
+        checkArgument(node.getNetwork() == this, "Node %s is not a child of this network.", node);
+        LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
+        for (Connection c : connections) {
+            if (c.getInputNode() == node || c.getOutputNode() == node) {
+                connectionsToRemove.add(c);
+            }
+        }
+        connections.removeAll(connectionsToRemove);
+    }
+
     public void disconnect(Port port) {
         checkNotNull(port);
         checkArgument(port.getNode().getNetwork() == this, "Port %s is not a child of this network.", port);
+        LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputPort() == port || c.getOutputPort() == port) {
-                connections.remove(c);
+                connectionsToRemove.add(c);
             }
         }
+        connections.removeAll(connectionsToRemove);
     }
 
     //// Published Ports ////

@@ -148,11 +148,11 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         g2.translate(centerX, centerY);
 
         paintConnections(g2);
-        if (isConnecting()) {
+        if (isConnecting() && connectionStartPort != null) {
             Port port = connectionStartPort;
             NodeView nv = getNodeView(port.getNode());
-            int y = nv.getPortPosition(connectionStartPort);
-            g2.drawLine(nv.getX() + nv.getWidth(), nv.getY() + y + NodeView.PORT_HEIGHT / 2, px, py);
+            Rectangle portBounds = nv.getPortBounds(connectionStartPort);
+            g2.drawLine((int) portBounds.getCenterX(), (int) portBounds.getCenterY(), px, py);
         }
 
         for (NodeView view : nodeViews.values()) {
@@ -298,6 +298,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         if (node instanceof Network)
             nodeViewPopup.add(new EditNetworkAction((Network) node));
         nodeViewPopup.add(new RenameAction(node));
+        nodeViewPopup.add(new DeleteAction(node));
         nodeViewPopup.show(NetworkViewer.this, e.getX(), e.getY());
         return true;
     }
@@ -321,14 +322,13 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
      * We don't care if a connection was established or not.
      */
     public void endConnection() {
-        if (connectionStartPort != null && connectionEndPort != null && connectionStartPort.canConnectTo(connectionEndPort)) {
+        if (connectionStartPort != null && connectionEndPort == null && connectionStartPort.isInputPort()) {
+            // If we're dragging from an input port to nowhere, disconnect the port.
+            getCurrentNetwork().disconnect(connectionStartPort);
+        } else if (connectionStartPort != null && connectionEndPort != null && connectionStartPort.canConnectTo(connectionEndPort)) {
             Port input = connectionStartPort.getDirection() == Port.Direction.INPUT ? connectionStartPort : connectionEndPort;
             Port output = connectionStartPort.getDirection() == Port.Direction.OUTPUT ? connectionStartPort : connectionEndPort;
-            Network network = input.getNode().getNetwork();
-            if (network != null) {
-                network.connect(output, input);
-                repaint();
-            }
+            getCurrentNetwork().connect(output, input);
         }
         connectionStartPort = null;
         connectionEndPort = null;
@@ -456,4 +456,21 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
             repaint();
         }
     }
+
+    private class DeleteAction extends AbstractAction {
+        private Node node;
+
+        private DeleteAction(Node node) {
+            super("Delete");
+            this.node = node;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if (node.getNetwork() != null) {
+                node.getNetwork().removeChild(node);
+                updateView();
+            }
+        }
+    }
+
 }

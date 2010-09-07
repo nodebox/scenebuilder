@@ -59,6 +59,14 @@ public abstract class Port {
         return direction;
     }
 
+    public boolean isInputPort() {
+        return direction == Direction.INPUT;
+    }
+
+    public boolean isOutputPort() {
+        return direction == Direction.OUTPUT;
+    }
+
     //// Attributes ////
 
     public Map<String, Object> getAttributes() {
