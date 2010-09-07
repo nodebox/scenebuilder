@@ -60,7 +60,7 @@ public class SceneTest extends TestCase {
      */
     public static class TestNode extends DrawingNode {
         @Override
-        public void execute(Context context, double time) {
+        public void draw(PApplet g, Context context, float time) {
         }
     }
 
