@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="Clear1" type="nodebox.builtins.draw.Clear" x="1045" y="21">
+            <port name="enabled">false</port>
+            <port name="color">#010101ff</port>
+        </node>
+        <node name="CurrentTime1" type="nodebox.builtins.time.CurrentTime" x="-71" y="101"/>
+        <node name="DrawGeometry1" type="nodebox.graphics.nodes.DrawGeometry" x="1023" y="102">
+            <port name="enabled">true</port>
+        </node>
+        <node name="ResampleNode1" type="nodebox.graphics.nodes.ResampleNode" x="458" y="104">
+            <port name="method">length</port>
+            <port name="length">10.0</port>
+            <port name="amount">10</port>
+            <port name="perContour">false</port>
+        </node>
+        <node name="SineWave1" type="nodebox.builtins.math.SineWave" x="113" y="103">
+            <port name="position">111.321</port>
+            <port name="amplitude">150.0</port>
+            <port name="phase">1.0</port>
+            <port name="offset">150.0</port>
+        </node>
+        <node name="SnapNode1" type="nodebox.graphics.nodes.SnapNode" x="814" y="115">
+            <port name="distance">15.0</port>
+            <port name="strength">100.0</port>
+            <port name="x">0.0</port>
+            <port name="y">0.0</port>
+        </node>
+        <node name="TextPathNode1" type="nodebox.graphics.nodes.TextPathNode" x="292" y="84">
+            <port name="text">hello</port>
+            <port name="font">Verdana</port>
+            <port name="size">3.1573644</port>
+            <port name="align">1</port>
+            <port name="x">63.0</port>
+            <port name="y">251.0</port>
+            <port name="width">0.0</port>
+            <port name="height">0.0</port>
+            <port name="fill">#090a1c0f</port>
+            <port name="stroke">#eaeaeaf8</port>
+            <port name="strokeWeight">0.2</port>
+        </node>
+        <node name="WiggleNode1" type="nodebox.graphics.nodes.WiggleNode" x="626" y="101">
+            <port name="wx">10.0</port>
+            <port name="wy">10.0</port>
+            <port name="seed">1</port>
+        </node>
+        <conn input="ResampleNode1" inputPort="geometry" output="TextPathNode1" outputPort="output"/>
+        <conn input="WiggleNode1" inputPort="geometry" output="ResampleNode1" outputPort="output"/>
+        <conn input="SineWave1" inputPort="position" output="CurrentTime1" outputPort="time"/>
+        <conn input="TextPathNode1" inputPort="size" output="SineWave1" outputPort="value"/>
+        <conn input="SnapNode1" inputPort="geometry" output="WiggleNode1" outputPort="output"/>
+        <conn input="DrawGeometry1" inputPort="geometry" output="SnapNode1" outputPort="output"/>
+    </node>
+</ndbx>
