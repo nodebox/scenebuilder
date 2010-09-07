@@ -14,6 +14,7 @@ public class Mouse extends Node {
     public final FloatPort pPreviousX = new FloatPort(this, "previousX", Port.Direction.OUTPUT);
     public final FloatPort pPreviousY = new FloatPort(this, "previousY", Port.Direction.OUTPUT);
     public final BooleanPort pMousePressed = new BooleanPort(this, "mousePressed", Port.Direction.OUTPUT);
+    public final IntPort pMouseButton = new IntPort(this, "mouseButton", Port.Direction.OUTPUT);
 
     @Override
     public void execute(Context context, double time) {
@@ -23,5 +24,6 @@ public class Mouse extends Node {
         pPreviousX.set((float) g.pmouseX);
         pPreviousY.set((float) g.pmouseY);
         pMousePressed.set(g.mousePressed);
+        pMouseButton.set(g.mouseButton);
     }
 }
