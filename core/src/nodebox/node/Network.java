@@ -73,6 +73,7 @@ public class Network extends Node {
         checkNotNull(input);
         checkArgument(output.getNode().getNetwork() == this, "Output %s is not a child of this network.", output);
         checkArgument(input.getNode().getNetwork() == this, "Input %s is not a child of this network.", input);
+        disconnect(input);
         connections.add(new Connection(this, output, input));
     }
 
@@ -84,6 +85,20 @@ public class Network extends Node {
             }
         }
         return cs;
+    }
+
+    public void disconnect(Port port) {
+        checkNotNull(port);
+        checkArgument(port.getNode().getNetwork() == this, "Port %s is not a child of this network.", port);
+        LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
+        for (Connection c : connections) {
+            if (c.getInputPort() == port || c.getOutputPort() == port) {
+                connectionsToRemove.add(c);
+            }
+        }
+        for (Connection c : connectionsToRemove) {
+            connections.remove(c);
+        }
     }
 
     //// Published Ports ////
