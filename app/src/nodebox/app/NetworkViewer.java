@@ -244,12 +244,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
             }
             repaint();
         } else {
-            NodeView view = getNodeAt(e.getPoint());
-            if (view != null) {
-                dragSelection(dx, dy);
-            } else {
-                // Drag rectangle
-            }
+            dragSelection(dx, dy);
         }
     }
 
