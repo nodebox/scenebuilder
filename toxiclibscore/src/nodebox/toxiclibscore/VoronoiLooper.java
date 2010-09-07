@@ -22,7 +22,7 @@ public class VoronoiLooper extends Network {
     public static final String KEY_POLYGON = "polygon";
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         //if (!pEnabled.get()) return true;
         // Construct Voronoi
         float voronoiSize = pSize.get();

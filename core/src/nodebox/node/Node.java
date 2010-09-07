@@ -246,7 +246,7 @@ public abstract class Node {
      * @param context the drawing context
      * @param time    the current time
      */
-    public abstract void execute(Context context, double time);
+    public abstract void execute(Context context, float time);
 
     @Override
     public String toString() {

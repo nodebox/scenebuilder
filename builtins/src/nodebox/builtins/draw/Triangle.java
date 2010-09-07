@@ -20,7 +20,7 @@ public class Triangle extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void draw(PApplet g, Context context, double time) {
+    public void draw(PApplet g, Context context, float time) {
         ProcessingSupport.setStyle(g, pFill, pStroke, pStrokeWeight);
         g.triangle(pX1.get(), pY1.get(), pX2.get(), pY2.get(), pX3.get(), pY3.get());
     }

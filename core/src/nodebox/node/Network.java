@@ -149,7 +149,7 @@ public class Network extends Node {
      * @return true if all children returned true.
      */
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         for (Node child : children) {
             if (child.canDraw()) {
                 updateChildDependencies(child, context, time);
@@ -158,7 +158,7 @@ public class Network extends Node {
         }
     }
 
-    private void updateChildDependencies(Node child, Context context, double time) {
+    private void updateChildDependencies(Node child, Context context, float time) {
         // Update all
         for (Connection c : getInputConnections(child)) {
             Node n = c.getOutputNode();

@@ -12,7 +12,7 @@ public class Image extends DrawingNode {
     public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT, 0f);
 
     @Override
-    public void draw(PApplet g, Context context, double time) {
+    public void draw(PApplet g, Context context, float time) {
         PImage image = pImage.get();
         if (image != null) {
             g.image(pImage.get(), pX.get(), pY.get());

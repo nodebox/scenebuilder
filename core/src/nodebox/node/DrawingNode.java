@@ -12,11 +12,11 @@ public abstract class DrawingNode extends Node {
     }
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         if (!pEnabled.get()) return;
         draw(context.getApplet(), context, time);
     }
 
-    public abstract void draw(PApplet g, Context context, double time);
+    public abstract void draw(PApplet g, Context context, float time);
 
 }

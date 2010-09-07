@@ -12,7 +12,7 @@ public class RandomFloat extends Node {
     public FloatPort pValue = new FloatPort(this, "value", Port.Direction.OUTPUT);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         float v = ProcessingSupport.random(pMinimum.get(), pMaximum.get(), pSeed.get());
         pValue.set(v);
     }

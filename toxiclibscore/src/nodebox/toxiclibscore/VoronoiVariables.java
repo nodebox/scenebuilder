@@ -18,7 +18,7 @@ public class VoronoiVariables extends Node {
     public final Polygon2DPort pPolygon = new Polygon2DPort(this, "polygon", Port.Direction.OUTPUT);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         Network network = getNetwork();
         if (network == null) return;
         if (!(network instanceof VoronoiLooper)) return;

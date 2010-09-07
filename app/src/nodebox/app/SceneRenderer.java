@@ -30,12 +30,8 @@ public class SceneRenderer extends PApplet {
 
     @Override
     public void draw() {
-        double time = (System.currentTimeMillis() - startMillis) / 1000.0;
+        float time = (float) ((System.currentTimeMillis() - startMillis) / 1000.0);
         Context context = new Context(this);
-        //double relativeX = Mouse.getX() / (double) screenWidth;
-        //double relativeY = Mouse.getY() / (double) screenHeight;
-        //context.setMouseX((relativeX - 0.5) * width);
-        //context.setMouseY((relativeY - 0.5) * height);
         scene.execute(context, time);
     }
 

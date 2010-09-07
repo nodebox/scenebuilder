@@ -14,7 +14,7 @@ public class LoadImage extends Node {
 
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         String fileName = pFileName.get();
         if (!fileName.equals(loadedFileName)) {
             loadedImage = context.getApplet().loadImage(fileName);

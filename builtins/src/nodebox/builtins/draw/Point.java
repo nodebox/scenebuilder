@@ -14,7 +14,7 @@ public class Point extends DrawingNode {
     public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.INPUT, Color.BLACK);
 
     @Override
-    public void draw(PApplet g, Context context, double time) {
+    public void draw(PApplet g, Context context, float time) {
         ProcessingSupport.setStroke(g, pColor);
         g.point(pX.get(), pY.get());
     }

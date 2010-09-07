@@ -17,7 +17,7 @@ public class RGBColor extends Node {
     public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.OUTPUT, Color.BLACK);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         float range = Math.max(pRange.get(), 1);
         float red = clamp(pRed.get() / range);
         float green = clamp(pGreen.get() / range);

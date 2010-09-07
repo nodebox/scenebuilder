@@ -17,7 +17,7 @@ public class Mouse extends Node {
     public final IntPort pMouseButton = new IntPort(this, "mouseButton", Port.Direction.OUTPUT);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         PApplet g = context.getApplet();
         pX.set((float) g.mouseX);
         pY.set((float) g.mouseY);

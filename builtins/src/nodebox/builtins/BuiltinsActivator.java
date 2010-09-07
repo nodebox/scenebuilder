@@ -9,8 +9,10 @@ import nodebox.builtins.looper.Looper;
 import nodebox.builtins.looper.LooperVariables;
 import nodebox.builtins.math.Clamp;
 import nodebox.builtins.math.ConvertRange;
+import nodebox.builtins.math.SineWave;
 import nodebox.builtins.random.RandomFloat;
 import nodebox.builtins.time.Calendar;
+import nodebox.builtins.time.CurrentTime;
 import nodebox.node.NodeManager;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -36,7 +38,9 @@ public class BuiltinsActivator implements BundleActivator {
         m.registerNodeClass(LooperVariables.class, "Utility");
         m.registerNodeClass(Clamp.class, "Math");
         m.registerNodeClass(ConvertRange.class, "Math");
+        m.registerNodeClass(SineWave.class, "Math");
         m.registerNodeClass(Calendar.class, "Time");
+        m.registerNodeClass(CurrentTime.class, "Time");
     }
 
     public void stop(BundleContext context) throws Exception {
@@ -57,7 +61,9 @@ public class BuiltinsActivator implements BundleActivator {
         m.unregisterNodeClass(LooperVariables.class);
         m.unregisterNodeClass(Clamp.class);
         m.unregisterNodeClass(ConvertRange.class);
+        m.unregisterNodeClass(SineWave.class);
         m.unregisterNodeClass(Calendar.class);
+        m.unregisterNodeClass(CurrentTime.class);
     }
 
     private NodeManager getNodeManager(BundleContext context) {

@@ -13,7 +13,7 @@ public class Clamp extends Node {
     public FloatPort pOutputValue = new FloatPort(this, "outputValue", Port.Direction.OUTPUT);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         float value = clamp(pValue.get(), pMinimum.get(), pMaximum.get());
         pOutputValue.set(value);
     }

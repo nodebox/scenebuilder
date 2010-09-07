@@ -15,7 +15,7 @@ public class ConvertRange extends Node {
     public FloatPort pOutputValue = new FloatPort(this, "outputValue", Port.Direction.OUTPUT);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         float srcMin = pSourceMinimum.get();
         float srcMax = pSourceMaximum.get();
         float targetMin = pTargetMinimum.get();

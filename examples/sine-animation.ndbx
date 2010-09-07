@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="Clear1" type="nodebox.builtins.draw.Clear" x="391" y="21">
+            <port name="enabled">false</port>
+            <port name="color">#c0c0c0ff</port>
+        </node>
+        <node name="CurrentTime1" type="nodebox.builtins.time.CurrentTime" x="22" y="43"/>
+        <node name="Ellipse1" type="nodebox.builtins.draw.Ellipse" x="462" y="115">
+            <port name="enabled">true</port>
+            <port name="x">153.38904</port>
+            <port name="y">324.8039</port>
+            <port name="width">20.0</port>
+            <port name="height">20.0</port>
+            <port name="fill">#ffffffff</port>
+            <port name="stroke">#000000ff</port>
+            <port name="strokeWeight">1.0</port>
+        </node>
+        <node name="SineWave1" type="nodebox.builtins.math.SineWave" x="215" y="69">
+            <port name="position">478.364</port>
+            <port name="amplitude">167.31313</port>
+            <port name="phase">0.2</port>
+            <port name="offset">300.0</port>
+        </node>
+        <node name="SineWave2" type="nodebox.builtins.math.SineWave" x="202" y="201">
+            <port name="position">478.364</port>
+            <port name="amplitude">167.31313</port>
+            <port name="phase">1.0</port>
+            <port name="offset">200.0</port>
+        </node>
+        <node name="SineWave3" type="nodebox.builtins.math.SineWave" x="17" y="195">
+            <port name="position">478.364</port>
+            <port name="amplitude">50.0</port>
+            <port name="phase">10.0</port>
+            <port name="offset">200.0</port>
+        </node>
+        <conn input="SineWave1" inputPort="position" output="CurrentTime1" outputPort="time"/>
+        <conn input="SineWave2" inputPort="position" output="CurrentTime1" outputPort="time"/>
+        <conn input="Ellipse1" inputPort="x" output="SineWave1" outputPort="value"/>
+        <conn input="Ellipse1" inputPort="y" output="SineWave2" outputPort="value"/>
+        <conn input="SineWave3" inputPort="position" output="CurrentTime1" outputPort="time"/>
+        <conn input="SineWave1" inputPort="amplitude" output="SineWave3" outputPort="value"/>
+        <conn input="SineWave2" inputPort="amplitude" output="SineWave3" outputPort="value"/>
+    </node>
+</ndbx>

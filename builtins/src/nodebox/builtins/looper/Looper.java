@@ -17,7 +17,7 @@ public class Looper extends Network {
     public static final String KEY_POSITION = "position";
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         int amount = pAmount.get();
         float position;
         for (int i = 0; i < amount; i++) {

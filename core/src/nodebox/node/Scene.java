@@ -37,7 +37,7 @@ public class Scene {
         return rootNetwork;
     }
 
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         rootNetwork.execute(context, time);
     }
 

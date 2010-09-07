@@ -16,7 +16,7 @@ public class LooperVariables extends Node {
     public final FloatPort pPosition = new FloatPort(this, "position", Port.Direction.OUTPUT, 0f);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         Network network = getNetwork();
         if (network == null) return;
         if (!(network instanceof Looper)) return;

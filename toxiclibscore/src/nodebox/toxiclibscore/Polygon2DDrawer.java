@@ -19,7 +19,7 @@ public class Polygon2DDrawer extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void draw(PApplet g, Context context, double time) {
+    public void draw(PApplet g, Context context, float time) {
         Polygon2D polygon = pPolygon.get();
         if (polygon == null) return;
         g.pushStyle();

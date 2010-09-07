@@ -11,7 +11,7 @@ public class Keyboard extends Node {
     public final BooleanPort pKeyPressed = new BooleanPort(this, "keyPressed", Port.Direction.OUTPUT, false);
 
     @Override
-    public void execute(Context context, double time) {
+    public void execute(Context context, float time) {
         PApplet g = context.getApplet();
         pKey.set(String.valueOf(g.key));
         pKeyCode.set(g.keyCode);

@@ -19,7 +19,7 @@ public class VoronoiDrawer extends DrawingNode {
     public final IntPort pSeed = new IntPort(this, "seed", Port.Direction.INPUT, 100);
 
     @Override
-    public void draw(PApplet g, Context context, double time) {
+    public void draw(PApplet g, Context context, float time) {
         // Construct Voronoi
         float voronoiSize = pSize.get();
         Voronoi voronoi = new Voronoi();
