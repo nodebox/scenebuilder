@@ -1,5 +1,9 @@
 package nodebox.graphics;
 
+import processing.core.PConstants;
+import processing.core.PFont;
+import processing.core.PGraphics;
+
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.util.ArrayList;
@@ -366,6 +370,49 @@ public class Contour extends AbstractGeometry {
         g.draw(gp);
         g.setColor(savedColor);
         g.setStroke(savedStroke);
+    }
+
+    /**
+     * Draw the contour.
+     * <p/>
+     * Because contours don't store color information, this method does not change existing fill or stroke.
+     *
+     * @param g the PGraphics object
+     */
+    public void draw(PGraphics g) {
+        if (points.size() == 0) return;
+        g.beginShape();
+        innerDraw(g);
+        g.endShape(PConstants.OPEN);
+    }
+
+    // package private
+
+    /**
+     * This method assumes it will be wrapped in beginShape and endShape calls.
+     *
+     * @param g the PGraphics object
+     */
+    void innerDraw(PGraphics g) {
+        if (points.size() == 0) return;
+        Point pt, ctrl1, ctrl2;
+        int pointCount = getPointCount();
+        for (int i = 0; i < pointCount; i++) {
+            pt = points.get(i);
+            if (pt.isLineTo()) {
+                g.vertex(pt.x, pt.y);
+            } else if (pt.isCurveTo()) {
+                ctrl1 = points.get(i - 2);
+                ctrl2 = points.get(i - 1);
+                g.bezierVertex(ctrl1.x, ctrl1.y, ctrl2.x, ctrl2.y, pt.x, pt.y);
+            }
+        }
+        if (closed) {
+            // Close bezier path manually, because we use breakShape.
+            pt = points.get(0);
+            // TODO the first contour doesn't close.
+            g.vertex(pt.x, pt.y);
+        }
     }
 
     /* package private */

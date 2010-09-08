@@ -18,6 +18,8 @@
  */
 package nodebox.graphics;
 
+import processing.core.PGraphics;
+
 import java.awt.*;
 
 public interface Grob extends Cloneable {
@@ -25,6 +27,8 @@ public interface Grob extends Cloneable {
     //// Operations on the current context. ////
 
     public void draw(Graphics2D g);
+
+    public void draw(PGraphics g);
 
     //// Geometric queries ////
 

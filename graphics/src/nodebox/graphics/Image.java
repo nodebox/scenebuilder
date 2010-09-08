@@ -1,5 +1,8 @@
 package nodebox.graphics;
 
+import processing.core.PGraphics;
+import processing.core.PImage;
+
 import javax.imageio.ImageIO;
 import javax.management.RuntimeErrorException;
 import java.awt.*;
@@ -201,6 +204,13 @@ public class Image extends AbstractGrob {
         restoreTransform(g);
     }
 
+    public void draw(PGraphics g) {
+        float factor = getScaleFactor();
+        float finalWidth = image.getWidth() * factor;
+        float finalHeight = image.getHeight() * factor;
+        PImage pImage = new PImage(image);
+        g.image(pImage, x, y, finalWidth, finalHeight);
+    }
 
     public Image clone() {
         return new Image(this);

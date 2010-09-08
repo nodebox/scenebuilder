@@ -30,18 +30,18 @@ public class Color implements Cloneable {
         RGB, HSB, CMYK
     }
 
-    private double r, g, b, a;
-    private double h, s, v;
+    private float r, g, b, a;
+    private float h, s, v;
 
-    public static double clamp(double v) {
-        return Math.max(0.0, Math.min(1.0, v));
+    public static float clamp(float v) {
+        return Math.max(0f, Math.min(1f, v));
     }
 
     /**
      * Create an empty (black) color object.
      */
     public Color() {
-        this(0, 0, 0, 1.0, Mode.RGB);
+        this(0, 0, 0, 1, Mode.RGB);
     }
 
     /**
@@ -49,8 +49,8 @@ public class Color implements Cloneable {
      *
      * @param v the gray component.
      */
-    public Color(double v) {
-        this(v, v, v, 1.0, Mode.RGB);
+    public Color(float v) {
+        this(v, v, v, 1, Mode.RGB);
     }
 
     /**
@@ -60,7 +60,7 @@ public class Color implements Cloneable {
      * @param a the alpha value.
      */
 
-    public Color(double v, double a) {
+    public Color(float v, float a) {
         this(v, v, v, a, Mode.RGB);
     }
 
@@ -72,8 +72,8 @@ public class Color implements Cloneable {
      * @param z the blue or brightness component.
      * @param m the specified color mode.
      */
-    public Color(double x, double y, double z, Mode m) {
-        this(x, y, z, 1.0, m);
+    public Color(float x, float y, float z, Mode m) {
+        this(x, y, z, 1f, m);
     }
 
     /**
@@ -83,8 +83,8 @@ public class Color implements Cloneable {
      * @param g the green component.
      * @param b the blue component.
      */
-    public Color(double r, double g, double b) {
-        this(r, g, b, 1.0, Mode.RGB);
+    public Color(float r, float g, float b) {
+        this(r, g, b, 1f, Mode.RGB);
     }
 
     /**
@@ -95,7 +95,7 @@ public class Color implements Cloneable {
      * @param b the blue component.
      * @param a the alpha component.
      */
-    public Color(double r, double g, double b, double a) {
+    public Color(float r, float g, float b, float a) {
         this(r, g, b, a, Mode.RGB);
     }
 
@@ -108,7 +108,7 @@ public class Color implements Cloneable {
      * @param a the alpha component.
      * @param m the specified color mode.
      */
-    public Color(double x, double y, double z, double a, Mode m) {
+    public Color(float x, float y, float z, float a, Mode m) {
         switch (m) {
             case RGB:
                 this.r = clamp(x);
@@ -140,10 +140,10 @@ public class Color implements Cloneable {
         int g255 = Integer.parseInt(m.group(2), 16);
         int b255 = Integer.parseInt(m.group(3), 16);
         int a255 = Integer.parseInt(m.group(4), 16);
-        this.r = r255 / 255.0;
-        this.g = g255 / 255.0;
-        this.b = b255 / 255.0;
-        this.a = a255 / 255.0;
+        this.r = r255 / 255f;
+        this.g = g255 / 255f;
+        this.b = b255 / 255f;
+        this.a = a255 / 255f;
         updateHSB();
         updateCMYK();
     }
@@ -157,10 +157,10 @@ public class Color implements Cloneable {
      * @param color the color object.
      */
     public Color(java.awt.Color color) {
-        this.r = color.getRed() / 255.0;
-        this.g = color.getGreen() / 255.0;
-        this.b = color.getBlue() / 255.0;
-        this.a = color.getAlpha() / 255.0;
+        this.r = color.getRed() / 255f;
+        this.g = color.getGreen() / 255f;
+        this.b = color.getBlue() / 255f;
+        this.a = color.getAlpha() / 255f;
         updateHSB();
         updateCMYK();
     }
@@ -182,133 +182,133 @@ public class Color implements Cloneable {
         updateCMYK();
     }
 
-    public double getRed() {
+    public float getRed() {
         return r;
     }
 
-    public double getR() {
+    public float getR() {
         return r;
     }
 
-    public void setRed(double r) {
+    public void setRed(float r) {
         this.r = clamp(r);
         updateHSB();
         updateCMYK();
     }
 
-    public void setR(double r) {
+    public void setR(float r) {
         setRed(r);
     }
 
-    public double getGreen() {
+    public float getGreen() {
         return g;
     }
 
-    public double getG() {
+    public float getG() {
         return g;
     }
 
-    public void setGreen(double g) {
+    public void setGreen(float g) {
         this.g = clamp(g);
         updateHSB();
         updateCMYK();
     }
 
-    public void setG(double g) {
+    public void setG(float g) {
         setGreen(g);
     }
 
-    public double getBlue() {
+    public float getBlue() {
         return b;
     }
 
-    public double getB() {
+    public float getB() {
         return b;
     }
 
-    public void setBlue(double b) {
+    public void setBlue(float b) {
         this.b = clamp(b);
         updateHSB();
         updateCMYK();
     }
 
-    public void setB(double b) {
+    public void setB(float b) {
         setBlue(b);
     }
 
-    public double getAlpha() {
+    public float getAlpha() {
         return a;
     }
 
-    public double getA() {
+    public float getA() {
         return a;
     }
 
-    public void setAlpha(double a) {
+    public void setAlpha(float a) {
         this.a = clamp(a);
         updateHSB();
         updateCMYK();
     }
 
-    public void setA(double a) {
+    public void setA(float a) {
         setAlpha(a);
     }
 
     public boolean isVisible() {
-        return a > 0.0;
+        return a > 0f;
     }
 
-    public double getHue() {
+    public float getHue() {
         return h;
     }
 
-    public double getH() {
+    public float getH() {
         return h;
     }
 
-    public void setHue(double h) {
+    public void setHue(float h) {
         this.h = clamp(h);
         updateRGB();
         updateCMYK();
     }
 
-    public void setH(double h) {
+    public void setH(float h) {
         setHue(h);
     }
 
-    public double getSaturation() {
+    public float getSaturation() {
         return s;
     }
 
-    public double getS() {
+    public float getS() {
         return s;
     }
 
-    public void setSaturation(double s) {
+    public void setSaturation(float s) {
         this.s = clamp(s);
         updateRGB();
         updateCMYK();
     }
 
-    public void setS(double s) {
+    public void setS(float s) {
         setSaturation(s);
     }
 
-    public double getBrightness() {
+    public float getBrightness() {
         return v;
     }
 
-    public double getV() {
+    public float getV() {
         return v;
     }
 
-    public void setBrightness(double v) {
+    public void setBrightness(float v) {
         this.v = clamp(v);
         updateRGB();
         updateCMYK();
     }
 
-    public void setV(double v) {
+    public void setV(float v) {
         setBrightness(v);
     }
 
@@ -316,30 +316,30 @@ public class Color implements Cloneable {
         if (s == 0)
             this.r = this.g = this.b = this.v;
         else {
-            double h = this.h;
-            double s = this.s;
-            double v = this.v;
-            double f, p, q, t;
-            h = h / (60.0/360);
+            float h = this.h;
+            float s = this.s;
+            float v = this.v;
+            float f, p, q, t;
+            h = h / (60f / 360);
             int i = (int) Math.floor(h);
             f = h - i;
             p = v * (1 - s);
             q = v * (1 - s * f);
             t = v * (1 - s * (1 - f));
 
-            double rgb[];
+            float[] rgb;
             if (i == 0)
-                rgb = new double[]{v, t, p};
+                rgb = new float[]{v, t, p};
             else if (i == 1)
-                rgb = new double[]{q, v, p};
+                rgb = new float[]{q, v, p};
             else if (i == 2)
-                rgb = new double[]{p, v, t};
+                rgb = new float[]{p, v, t};
             else if (i == 3)
-                rgb = new double[]{p, q, v};
+                rgb = new float[]{p, q, v};
             else if (i == 4)
-                rgb = new double[]{t, p, v};
+                rgb = new float[]{t, p, v};
             else
-                rgb = new double[]{v, p, q};
+                rgb = new float[]{v, p, q};
 
             this.r = rgb[0];
             this.g = rgb[1];
@@ -348,10 +348,10 @@ public class Color implements Cloneable {
     }
 
     private void updateHSB() {
-        double h = 0;
-        double s = 0;
-        double v = Math.max(Math.max(r, g), b);
-        double d = v - Math.min(Math.min(r, g), b);
+        float h = 0;
+        float s = 0;
+        float v = Math.max(Math.max(r, g), b);
+        float d = v - Math.min(Math.min(r, g), b);
 
         if (v != 0)
             s = d / v;
@@ -365,7 +365,7 @@ public class Color implements Cloneable {
                 h = 4 + (r - g) / d;
         }
 
-        h = h * (float) (60.0 / 360);
+        h = h * (60f / 360);
         if (h < 0)
             h = h + 1;
 
@@ -379,7 +379,7 @@ public class Color implements Cloneable {
     }
 
     public java.awt.Color getAwtColor() {
-        return new java.awt.Color((float) getRed(), (float) getGreen(), (float) getBlue(), (float) getAlpha());
+        return new java.awt.Color(getRed(), getGreen(), getBlue(), getAlpha());
     }
 
     @Override
@@ -429,10 +429,10 @@ public class Color implements Cloneable {
      */
     @Override
     public String toString() {
-        int r256 = (int) Math.round(r * 255);
-        int g256 = (int) Math.round(g * 255);
-        int b256 = (int) Math.round(b * 255);
-        int a256 = (int) Math.round(a * 255);
+        int r256 = Math.round(r * 255);
+        int g256 = Math.round(g * 255);
+        int b256 = Math.round(b * 255);
+        int a256 = Math.round(a * 255);
         return "#"
                 + paddedHexString(r256)
                 + paddedHexString(g256)

@@ -1,5 +1,7 @@
 package nodebox.graphics;
 
+import processing.core.PGraphics;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -367,6 +369,12 @@ public class Geometry extends AbstractGeometry implements Colorizable {
 
     public void draw(Graphics2D g) {
         for (Grob grob : paths) {
+            grob.draw(g);
+        }
+    }
+
+    public void draw(PGraphics g) {
+        for (Grob grob: paths) {
             grob.draw(g);
         }
     }

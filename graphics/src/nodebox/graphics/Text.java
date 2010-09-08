@@ -1,5 +1,7 @@
 package nodebox.graphics;
 
+import processing.core.PGraphics;
+
 import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
@@ -219,6 +221,10 @@ public class Text extends AbstractGrob {
             layout.draw(g, (float) baseLineX + iterator.getX(), (float) baseLineY + iterator.getY());
         }
         restoreTransform(g);
+    }
+
+    public void draw(PGraphics g) {
+        throw new RuntimeException("Text.draw() not implemented.");
     }
 
     public Path getPath() {

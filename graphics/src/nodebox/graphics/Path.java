@@ -1,8 +1,14 @@
 package nodebox.graphics;
 
+import processing.core.PGraphics;
+
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+
+import static nodebox.graphics.ProcessingGraphics.setStyle;
 
 /**
  * Base class for all geometric (vector) data.
@@ -781,8 +787,9 @@ public class Path extends AbstractGeometry implements Colorizable, Iterable<Poin
      * a smooth bezier path betweem them.
      * Curvature is only useful if the path has more than  three points.
      * </p>
-     * @param points     the points of which to construct the path from.
-     * @param curvature  the smoothness of the generated path (0: straight, 1: smooth)
+     *
+     * @param points    the points of which to construct the path from.
+     * @param curvature the smoothness of the generated path (0: straight, 1: smooth)
      * @return a new Path.
      */
     public static Path findPath(Point[] points, float curvature) {
@@ -810,7 +817,7 @@ public class Path extends AbstractGeometry implements Colorizable, Iterable<Poin
             return path;
         }
 
-        curvature = (float) (4 + (1.0-curvature)*40);
+        curvature = (float) (4 + (1.0 - curvature) * 40);
 
         HashMap<Integer, Float> dx, dy, bi, ax, ay;
         dx = new HashMap<Integer, Float>();
@@ -819,33 +826,33 @@ public class Path extends AbstractGeometry implements Colorizable, Iterable<Poin
         ax = new HashMap<Integer, Float>();
         ay = new HashMap<Integer, Float>();
         dx.put(0, 0f);
-        dx.put(points.length-1, 0f);
+        dx.put(points.length - 1, 0f);
         dy.put(0, 0f);
-        dy.put(points.length-1, 0f);
+        dy.put(points.length - 1, 0f);
         bi.put(1, -0.25f);
-        ax.put(1, (points[2].x-points[0].x-dx.get(0)) / 4);
-        ay.put(1, (points[2].y-points[0].y-dy.get(0)) / 4);
+        ax.put(1, (points[2].x - points[0].x - dx.get(0)) / 4);
+        ay.put(1, (points[2].y - points[0].y - dy.get(0)) / 4);
 
-        for (int i = 2; i < points.length-1; i++) {
-            bi.put(i, -1 / (curvature + bi.get(i-1)));
-            ax.put(i, -(points[i+1].x-points[i-1].x-ax.get(i-1)) * bi.get(i));
-            ay.put(i, -(points[i+1].y-points[i-1].y-ay.get(i-1)) * bi.get(i));
+        for (int i = 2; i < points.length - 1; i++) {
+            bi.put(i, -1 / (curvature + bi.get(i - 1)));
+            ax.put(i, -(points[i + 1].x - points[i - 1].x - ax.get(i - 1)) * bi.get(i));
+            ay.put(i, -(points[i + 1].y - points[i - 1].y - ay.get(i - 1)) * bi.get(i));
         }
 
         for (int i = points.length - 2; i >= 1; i--) {
-            dx.put(i, ax.get(i) + dx.get(i+1) * bi.get(i));
-            dy.put(i, ay.get(i) + dy.get(i+1) * bi.get(i));
+            dx.put(i, ax.get(i) + dx.get(i + 1) * bi.get(i));
+            dy.put(i, ay.get(i) + dy.get(i + 1) * bi.get(i));
         }
 
         Path path = new Path();
         path.moveto(points[0].x, points[0].y);
-        for (int i = 0; i < points.length-1; i++) {
+        for (int i = 0; i < points.length - 1; i++) {
             path.curveto(points[i].x + dx.get(i),
-                         points[i].y + dy.get(i),
-                         points[i+1].x - dx.get(i+1),
-                         points[i+1].y - dy.get(i+1),
-                         points[i+1].x,
-                         points[i+1].y);
+                    points[i].y + dy.get(i),
+                    points[i + 1].x - dx.get(i + 1),
+                    points[i + 1].y - dy.get(i + 1),
+                    points[i + 1].x,
+                    points[i + 1].y);
         }
 
         return path;
@@ -997,6 +1004,20 @@ public class Path extends AbstractGeometry implements Colorizable, Iterable<Poin
                 // The path would be too small to be displayed anyway.
             }
         }
+    }
+
+    public void draw(PGraphics g) {
+        // If we can't fill or stroke the path, there's nothing to draw.
+        if (fillColor == null && strokeColor == null) return;
+        // If there are no points, there's nothing to draw.
+        if (getPointCount() == 0) return;
+        setStyle(g, fillColor, strokeColor, strokeWidth);
+        g.beginShape();
+        for (Contour c : contours) {
+            c.innerDraw(g);
+            g.breakShape();
+        }
+        g.endShape();
     }
 
     public Path clone() {

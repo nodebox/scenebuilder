@@ -18,6 +18,8 @@
  */
 package nodebox.graphics;
 
+import processing.core.PGraphics;
+
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -169,6 +171,15 @@ public class Canvas extends AbstractTransformable {
         //int clipheight = clip != null && height > clip.height ? clip.height : (int) width;
         //g.setClip(clip != null ? clip.x : 0, clip != null ? clip.y : 0, clipwidth, clipheight);
         for (Grob grob : items) {
+            grob.draw(g);
+        }
+    }
+
+    public void draw(PGraphics g) {
+        if (background != null) {
+            g.background((float) background.getRed(), (float) background.getGreen(), (float) background.getBlue(), (float) background.getAlpha());
+        }
+        for (Grob grob: items) {
             grob.draw(g);
         }
     }
