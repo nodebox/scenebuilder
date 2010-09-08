@@ -2,6 +2,7 @@ package nodebox.builtins.device;
 
 import nodebox.node.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 @Description("Provide access to keyboard data")
 public class Keyboard extends Node {
@@ -12,9 +13,9 @@ public class Keyboard extends Node {
 
     @Override
     public void execute(Context context, float time) {
-        PApplet g = context.getApplet();
-        pKey.set(String.valueOf(g.key));
-        pKeyCode.set(g.keyCode);
-        pKeyPressed.set(g.keyPressed);
+        PApplet applet = context.getApplet();
+        pKey.set(String.valueOf(applet.key));
+        pKeyCode.set(applet.keyCode);
+        pKeyPressed.set(applet.keyPressed);
     }
 }

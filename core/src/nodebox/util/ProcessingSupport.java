@@ -2,7 +2,7 @@ package nodebox.util;
 
 import nodebox.node.ColorPort;
 import nodebox.node.FloatPort;
-import processing.core.PApplet;
+import processing.core.PGraphics;
 
 import java.awt.*;
 import java.util.Random;
@@ -34,51 +34,51 @@ public class ProcessingSupport {
     /**
      * Set the fill color. If the color is null, call noFill().
      *
-     * @param p the processing context
+     * @param g the processing context
      * @param c the color
      */
-    public static void setFill(PApplet p, Color c) {
+    public static void setFill(PGraphics g, Color c) {
         if (c != null) {
-            p.fill(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+            g.fill(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         } else {
-            p.noFill();
+            g.noFill();
         }
     }
 
     /**
      * Set the fill color from a color port. If the port is null, call noFill().
      *
-     * @param p    the processing context
+     * @param g    the processing context
      * @param port the fill color port
      */
-    public static void setFill(PApplet p, ColorPort port) {
+    public static void setFill(PGraphics g, ColorPort port) {
         Color fill = port != null ? port.get() : null;
-        setFill(p, fill);
+        setFill(g, fill);
     }
 
     /**
      * Set the stroke color. If the color is null, call noFill().
      *
-     * @param p the processing context
+     * @param g the processing context
      * @param c the color
      */
-    public static void setStroke(PApplet p, Color c) {
+    public static void setStroke(PGraphics g, Color c) {
         if (c != null) {
-            p.stroke(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+            g.stroke(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         } else {
-            p.noStroke();
+            g.noStroke();
         }
     }
 
     /**
      * Set the stroke color from a color port. If the port is null, call noStroke().
      *
-     * @param p    the processing context
+     * @param g    the processing context
      * @param port the stroke color port
      */
-    public static void setStroke(PApplet p, ColorPort port) {
+    public static void setStroke(PGraphics g, ColorPort port) {
         Color stroke = port != null ? port.get() : null;
-        setStroke(p, stroke);
+        setStroke(g, stroke);
     }
 
     /**
@@ -87,41 +87,41 @@ public class ProcessingSupport {
      * This method supports null values for all arguments, disabling the style.
      * E.g. if the fill is null, noFill() will be called.
      *
-     * @param p            the processing applet
+     * @param g            the processing applet
      * @param fill         the fill color
      * @param stroke       the stroke color
      * @param strokeWeight the stroke weight
      */
-    public static void setStyle(PApplet p, Color fill, Color stroke, float strokeWeight) {
+    public static void setStyle(PGraphics g, Color fill, Color stroke, float strokeWeight) {
         if (fill != null) {
-            setFill(p, fill);
+            setFill(g, fill);
         } else {
-            p.noFill();
+            g.noFill();
         }
         if (stroke != null) {
-            setStroke(p, stroke);
-            p.strokeWeight(Math.max(strokeWeight, 0f));
+            setStroke(g, stroke);
+            g.strokeWeight(Math.max(strokeWeight, 0f));
         } else {
-            p.noStroke();
+            g.noStroke();
         }
     }
 
     /**
      * Set the drawing style based on a number of common ports.
-     * <p/>
+     * <g/>
      * This method support null values for all of the arguments, disabling the style.
      * E.g. if the fillPort is null, noFill() will be called.
      *
-     * @param p                the processing applet
+     * @param g                the processing applet
      * @param fillPort         the port that contains the fill color
      * @param strokePort       the port that contains the stroke color
      * @param strokeWeightPort the port that contains the stroke weight
      */
-    public static void setStyle(PApplet p, ColorPort fillPort, ColorPort strokePort, FloatPort strokeWeightPort) {
+    public static void setStyle(PGraphics g, ColorPort fillPort, ColorPort strokePort, FloatPort strokeWeightPort) {
         Color fill = fillPort != null ? fillPort.get() : null;
         Color stroke = strokePort != null ? strokePort.get() : null;
         float strokeWeight = strokeWeightPort != null ? strokeWeightPort.get() : 1f;
-        setStyle(p, fill, stroke, strokeWeight);
+        setStyle(g, fill, stroke, strokeWeight);
     }
 
     public static float random(float min, float max, int seed) {

@@ -146,7 +146,6 @@ public class Network extends Node {
      *
      * @param context the rendering context
      * @param time    the current time
-     * @return true if all children returned true.
      */
     @Override
     public void execute(Context context, float time) {

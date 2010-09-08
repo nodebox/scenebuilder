@@ -2,8 +2,8 @@ package nodebox.toxiclibscore;
 
 import nodebox.node.*;
 import nodebox.util.ProcessingSupport;
-import processing.core.PApplet;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 
@@ -19,7 +19,7 @@ public class Polygon2DDrawer extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void draw(PApplet g, Context context, float time) {
+    public void draw(PGraphics g, Context context, float time) {
         Polygon2D polygon = pPolygon.get();
         if (polygon == null) return;
         g.pushStyle();

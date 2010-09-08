@@ -2,7 +2,7 @@ package nodebox.builtins.draw;
 
 import nodebox.node.*;
 import nodebox.util.ProcessingSupport;
-import processing.core.PApplet;
+import processing.core.PGraphics;
 
 import java.awt.*;
 
@@ -17,7 +17,7 @@ public class Line extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void draw(PApplet g, Context context, float time) {
+    public void draw(PGraphics g, Context context, float time) {
         ProcessingSupport.setStyle(g, null, pStroke, pStrokeWeight);
         g.line(pX1.get(), pY1.get(), pX2.get(), pY2.get());
     }

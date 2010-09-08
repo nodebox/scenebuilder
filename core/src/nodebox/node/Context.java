@@ -1,6 +1,7 @@
 package nodebox.node;
 
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,4 +70,10 @@ public class Context {
     public PApplet getApplet() {
         return applet;
     }
+
+    public PGraphics getGraphics() {
+        return applet.g;
+    }
+
+
 }

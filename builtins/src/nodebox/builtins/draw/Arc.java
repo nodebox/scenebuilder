@@ -2,7 +2,7 @@ package nodebox.builtins.draw;
 
 import nodebox.node.*;
 import nodebox.util.ProcessingSupport;
-import processing.core.PApplet;
+import processing.core.PGraphics;
 
 import java.awt.*;
 
@@ -20,7 +20,7 @@ public class Arc extends DrawingNode {
     public final FloatPort pStrokeWeight = new FloatPort(this, "strokeWeight", Port.Direction.INPUT, 1f);
 
     @Override
-    public void draw(PApplet g, Context context, float time) {
+    public void draw(PGraphics g, Context context, float time) {
         ProcessingSupport.setStyle(g, pFill, pStroke, pStrokeWeight);
         float start = pStart.get() * ProcessingSupport.TO_RADIANS;
         float stop = pStop.get() * ProcessingSupport.TO_RADIANS;

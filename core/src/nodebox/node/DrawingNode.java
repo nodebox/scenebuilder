@@ -1,6 +1,6 @@
 package nodebox.node;
 
-import processing.core.PApplet;
+import processing.core.PGraphics;
 
 public abstract class DrawingNode extends Node {
 
@@ -14,9 +14,9 @@ public abstract class DrawingNode extends Node {
     @Override
     public void execute(Context context, float time) {
         if (!pEnabled.get()) return;
-        draw(context.getApplet(), context, time);
+        draw(context.getGraphics(), context, time);
     }
 
-    public abstract void draw(PApplet g, Context context, float time);
+    public abstract void draw(PGraphics g, Context context, float time);
 
 }

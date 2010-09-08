@@ -2,6 +2,7 @@ package nodebox.node;
 
 import junit.framework.TestCase;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 import java.awt.*;
 import java.io.File;
@@ -34,7 +35,7 @@ public class SceneTest extends TestCase {
         assertTrue(output1.getPort("output").isConnected());
         assertTrue(input1.getPort("input").isConnected());
         assertEquals(0, input1.getValue("input"));
-        root.execute(new Context((PApplet) null), 0);
+        root.execute(new Context((PGraphics) null), 0);
         assertEquals(99, input1.getValue("input"));
     }
 
@@ -60,7 +61,7 @@ public class SceneTest extends TestCase {
      */
     public static class TestNode extends DrawingNode {
         @Override
-        public void draw(PApplet g, Context context, float time) {
+        public void draw(PGraphics g, Context context, float time) {
         }
     }
 

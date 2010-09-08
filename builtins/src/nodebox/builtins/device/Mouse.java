@@ -2,6 +2,7 @@ package nodebox.builtins.device;
 
 import nodebox.node.*;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 /**
  * Even though mouse values are integers, X & Y coordinates are stored as float for compatibility.
@@ -18,12 +19,12 @@ public class Mouse extends Node {
 
     @Override
     public void execute(Context context, float time) {
-        PApplet g = context.getApplet();
-        pX.set((float) g.mouseX);
-        pY.set((float) g.mouseY);
-        pPreviousX.set((float) g.pmouseX);
-        pPreviousY.set((float) g.pmouseY);
-        pMousePressed.set(g.mousePressed);
-        pMouseButton.set(g.mouseButton);
+        PApplet applet = context.getApplet();
+        pX.set((float) applet.mouseX);
+        pY.set((float) applet.mouseY);
+        pPreviousX.set((float) applet.pmouseX);
+        pPreviousY.set((float) applet.pmouseY);
+        pMousePressed.set(applet.mousePressed);
+        pMouseButton.set(applet.mouseButton);
     }
 }
