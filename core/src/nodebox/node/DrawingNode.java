@@ -5,6 +5,8 @@ import processing.core.PGraphics;
 public abstract class DrawingNode extends Node {
 
     public final BooleanPort pEnabled = new BooleanPort(this, "enabled", Port.Direction.INPUT, true);
+    // TODO: Something else than boolean
+    public final BooleanPort pOutput = new BooleanPort(this, "output", Port.Direction.OUTPUT, true);
 
     @Override
     public boolean canDraw() {

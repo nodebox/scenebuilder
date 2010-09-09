@@ -197,7 +197,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         NodeView view = getNodeAt(e.getPoint());
         if (view == null) return;
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
-            new RenameAction(getNode(view)).actionPerformed(null);
+            new SetRenderedNodeAction(getNode(view)).actionPerformed(null);
         }
     }
 
@@ -293,6 +293,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         if (node instanceof Network)
             nodeViewPopup.add(new EditNetworkAction((Network) node));
         nodeViewPopup.add(new RenameAction(node));
+        nodeViewPopup.add(new SetRenderedNodeAction(node));
         nodeViewPopup.add(new DeleteAction(node));
         nodeViewPopup.show(NetworkViewer.this, e.getX(), e.getY());
         return true;
@@ -468,4 +469,16 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         }
     }
 
+    private class SetRenderedNodeAction extends AbstractAction {
+        private Node node;
+
+        public SetRenderedNodeAction(Node node) {
+            super("Set Rendered");
+            this.node = node;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            node.getNetwork().setRenderedNode(node);
+        }
+    }
 }

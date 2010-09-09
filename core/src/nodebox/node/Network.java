@@ -15,6 +15,7 @@ public class Network extends Node {
     private List<Node> children;
     private List<Connection> connections;
     private Set<Port> publishedPorts;
+    private Node renderedNode;
 
     public Network() {
         children = new LinkedList<Node>();
@@ -100,6 +101,16 @@ public class Network extends Node {
         }
     }
 
+    //// Rendered node ////
+
+    public Node getRenderedNode() {
+        return renderedNode;
+    }
+
+    public void setRenderedNode(Node renderedNode) {
+        this.renderedNode = renderedNode;
+    }
+
     //// Connections ////
 
     public Collection<Connection> getConnections() {
@@ -123,6 +134,16 @@ public class Network extends Node {
             }
         }
         return cs;
+    }
+
+    public Connection getInputConnection(Port port) {
+        checkArgument(port.isInputPort(), "getInputConnection() can only take input ports.");
+        for (Connection c : connections) {
+            if (c.getInputPort() == port) {
+                return c;
+            }
+        }
+        return null;
     }
 
     public void disconnect(Node node) {
@@ -186,10 +207,8 @@ public class Network extends Node {
      */
     @Override
     public void execute(Context context, float time) {
-        for (Node child : children) {
-            if (child.canDraw()) {
-                child.update(context, time);
-            }
+        if (renderedNode != null) {
+            renderedNode.update(context, time);
         }
     }
 

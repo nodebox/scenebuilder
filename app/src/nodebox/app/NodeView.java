@@ -32,6 +32,7 @@ public class NodeView {
     private static final Stroke NODE_BORDER_STROKE = new BasicStroke(2);
     private static final Color NODE_SELECTION_BORDER_COLOR = new Color(200, 18, 18);
     private static final Stroke NODE_SELECTION_BORDER_STROKE = new BasicStroke(3);
+    private static final Color NODE_RENDERED_COLOR = new Color(202, 197, 59);
     private static final int VERTICAL_TEXT_NUDGE = 6;
 
     private final NetworkViewer networkViewer;
@@ -146,7 +147,7 @@ public class NodeView {
 
         // Draw the header
         g2.setColor(NODE_HEADER_COLOR);
-        g2.fillRect(0, 0, totalWidth + 3, NODE_HEADER_HEIGHT); // TODO: Find out why the +3 needs to be here.
+        g2.fillRect(0, 0, totalWidth, NODE_HEADER_HEIGHT);
         g2.setFont(NODE_NAME_FONT);
         g2.setColor(NODE_NAME_COLOR);
         g2.drawString(node.getDisplayName(), 10, NODE_NAME_FONT.getSize() + VERTICAL_TEXT_NUDGE);
@@ -188,6 +189,16 @@ public class NodeView {
             g2.setStroke(NODE_BORDER_STROKE);
         }
         g2.draw(nodeRect);
+
+        // If the node is rendered, draw the yellow line on top.
+        if (node.isRenderedNode()) {
+            g2.clip(nodeRect);
+            g2.setColor(NODE_RENDERED_COLOR);
+            g2.fillRect(0, 0, totalWidth, 4);
+            g2.setClip(originalClip);
+        }
+
+        // Restore original state.
         g2.setTransform(originalTransform);
     }
 

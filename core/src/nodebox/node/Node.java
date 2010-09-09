@@ -100,6 +100,16 @@ public abstract class Node {
         this.position = new Point(x, y);
     }
 
+    public boolean isRenderedNode() {
+        return network != null && network.getRenderedNode() == this;
+    }
+
+    public void setRenderedNode() {
+        if (network != null) {
+            network.setRenderedNode(this);
+        }
+    }
+
     //// Ports ////
 
     public java.util.List<Port> getPorts() {

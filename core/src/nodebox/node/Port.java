@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static nodebox.util.Preconditions.checkNotNull;
+import static nodebox.util.Preconditions.checkState;
 
 /**
  * A port is a connection point on a node. It contains the values that influence the behavior of the node.
@@ -124,6 +125,16 @@ public abstract class Port {
     public boolean isConnected() {
         Network parent = node.getNetwork();
         return parent != null && parent.isConnected(this);
+    }
+
+    public Connection getConnection() {
+        checkState(isInputPort(), "Get connection only works on input ports.");
+        Network parent = node.getNetwork();
+        if (parent != null) {
+            return parent.getInputConnection(this);
+        } else {
+            return null;
+        }
     }
 
     /**

@@ -194,7 +194,6 @@ public class Scene {
             int x = parseInt(attributes, "x");
             int y = parseInt(attributes, "y");
             newNode.setPosition(x, y);
-
             if (currentNode == null) {
                 if (newNode instanceof Network) {
                     // We're creating the root node and scene.
@@ -209,6 +208,12 @@ public class Scene {
                 currentNetwork = (Network) currentNode;
                 currentNetwork.addChild(newNode);
             }
+
+            // If this is rendered node, mark it.
+            if ("true".equals(attributes.getValue("rendered"))) {
+                newNode.setRenderedNode();
+            }
+            
             // Go down into the current node; this will now become the current node.
             currentNode = newNode;
         }
@@ -340,6 +345,9 @@ public class Scene {
         Point position = node.getPosition();
         el.setAttribute("x", Integer.toString(position.x));
         el.setAttribute("y", Integer.toString(position.y));
+        if (node.isRenderedNode()) {
+            el.setAttribute("rendered", "true");
+        }
 
         // Add the input ports
         for (Port port : node.getInputPorts()) {
