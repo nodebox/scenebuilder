@@ -188,22 +188,8 @@ public class Network extends Node {
     public void execute(Context context, float time) {
         for (Node child : children) {
             if (child.canDraw()) {
-                updateChildDependencies(child, context, time);
-                child.execute(context, time);
+                child.update(context, time);
             }
-        }
-    }
-
-    private void updateChildDependencies(Node child, Context context, float time) {
-        // Update all
-        for (Connection c : getInputConnections(child)) {
-            Node n = c.getOutputNode();
-            if (!context.hasExecuted(n)) {
-                context.addToExecutedNodes(n);
-                updateChildDependencies(n, context, time);
-                n.execute(context, time);
-            }
-            c.getInputPort().setValue(c.getOutputPort().getValue());
         }
     }
 

@@ -7,7 +7,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Map;
 
 import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
@@ -229,6 +228,36 @@ public abstract class Node {
 
     public void stopExecution(Context context) {
     }
+
+    /**
+     * Call this method to update a node and its dependencies.
+     * <p/>
+     * This method will:
+     * <ul>
+     * <li>Update its dependencies</li>
+     * <li>Execute itself</li>
+     * </ul>
+     *
+     * @param context the processing context
+     * @param time    the current time
+     */
+    public void update(Context context, float time) {
+        updateDependencies(context, time);
+        execute(context, time);
+    }
+
+    public void updateDependencies(Context context, float time) {
+        if (network == null) return;
+        for (Connection c : network.getInputConnections(this)) {
+            Node n = c.getOutputNode();
+            if (!context.hasExecuted(n)) {
+                context.addToExecutedNodes(n);
+                n.update(context, time);
+            }
+            c.getInputPort().setValue(c.getOutputPort().getValue());
+        }
+    }
+
 
     /**
      * Process the node and update the values of the output ports.
