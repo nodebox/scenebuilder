@@ -81,7 +81,7 @@ public class AddressBar extends JPanel implements MouseListener {
             } else {
                 g2.setColor(TEXT_NORMAL_COLOR);
             }
-            String displayName = part.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE);
+            String displayName = part.getDisplayName();
             SwingUtils.drawShadowText(g2, displayName, x, 16);
 
             int width = (int) g2.getFontMetrics().stringWidth(displayName);

@@ -12,17 +12,15 @@ import java.util.Map;
 import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
 
+@Description("Generic node")
 public abstract class Node {
-
-    public static final String DISPLAY_NAME_ATTRIBUTE = "displayName";
-    public static final String DESCRIPTION_ATTRIBUTE = "description";
 
     public static final HashMap<Class, Integer> instanceCounts = new HashMap<Class, Integer>();
 
     private Network network;
     private String name = "";
+    private String displayName;
     private Point position = new Point(0, 0);
-    private Map<String, String> attributes = new HashMap<String, String>();
     private LinkedList<Port> ports = new LinkedList<Port>();
 
     public static int createInstance(Class c) {
@@ -39,9 +37,8 @@ public abstract class Node {
     }
 
     public Node() {
-        name = getClass().getSimpleName() + createInstance(getClass());
-        setAttribute(DISPLAY_NAME_ATTRIBUTE, Strings.humanizeName(name));
-        setAttribute(DESCRIPTION_ATTRIBUTE, "Generic node.");
+        name = Strings.classToName(getClass());
+        setDisplayName(defaultDisplayName());
     }
 
     public boolean canDraw() {
@@ -60,19 +57,27 @@ public abstract class Node {
         return name;
     }
 
-    public void setDisplayName(String displayName) {
-        if (displayName == null || displayName.trim().length() == 0) {
-            displayName = Strings.humanizeName(name);
-        }
-        setAttribute(DISPLAY_NAME_ATTRIBUTE, displayName);
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
     public String getDisplayName() {
-        return getAttribute(Node.DISPLAY_NAME_ATTRIBUTE);
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        checkNotNull(displayName);
+        checkArgument(displayName.trim().length() != 0, "Display name cannot be empty.");
+        this.displayName = displayName;
+    }
+
+    public String defaultDisplayName() {
+        String className = getClass().getSimpleName();
+        return Strings.humanizeName(className);
+    }
+
+    public boolean hasDefaultDisplayName() {
+        return defaultDisplayName().equals(displayName);
     }
 
     public String getDescription() {
@@ -94,21 +99,6 @@ public abstract class Node {
 
     public void setPosition(int x, int y) {
         this.position = new Point(x, y);
-    }
-
-    //// Attributes ////
-
-    public Map<String, String> getAttributes() {
-        return attributes;
-    }
-
-    public void setAttribute(String attribute, String value) {
-        attributes.put(attribute, value);
-    }
-
-    public String getAttribute(String attribute) {
-        String v = attributes.get(attribute);
-        return v != null ? v : "";
     }
 
     //// Ports ////

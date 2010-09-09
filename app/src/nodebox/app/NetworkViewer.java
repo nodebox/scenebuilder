@@ -444,10 +444,10 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         }
 
         public void actionPerformed(ActionEvent e) {
-            String s = JOptionPane.showInputDialog(NetworkViewer.this, "New name:", node.getAttribute(Node.DISPLAY_NAME_ATTRIBUTE).toString());
+            String s = JOptionPane.showInputDialog(NetworkViewer.this, "New name:", node.getDisplayName());
             if (s == null || s.length() == 0)
                 return;
-            node.setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, s);
+            node.setDisplayName(s);
             repaint();
         }
     }

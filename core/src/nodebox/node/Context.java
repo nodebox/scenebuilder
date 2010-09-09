@@ -72,6 +72,7 @@ public class Context {
     }
 
     public PGraphics getGraphics() {
+        if (applet == null) return null;
         return applet.g;
     }
 

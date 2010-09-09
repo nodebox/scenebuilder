@@ -1,16 +1,27 @@
 package nodebox.util;
 
+import java.util.regex.Pattern;
+
 public class Strings {
-    public static String humanizeName(String name) {
-        StringBuffer sb = new StringBuffer();
-        String[] tokens = name.split("_");
-        for (String t : tokens) {
-            if (t.length() == 0) continue;
-            sb.append(t.substring(0, 1).toUpperCase());
-            sb.append(t.substring(1));
-            sb.append(" ");
-        }
-        return sb.toString().trim();
+
+    // Discussion about this pattern at:
+    // http://stackoverflow.com/questions/2559759/how-do-i-convert-camelcase-into-human-readable-names-in-java
+    private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile(String.format("%s|%s|%s",
+            "(?<=[A-Z])(?=[A-Z][a-z])",
+            "(?<=[^A-Z])(?=[A-Z])",
+            "(?<=[A-Za-z])(?=[^A-Za-z])"
+    ));
+
+    public static String humanizeName(String s) {
+        return CAMEL_CASE_PATTERN.matcher(s).replaceAll(" ");
     }
 
+    public static String classToName(Class c) {
+        String simpleName = c.getSimpleName();
+        if (simpleName.length() > 1) {
+            return simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1);
+        } else {
+            return simpleName.toLowerCase();
+        }
+    }
 }

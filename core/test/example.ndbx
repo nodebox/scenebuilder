@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ndbx formatVersion="3">
     <node name="root" type="nodebox.node.Network" x="0" y="0">
-        <node name="types1" type="nodebox.node.SceneTest$AllTypesNode">
+        <node name="types1" type="nodebox.node.SceneTest$AllTypesNode" displayName="Custom Display Name">
             <port name="int">11</port>
             <port name="float">22.22</port>
             <port name="string">33-33-33</port>

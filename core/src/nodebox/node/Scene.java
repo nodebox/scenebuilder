@@ -26,7 +26,7 @@ public class Scene {
     public Scene() {
         rootNetwork = new Network();
         rootNetwork.setName("root");
-        rootNetwork.setAttribute(Node.DISPLAY_NAME_ATTRIBUTE, "Root");
+        rootNetwork.setDisplayName("Root");
     }
 
     private Scene(Network root) {
@@ -187,9 +187,14 @@ public class Scene {
             Node newNode = manager.createNode(type);
             // Set node attributes.
             newNode.setName(name);
+            String displayName = attributes.getValue("displayName");
+            if (displayName != null) {
+                newNode.setDisplayName(displayName);
+            }
             int x = parseInt(attributes, "x");
             int y = parseInt(attributes, "y");
             newNode.setPosition(x, y);
+
             if (currentNode == null) {
                 if (newNode instanceof Network) {
                     // We're creating the root node and scene.
@@ -329,6 +334,9 @@ public class Scene {
         parent.appendChild(el);
         el.setAttribute("name", node.getName());
         el.setAttribute("type", NodeManager.nodeId(node.getClass()));
+        if (!node.hasDefaultDisplayName()) {
+            el.setAttribute("displayName", node.getDisplayName());
+        }
         Point position = node.getPosition();
         el.setAttribute("x", Integer.toString(position.x));
         el.setAttribute("y", Integer.toString(position.y));

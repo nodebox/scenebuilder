@@ -1,19 +1,22 @@
 package nodebox.node;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
 
+@Description("A node that contain other nodes")
 public class Network extends Node {
+
+    private static final Pattern NUMBER_AT_THE_END = Pattern.compile("^(.*?)(\\d*)$");
 
     private List<Node> children;
     private List<Connection> connections;
     private Set<Port> publishedPorts;
 
     public Network() {
-        setAttribute(DISPLAY_NAME_ATTRIBUTE, "Network Node");
-        setAttribute(DESCRIPTION_ATTRIBUTE, "A Node that can contain other nodes.");
         children = new LinkedList<Node>();
         connections = new LinkedList<Connection>();
         publishedPorts = new LinkedHashSet<Port>();
@@ -28,6 +31,18 @@ public class Network extends Node {
 
     public List<Node> getChildren() {
         return new ArrayList<Node>(children);
+    }
+
+    public Node createChild(Class<? extends Node> nodeClass) {
+        Node n;
+        try {
+            n = nodeClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        n.setName(uniqueChildName(n.getName()));
+        addChild(n);
+        return n;
     }
 
     public void addChild(Node child) {
@@ -61,6 +76,28 @@ public class Network extends Node {
             }
         }
         return false;
+    }
+
+    public String uniqueChildName(String prefix) {
+        Matcher m = NUMBER_AT_THE_END.matcher(prefix);
+        m.find();
+        String namePrefix = m.group(1);
+        String number = m.group(2);
+        int counter;
+        if (number.length() > 0) {
+            counter = Integer.parseInt(number);
+        } else {
+            counter = 1;
+        }
+        while (true) {
+            String suggestedName = namePrefix + counter;
+            if (!hasChild(suggestedName)) {
+                // We don't use rename here, since it assumes the node will be in
+                // this network.
+                return suggestedName;
+            }
+            counter++;
+        }
     }
 
     //// Connections ////

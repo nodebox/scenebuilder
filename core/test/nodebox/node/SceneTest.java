@@ -26,6 +26,7 @@ public class SceneTest extends TestCase {
         Collection<Node> children = root.getChildren();
         assertEquals(3, children.size());
         Node types1 = root.getChild("types1");
+        assertEquals("Custom Display Name", types1.getDisplayName());
         assertEquals(11, types1.getValue("int"));
         assertEquals(22.22f, types1.getValue("float"));
         assertEquals("33-33-33", types1.getValue("string"));
@@ -35,25 +36,22 @@ public class SceneTest extends TestCase {
         assertTrue(output1.getPort("output").isConnected());
         assertTrue(input1.getPort("input").isConnected());
         assertEquals(0, input1.getValue("input"));
-        root.execute(new Context((PGraphics) null), 0);
+        root.execute(new Context((PApplet) null), 0);
         assertEquals(99, input1.getValue("input"));
     }
 
     public void testSaveLoad() {
         Scene scene = new Scene();
         Network root = scene.getRootNetwork();
-        Node output1 = manager.createNode(NodeManager.nodeId(OutputNode.class));
-        // TODO Build API for automatically setting node name.
-        output1.setName("output1");
-        Node input1 = manager.createNode(NodeManager.nodeId(InputNode.class));
-        input1.setName("input1");
+        Node output1 = root.createChild(OutputNode.class);
+        Node input1 = root.createChild(InputNode.class);
         root.addChild(output1);
         root.addChild(input1);
         root.connect(output1.getPort("output"), input1.getPort("input"));
         String xml = scene.toXML();
         Scene newScene = Scene.load(xml, manager);
         Network newRoot = newScene.getRootNetwork();
-        assertTrue(newRoot.getChild("output1").getPort("output").isConnected());
+        assertTrue(newRoot.getChild("outputNode1").getPort("output").isConnected());
     }
 
     /**
