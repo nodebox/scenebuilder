@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class
-        ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
+public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
 
     private static final Font NODE_LABEL_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
     private static final Font PORT_LABEL_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
@@ -55,6 +54,7 @@ public class
 
     private void finishInterface() {
         add(Box.createVerticalGlue());
+        repaint();
     }
 
     private void clearInterface() {

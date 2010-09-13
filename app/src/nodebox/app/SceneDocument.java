@@ -195,10 +195,11 @@ public class SceneDocument extends JFrame {
     public void createNode(Class<? extends Node> nodeClass) {
         try {
             Node n = getCurrentNetwork().createChild(nodeClass);
-            n.setPosition((int) Math.random() * 300, (int) Math.random() * 300);
+            n.setPosition((int) (Math.random() * 300), (int) (Math.random() * 300));
             if (getCurrentNetwork().getChildren().size() == 1) {
                 getCurrentNetwork().setRenderedNode(n);
             }
+            viewer.singleSelect(n);
             viewer.updateView();
         } catch (Exception e1) {
             throw new RuntimeException(e1);
