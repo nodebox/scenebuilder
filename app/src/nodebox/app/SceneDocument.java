@@ -29,6 +29,7 @@ public class SceneDocument extends JFrame {
     private SceneRenderer renderer;
     private File documentFile;
     private boolean documentChanged;
+    private JFrame rendererFrame;
 
     public static SceneDocument getCurrentDocument() {
         return Application.getInstance().getCurrentDocument();
@@ -48,8 +49,6 @@ public class SceneDocument extends JFrame {
         JPanel rootPanel = new JPanel(new BorderLayout());
         addressBar = new AddressBar(this);
         rootPanel.add(addressBar, BorderLayout.NORTH);
-        renderer = new SceneRenderer(scene);
-        Pane rendererPane = new Pane(new PaneHeader(), renderer);
         JPanel networkPanel = new JPanel(new BorderLayout(0, 0));
         Pane networkPane = new Pane(new PaneHeader(), networkPanel);
         viewer = new NetworkViewer(this, scene);
@@ -57,22 +56,33 @@ public class SceneDocument extends JFrame {
         viewer.addPropertyChangeListener(NetworkViewer.SELECT_PROPERTY, parameters);
         networkPanel.add(viewer, BorderLayout.CENTER);
         networkPanel.add(parameters, BorderLayout.WEST);
-        JSplitPane mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, rendererPane, networkPane);
-        mainSplitter.setDividerSize(5);
-        mainSplitter.setDividerLocation(300);
-        mainSplitter.setBorder(null);
-        rootPanel.add(mainSplitter, BorderLayout.CENTER);
+//        JSplitPane mainSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, rendererPane, networkPane);
+//        mainSplitter.setDividerSize(5);
+//        mainSplitter.setDividerLocation(300);
+//        mainSplitter.setBorder(null);
+        rootPanel.add(networkPane, BorderLayout.CENTER);
         setContentPane(rootPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(new MenuBar(this, manager));
-        // Setup renderer
-        renderer.init();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 close();
             }
         });
+
+        // Initialize the renderer.
+        renderer = new SceneRenderer(scene);
+        renderer.init();
+        rendererFrame = new JFrame("Output");
+        rendererFrame.setContentPane(renderer);
+        rendererFrame.pack();
+    }
+
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
+        rendererFrame.setVisible(true);
     }
 
     private void updateTitle() {
