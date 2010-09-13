@@ -1,21 +1,17 @@
 package nodebox.app;
 
-import nodebox.node.Network;
-import nodebox.node.Node;
 import nodebox.node.NodeManager;
 import nodebox.node.Scene;
-import org.eclipse.osgi.framework.internal.core.BundleContextImpl;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,17 +34,17 @@ public class Application implements BundleActivator {
 
     public void stop(BundleContext context) throws Exception {
         System.out.println("Shutting down application.");
-        for (SceneDocument document:documents) {
+        for (SceneDocument document : documents) {
             document.close();
         }
         instance = null;
     }
 
     private String version;
-    private SceneDocument document;
     private NodeManager manager;
     private java.util.List<SceneDocument> documents = new ArrayList<SceneDocument>();
     private SceneDocument currentDocument;
+    private JFrame hiddenFrame;
 
     public Application() {
         try {
@@ -78,31 +74,30 @@ public class Application implements BundleActivator {
         } catch (Exception e) {
             throw new RuntimeException("Error while loading the OS X Adapter.", e);
         }
+        // Create hidden window.
+        hiddenFrame = new JFrame();
+        hiddenFrame.setJMenuBar(new MenuBar());
+        hiddenFrame.setUndecorated(true);
+        hiddenFrame.setSize(0, 0);
+        hiddenFrame.pack();
+        hiddenFrame.setVisible(true);
     }
 
     public boolean quit() {
-        document.close();
+        // Because documents will disappear from the list once they are closed,
+        // make a copy of the list.
+        java.util.List<SceneDocument> documents = new ArrayList<SceneDocument>(getDocuments());
+        for (SceneDocument d : documents) {
+            if (!d.shouldClose())
+                return false;
+        }
+        hiddenFrame.dispose();
         System.exit(0);
         return true;
     }
 
     public String getVersion() {
         return version;
-    }
-
-    public void loadScene(String sceneName) {
-        try {
-            if (document != null) {
-                document.close();
-            }
-            Method m = getClass().getMethod(sceneName);
-            Scene scene = (Scene) m.invoke(this);
-            document = new SceneDocument(manager, scene);
-            document.setLocationRelativeTo(null);
-            document.setVisible(true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     private NodeManager getNodeManager(BundleContext context) {
@@ -165,6 +160,7 @@ public class Application implements BundleActivator {
             return false;
         }
     }
+
     private void addDocument(SceneDocument doc) {
         doc.setVisible(true);
         doc.requestFocus();

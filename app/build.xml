@@ -2,6 +2,7 @@
 <project name="NodeBox Application" default="dist">
 
     <property name="src" value="src"/>
+    <property name="res" value="res"/>
     <property name="lib" value="../lib"/>
     <property name="build" value="build"/>
     <property name="dist" value="../dist"/>
@@ -21,11 +22,17 @@
         <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath" source="1.5" target="1.5"/>
     </target>
 
+    <target name="embed-resources" depends="init">
+        <copy todir="${build}">
+            <fileset dir="res"/>
+        </copy>
+    </target>
+
     <target name="embed-dependencies" depends="init">
         <unzip src="${lib}/jna.jar" dest="${build}"/>
     </target>
 
-    <target name="dist" depends="compile,embed-dependencies">
+    <target name="dist" depends="compile,embed-resources,embed-dependencies">
         <mkdir dir="${dist}"/>
         <jar jarfile="${dist}/nodebox-app.jar" basedir="${build}" manifest="manifest.mf"/>
     </target>

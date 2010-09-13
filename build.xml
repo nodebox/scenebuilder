@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="NodeBox" default="dist">
+<project name="SceneBuilder" default="dist">
 
     <property name="module.core" value="core"/>
     <property name="module.builtins" value="builtins"/>
@@ -7,6 +7,14 @@
     <property name="module.toxiclibscore" value="toxiclibscore"/>
     <property name="module.app" value="app"/>
     <property name="module.launcher" value="launcher"/>
+    <property name="app.res.mac" value="app/platform/mac/res"/>
+    <property name="dist.mac" value="dist/mac/${ant.project.name}"/>
+    <property name="dist.mac.app" value="${dist.mac}/${ant.project.name}.app"/>
+    <property name="dist.mac.stub" location="${dist.mac.app}/Contents/MacOS/${ant.project.name}"/>
+    <property name="dist.mac.contents" location="${dist.mac.app}/Contents"/>
+    <property name="dist.mac.res" location="${dist.mac.contents}/Resources"/>
+    <property name="dist.mac.java" location="${dist.mac.res}/dist"/>
+    <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
 
     <target name="dist">
         <ant dir="${module.core}" antfile="build.xml" target="dist"/>
@@ -35,6 +43,45 @@
         <java fork="true" classpath="dist/nodebox-launcher.jar;lib/equinox.jar" classname="nodebox.launcher.Launcher">
             <arg value="-console"/>
         </java>
+    </target>
+    
+    <target name="dist-mac" depends="dist" description="Make a double-clickable Mac OS X application">
+        <mkdir dir="${dist.mac.app}"/>
+        <mkdir dir="${dist.mac.java}"/>
+        <!-- Copy library and program archives-->
+        <copy todir="${dist.mac.java}">
+            <fileset dir="lib">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </fileset>
+            <fileset dir="dist">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </fileset>
+        </copy>
+        <!-- Copy resources-->
+        <copy todir="${dist.mac.res}">
+            <fileset dir="app/res"/>
+        </copy>
+        <!-- Copy application stub -->
+        <copy file="${apple.appstub}" toFile="${dist.mac.stub}"/>
+        <!-- fix stub permissions -->
+        <chmod file="${dist.mac.stub}" perm="755"/>
+        <!-- copy additional Mac contents -->
+        <copy todir="${dist.mac.contents}">
+            <fileset dir="${app.res.mac}"/>
+        </copy>
+        <!-- Make directory into a bundle -->
+        <exec executable="/Developer/Tools/SetFile">
+            <arg line="-a B ${dist.mac.app}"/>
+        </exec>
+    </target>
+    
+    <target name="run-mac" depends="dist-mac" description="Run the double-clickable application">
+        <!-- Use the exec task to open the application -->
+        <exec executable="/usr/bin/open" os="Mac OS X">
+            <arg line="${dist.mac.app}"/>
+        </exec>
     </target>
 
 </project>

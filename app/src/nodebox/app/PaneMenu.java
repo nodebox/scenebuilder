@@ -15,13 +15,9 @@ public class PaneMenu extends JComponent implements MouseListener {
     private static Image paneMenuLeft, paneMenuBackground, paneMenuRight;
 
     static {
-        try {
-            paneMenuLeft = ImageIO.read(new File("app/res/pane-menu-left.png"));
-            paneMenuBackground = ImageIO.read(new File("app/res/pane-menu-background.png"));
-            paneMenuRight = ImageIO.read(new File("app/res/pane-menu-right.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        paneMenuLeft = PlatformUtils.loadImageResource("pane-menu-left.png");
+        paneMenuBackground = PlatformUtils.loadImageResource("pane-menu-background.png");
+        paneMenuRight = PlatformUtils.loadImageResource("pane-menu-right.png");
     }
 
     public PaneMenu() {

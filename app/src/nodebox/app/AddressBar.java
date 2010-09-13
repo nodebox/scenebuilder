@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddressBar extends JPanel implements MouseListener {
@@ -23,12 +24,8 @@ public class AddressBar extends JPanel implements MouseListener {
     public static final Color TEXT_ARMED_COLOR = new Color(0, 0, 0);
 
     static {
-        try {
-            addressGradient = ImageIO.read(new File("app/res/address-gradient.png"));
-            addressArrow = ImageIO.read(new File("app/res/address-arrow.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        addressGradient = PlatformUtils.loadImageResource("address-gradient.png");
+        addressArrow = PlatformUtils.loadImageResource("address-arrow.png");
     }
 
     //private ArrayList<Node> parts = new List<Node>[]{"root", "poster", "background"};

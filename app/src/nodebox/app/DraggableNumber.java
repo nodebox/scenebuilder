@@ -26,16 +26,12 @@ public class DraggableNumber extends JComponent implements MouseListener, MouseM
     public static final Color DRAGGABLE_NUMBER_HIGLIGHT_COLOR = new Color(223, 223, 223);
 
     static {
-        try {
-            draggerLeft = ImageIO.read(new File("app/res/dragger-left.png"));
-            draggerRight = ImageIO.read(new File("app/res/dragger-right.png"));
-            draggerBackground = ImageIO.read(new File("app/res/dragger-background.png"));
-            draggerLeftWidth = draggerLeft.getWidth(null);
-            draggerRightWidth = draggerRight.getWidth(null);
-            draggerHeight = draggerBackground.getHeight(null);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        draggerLeft = PlatformUtils.loadImageResource("dragger-left.png");
+        draggerRight = PlatformUtils.loadImageResource("dragger-right.png");
+        draggerBackground = PlatformUtils.loadImageResource("dragger-background.png");
+        draggerLeftWidth = draggerLeft.getWidth(null);
+        draggerRightWidth = draggerRight.getWidth(null);
+        draggerHeight = draggerBackground.getHeight(null);
     }
 
     // todo: could use something like BoundedRangeModel (but then for floats) for checking bounds.

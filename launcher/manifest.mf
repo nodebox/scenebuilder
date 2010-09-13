@@ -1,6 +1,1 @@
 Main-Class: nodebox.launcher.Launcher
-Bundle-ManifestVersion: 2
-Bundle-SymbolicName: nodebox.launcher
-Bundle-Name: NodeBox-Launcher
-Bundle-Version: 1.0.0
-Import-Package: org.osgi.framework
