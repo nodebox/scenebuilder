@@ -8,7 +8,7 @@
             <port name="width">200.0</port>
             <port name="height">200.0</port>
             <port name="start">0.0</port>
-            <port name="stop">285.0</port>
+            <port name="stop">225.0</port>
             <port name="fill">#fbff0000</port>
             <port name="stroke">#fff900ff</port>
             <port name="strokeWeight">10.0</port>
@@ -20,7 +20,7 @@
             <port name="width">180.0</port>
             <port name="height">180.0</port>
             <port name="start">0.0</port>
-            <port name="stop">66.0</port>
+            <port name="stop">78.0</port>
             <port name="fill">#ffffff00</port>
             <port name="stroke">#011cffff</port>
             <port name="strokeWeight">10.0</port>
@@ -32,36 +32,40 @@
             <port name="width">160.0</port>
             <port name="height">160.0</port>
             <port name="start">0.0</port>
-            <port name="stop">138.0</port>
+            <port name="stop">228.0</port>
             <port name="fill">#ffffff00</port>
             <port name="stroke">#fe0000ff</port>
             <port name="strokeWeight">10.0</port>
         </node>
         <node name="Calendar1" type="nodebox.builtins.time.Calendar" x="17" y="24"/>
-        <node name="Clear1" type="nodebox.builtins.draw.Clear" x="389" y="-1">
-            <port name="enabled">true</port>
-            <port name="color">#020202ff</port>
-        </node>
         <node name="ConvertRange1" type="nodebox.builtins.math.ConvertRange" x="212" y="101">
-            <port name="value">19.0</port>
+            <port name="value">15.0</port>
             <port name="sourceMinimum">0.0</port>
             <port name="sourceMaximum">24.0</port>
             <port name="targetMinimum">0.0</port>
             <port name="targetMaximum">360.0</port>
         </node>
         <node name="ConvertRange2" type="nodebox.builtins.math.ConvertRange" x="228" y="232">
-            <port name="value">11.0</port>
+            <port name="value">13.0</port>
             <port name="sourceMinimum">0.0</port>
             <port name="sourceMaximum">60.0</port>
             <port name="targetMinimum">0.0</port>
             <port name="targetMaximum">360.0</port>
         </node>
         <node name="ConvertRange3" type="nodebox.builtins.math.ConvertRange" x="240" y="367">
-            <port name="value">23.0</port>
+            <port name="value">38.0</port>
             <port name="sourceMinimum">0.0</port>
             <port name="sourceMaximum">60.0</port>
             <port name="targetMinimum">0.0</port>
             <port name="targetMaximum">360.0</port>
+        </node>
+        <node name="layers1" rendered="true" type="nodebox.builtins.draw.Layers" x="769" y="127">
+            <port name="enabled">true</port>
+            <port name="clear">true</port>
+            <port name="clearColor">#000000ff</port>
+            <port name="layer1">false</port>
+            <port name="layer2">false</port>
+            <port name="layer3">false</port>
         </node>
         <conn input="ConvertRange1" inputPort="value" output="Calendar1" outputPort="hours24"/>
         <conn input="Arc1" inputPort="stop" output="ConvertRange1" outputPort="outputValue"/>
@@ -69,5 +73,8 @@
         <conn input="Arc2" inputPort="stop" output="ConvertRange2" outputPort="outputValue"/>
         <conn input="ConvertRange3" inputPort="value" output="Calendar1" outputPort="seconds"/>
         <conn input="Arc3" inputPort="stop" output="ConvertRange3" outputPort="outputValue"/>
+        <conn input="layers1" inputPort="layer1" output="Arc1" outputPort="output"/>
+        <conn input="layers1" inputPort="layer2" output="Arc2" outputPort="output"/>
+        <conn input="layers1" inputPort="layer3" output="Arc3" outputPort="output"/>
     </node>
 </ndbx>

@@ -1,5 +1,7 @@
 package nodebox.app;
 
+import nodebox.node.Network;
+import nodebox.node.Node;
 import nodebox.node.NodeManager;
 import nodebox.node.Scene;
 import org.osgi.framework.BundleActivator;
@@ -120,7 +122,15 @@ public class Application implements BundleActivator {
     }
 
     public SceneDocument createNewDocument() {
-        SceneDocument doc = new SceneDocument(manager, new Scene());
+        Scene scene = new Scene();
+        Network root = scene.getRootNetwork();
+        Node layers = root.createChild(manager.getNodeClass("nodebox.builtins.draw.Layers"));
+        layers.setPosition(200, 10);
+        Node rect = root.createChild(manager.getNodeClass("nodebox.builtins.draw.Rect"));
+        rect.setPosition(10, 10);
+        root.connect(rect.getPort("output"), layers.getPort("layer1"));
+        layers.setRenderedNode();
+        SceneDocument doc = new SceneDocument(manager, scene);
         addDocument(doc);
         return doc;
     }
