@@ -19,7 +19,7 @@ public class AddressBar extends JPanel implements MouseListener {
     public static Image addressGradient;
     public static Image addressArrow;
 
-    private static final Font SMALL_BOLD_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
+    private static final Font SMALL_BOLD_FONT = Theme.INFO_FONT;
     public static final Color TEXT_NORMAL_COLOR = new Color(60, 60, 60);
     public static final Color TEXT_ARMED_COLOR = new Color(0, 0, 0);
 

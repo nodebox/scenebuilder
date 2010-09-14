@@ -20,7 +20,7 @@ public class DraggableNumber extends JComponent implements MouseListener, MouseM
     private static Image draggerLeft, draggerRight, draggerBackground;
     private static int draggerLeftWidth, draggerRightWidth, draggerHeight;
 
-    private static final Font SMALL_BOLD_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
+    private static final Font SMALL_BOLD_FONT = Theme.SMALL_BOLD_FONT;
     public static final Color TEXT_NORMAL_COLOR = new Color(60, 60, 60);
     public static final Color TEXT_DISABLED_COLOR = new Color(98, 112, 130);
     public static final Color DRAGGABLE_NUMBER_HIGLIGHT_COLOR = new Color(223, 223, 223);

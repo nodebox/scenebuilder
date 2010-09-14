@@ -21,13 +21,13 @@ public class NodeView {
     private static final int NODE_HEADER_HEIGHT = 20;
     private static final int NODE_MINIMUM_WIDTH = 150;
     private static final Color NODE_NAME_COLOR = new Color(233, 233, 233);
-    private static final Font NODE_NAME_FONT = new Font(Font.DIALOG, Font.BOLD, 10);
+    private static final Font NODE_NAME_FONT = Theme.SMALL_BOLD_FONT;
     private static final Color NODE_HEADER_COLOR = new Color(83, 83, 85, 200);
     private static final Color NODE_BODY_COLOR = new Color(39, 39, 41, 200);
     private static final Color NODE_PORT_COLOR = new Color(233, 233, 233);
     private static final Color NODE_PUBLISHED_PORT_COLOR = new Color(250, 250, 100);
     private static final Stroke NODE_PORT_STROKE = new BasicStroke(1);
-    private static final Font NODE_PORT_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
+    private static final Font NODE_PORT_FONT = Theme.INFO_FONT;
     private static final Color NODE_BORDER_COLOR = new Color(18, 18, 18);
     private static final Stroke NODE_BORDER_STROKE = new BasicStroke(2);
     private static final Color NODE_SELECTION_BORDER_COLOR = new Color(200, 18, 18);

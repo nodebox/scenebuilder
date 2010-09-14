@@ -17,9 +17,9 @@ import java.util.Set;
 
 public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
 
-    private static final Font NODE_LABEL_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
-    private static final Font PORT_LABEL_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
-    private static final Font PORT_VALUE_FONT = new Font(Font.DIALOG, Font.PLAIN, 10);
+    private static final Font NODE_LABEL_FONT = Theme.SMALL_BOLD_FONT;
+    private static final Font PORT_LABEL_FONT = Theme.INFO_FONT;
+    private static final Font PORT_VALUE_FONT = Theme.INFO_FONT;
 
 
     private Map<JComponent, Port> components = new HashMap<JComponent, Port>();

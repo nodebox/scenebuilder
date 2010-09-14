@@ -9,7 +9,7 @@ import java.io.File;
 
 public class FilePicker extends JPanel implements ActionListener {
 
-    private static final Font SMALL_BOLD_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
+    private static final Font SMALL_BOLD_FONT = Theme.SMALL_BOLD_FONT;
 
 
     private File file;

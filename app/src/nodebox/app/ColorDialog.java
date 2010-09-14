@@ -13,7 +13,7 @@ import java.text.NumberFormat;
 import java.util.prefs.Preferences;
 
 public class ColorDialog extends JDialog implements ChangeListener {
-    private static final Font SMALL_BOLD_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
+    private static final Font SMALL_BOLD_FONT = Theme.SMALL_BOLD_FONT;
 
     public static final String COLOR_RANGE = "NBColorRange";
 

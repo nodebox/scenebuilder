@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 public class PaneMenu extends JComponent implements MouseListener {
-    private static final Font SMALL_BOLD_FONT = new Font(Font.DIALOG, Font.BOLD, 11);
+    private static final Font SMALL_BOLD_FONT = Theme.SMALL_BOLD_FONT;
     public static final Color TEXT_NORMAL_COLOR = new Color(60, 60, 60);
     private static Image paneMenuLeft, paneMenuBackground, paneMenuRight;
 
