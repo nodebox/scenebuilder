@@ -3,7 +3,7 @@
     <property name="src" value="src"/>
     <property name="lib" value="../lib"/>
     <property name="jdk.version" value="1.5"/>
-    
+
     <property name="build" value="build"/>
     <property name="dist" value="../dist"/>
 
@@ -21,7 +21,7 @@
     </target>
 
     <target name="embed-dependencies" depends="init">
-        <unzip src="${lib}/processing-core.jar" dest="${build}"/>
+        <copy file="${lib}/processing-core.jar" todir="${build}"/>
     </target>
 
     <target name="dist" depends="compile,embed-dependencies">

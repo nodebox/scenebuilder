@@ -1,3 +1,4 @@
+Manifest-Version: 1
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.builtins
 Bundle-Name: Node-Builtins

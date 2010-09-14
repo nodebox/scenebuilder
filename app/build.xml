@@ -29,7 +29,7 @@
     </target>
 
     <target name="embed-dependencies" depends="init">
-        <unzip src="${lib}/jna.jar" dest="${build}"/>
+        <copy file="${lib}/jna.jar" todir="${build}"/>
     </target>
 
     <target name="dist" depends="compile,embed-resources,embed-dependencies">

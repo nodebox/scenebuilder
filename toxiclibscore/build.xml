@@ -22,7 +22,7 @@
     </target>
 
     <target name="embed-dependencies" depends="init">
-        <unzip src="${lib}/toxiclibscore.jar" dest="${build}"/>
+        <copy file="${lib}/toxiclibscore.jar" todir="${build}"/>
     </target>
 
     <target name="dist" depends="compile,embed-dependencies">

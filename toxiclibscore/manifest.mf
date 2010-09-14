@@ -1,6 +1,8 @@
+Manifest-Version: 1
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.toxiclibscore
 Bundle-Name: Node-ToxiclibsCore
 Bundle-Version: 1.0.0
 Bundle-Activator: nodebox.toxiclibscore.ToxiclibsCoreActivator
+Bundle-ClassPath: .,toxiclibscore.jar
 Import-Package: org.osgi.framework, org.osgi.util.tracker, processing.core, nodebox.node, nodebox.util
