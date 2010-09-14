@@ -19,7 +19,7 @@ public class Launcher implements Runnable, BundleListener {
             context.installBundle("file:dist/nodebox-core.jar");
             context.installBundle("file:dist/nodebox-builtins.jar");
             context.installBundle("file:dist/nodebox-graphics.jar");
-            context.installBundle("file:dist/nodebox-toxiclibscore.jar");
+            //context.installBundle("file:dist/nodebox-toxiclibscore.jar");
             context.installBundle("file:dist/nodebox-app.jar");
         } catch (Exception e) {
             throw new RuntimeException(e);

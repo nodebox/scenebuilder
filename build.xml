@@ -20,7 +20,7 @@
         <ant dir="${module.core}" antfile="build.xml" target="dist"/>
         <ant dir="${module.builtins}" antfile="build.xml" target="dist"/>
         <ant dir="${module.graphics}" antfile="build.xml" target="dist"/>
-        <ant dir="${module.toxiclibscore}" antfile="build.xml" target="dist"/>
+        <!-- <ant dir="${module.toxiclibscore}" antfile="build.xml" target="dist"/> -->
         <ant dir="${module.app}" antfile="build.xml" target="dist"/>
         <ant dir="${module.launcher}" antfile="build.xml" target="dist"/>
     </target>
