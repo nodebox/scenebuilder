@@ -1,9 +1,11 @@
 package nodebox.app;
 
+import nodebox.app.actions.ScenePropertiesAction;
 import nodebox.node.Network;
 import nodebox.node.Node;
 import nodebox.node.NodeManager;
 import nodebox.node.Scene;
+import nodebox.util.Strings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,13 +73,7 @@ public class SceneDocument extends JFrame {
             }
         });
 
-        // Initialize the renderer.
-        renderer = new SceneRenderer(scene);
-        renderer.init();
-        rendererFrame = new JFrame("Output");
-        rendererFrame.setContentPane(renderer);
-        rendererFrame.setSize(500, 500);
-        rendererFrame.setLocation(920, 20);
+        initRenderer();
     }
 
     @Override
@@ -185,6 +181,49 @@ public class SceneDocument extends JFrame {
         updateTitle();
         return true;
     }
+
+    //// Scene properties ////
+
+    public void showSceneProperties() {
+        ScenePropertiesDialog dialog = new ScenePropertiesDialog(this);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+        if (dialog.success) {
+            setPropertyFromDialog(dialog, Scene.PROCESSING_WIDTH);
+            setPropertyFromDialog(dialog, Scene.PROCESSING_HEIGHT);
+            setPropertyFromDialog(dialog, Scene.PROCESSING_DRAW_BACKGROUND);
+            setPropertyFromDialog(dialog, Scene.PROCESSING_BACKGROUND_COLOR);
+            setPropertyFromDialog(dialog, Scene.PROCESSING_RENDERER);
+            setPropertyFromDialog(dialog, Scene.PROCESSING_SMOOTH);
+            setPropertyFromDialog(dialog, Scene.PROCESSING_FRAME_RATE);
+            initRenderer();
+            rendererFrame.setVisible(true);
+        }
+    }
+
+    private void setPropertyFromDialog(ScenePropertiesDialog dialog, String key) {
+        scene.setProperty(key, dialog.getFieldValue(key));
+    }
+
+    public void initRenderer() {
+        // Stop the old renderer
+        if (renderer != null) {
+            renderer.stop();
+            rendererFrame.dispose();
+        }
+
+        // Initialize the renderer.
+        renderer = new SceneRenderer(scene);
+        renderer.init();
+        rendererFrame = new JFrame("Output");
+        rendererFrame.setContentPane(renderer);
+        int sceneWidth = Strings.parseInt(scene.getProperty(Scene.PROCESSING_WIDTH), 500);
+        int sceneHeight = Strings.parseInt(scene.getProperty(Scene.PROCESSING_HEIGHT), 500);
+        rendererFrame.setSize(sceneWidth, sceneHeight);
+        rendererFrame.setResizable(false);
+        rendererFrame.setLocation(920, 20);
+    }
+
 
     //// Scene management ////
 

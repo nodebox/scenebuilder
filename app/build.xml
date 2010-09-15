@@ -11,6 +11,7 @@
         <path path="${dist}/nodebox-core.jar"/>
         <path path="${lib}/processing-core.jar"/>
         <path path="${lib}/jna.jar"/>
+        <path path="${lib}/miglayout.jar"/>
         <path path="${lib}/equinox.jar"/>
     </path>
 
@@ -29,6 +30,7 @@
     </target>
 
     <target name="embed-dependencies" depends="init">
+        <copy file="${lib}/miglayout.jar" todir="${build}"/>
         <copy file="${lib}/jna.jar" todir="${build}"/>
     </target>
 

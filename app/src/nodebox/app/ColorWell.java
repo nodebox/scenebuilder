@@ -11,8 +11,7 @@ public class ColorWell extends JButton implements ActionListener, ChangeListener
 
     public static final Color PARAMETER_LABEL_BACKGROUND = new Color(153, 153, 153);
 
-
-    private Color color;
+    private Color color = Color.LIGHT_GRAY;
 
     public ColorWell() {
         addActionListener(this);
@@ -46,7 +45,7 @@ public class ColorWell extends JButton implements ActionListener, ChangeListener
     }
 
     public void actionPerformed(ActionEvent e) {
-        ColorDialog dialog = new ColorDialog((Frame) SwingUtilities.getWindowAncestor(this));
+        ColorDialog dialog = new ColorDialog(SwingUtilities.getWindowAncestor(this));
         dialog.setColor(color);
         dialog.setMinimumSize(new Dimension(400, 375));
         dialog.setPreferredSize(new Dimension(540, 375));

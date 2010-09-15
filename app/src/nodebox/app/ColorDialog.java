@@ -57,7 +57,7 @@ public class ColorDialog extends JDialog implements ChangeListener {
      */
     protected EventListenerList listenerList = new EventListenerList();
 
-    public ColorDialog(Frame owner) {
+    public ColorDialog(Window owner) {
         super(owner, "Choose Color");
         getRootPane().putClientProperty("Window.style", "small");
         colorField = new ColorField();

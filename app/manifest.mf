@@ -4,7 +4,7 @@ Bundle-SymbolicName: nodebox.app
 Bundle-Name: Node-App
 Bundle-Version: 1.0.0
 Bundle-Activator: nodebox.app.Application
-Bundle-ClassPath: .,jna.jar
+Bundle-ClassPath: .,jna.jar,miglayout.jar
 Import-Package: org.osgi.framework,
     org.osgi.util.tracker,
     javax.swing,

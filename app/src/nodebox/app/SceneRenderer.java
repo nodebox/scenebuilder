@@ -2,9 +2,10 @@ package nodebox.app;
 
 import nodebox.node.Context;
 import nodebox.node.Scene;
+import nodebox.util.Strings;
 import processing.core.PApplet;
 
-import javax.swing.*;
+import java.awt.*;
 
 
 public class SceneRenderer extends PApplet {
@@ -15,6 +16,8 @@ public class SceneRenderer extends PApplet {
     private double width, height;
     private long startMillis;
     private double time;
+    private boolean drawBackground;
+    private Color backgroundColor;
 
     public SceneRenderer(Scene scene) {
         this.scene = scene;
@@ -23,15 +26,32 @@ public class SceneRenderer extends PApplet {
     @Override
     public void setup() {
         startMillis = System.currentTimeMillis();
-        size(800, 600, "processing.core.PGraphicsJava2D");
-        frameRate(60);
-        smooth();
+        int width = Strings.parseInt(scene.getProperty(Scene.PROCESSING_WIDTH), 500);
+        int height = Strings.parseInt(scene.getProperty(Scene.PROCESSING_HEIGHT), 500);
+        String renderer = scene.getProperty(Scene.PROCESSING_RENDERER);
+        int frameRate = Strings.parseInt(scene.getProperty(Scene.PROCESSING_FRAME_RATE), 60);
+        boolean smooth = Strings.parseBoolean(scene.getProperty(Scene.PROCESSING_SMOOTH), true);
+        drawBackground = Strings.parseBoolean(scene.getProperty(Scene.PROCESSING_DRAW_BACKGROUND), true);
+        backgroundColor = Strings.parseColor(scene.getProperty(Scene.PROCESSING_BACKGROUND_COLOR), Color.LIGHT_GRAY);
+        size(width, height, renderer);
+        frameRate(frameRate);
+        if (smooth) {
+            smooth();
+        } else {
+            noSmooth();
+        }
     }
 
     @Override
     public void draw() {
+        // Initialize the context.
         float time = (float) ((System.currentTimeMillis() - startMillis) / 1000.0);
         Context context = new Context(this);
+        // Draw the background, if needed.
+        if (drawBackground) {
+            background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+        }
+        // Execute the scene.
         scene.execute(context, time);
     }
 

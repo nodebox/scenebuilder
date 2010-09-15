@@ -18,10 +18,33 @@ import java.io.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Properties;
 
 public class Scene {
 
+    public static final String PROCESSING_RENDERER = "processing.renderer";
+    public static final String PROCESSING_FRAME_RATE = "processing.frameRate";
+    public static final String PROCESSING_DRAW_BACKGROUND = "processing.drawBackground";
+    public static final String PROCESSING_BACKGROUND_COLOR = "processing.backgroundColor";
+    public static final String PROCESSING_SMOOTH = "processing.smooth";
+    public static final String PROCESSING_WIDTH = "processing.width";
+    public static final String PROCESSING_HEIGHT = "processing.height";
+
+    public final static Properties DEFAULT_PROPERTIES;
+
+    static {
+        DEFAULT_PROPERTIES = new Properties();
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_WIDTH, "500");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_HEIGHT, "500");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_RENDERER, "processing.core.PGraphicsJava2D");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_FRAME_RATE, "60");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_DRAW_BACKGROUND, "true");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_BACKGROUND_COLOR, "200,200,200");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_SMOOTH, "false");
+    }
+
     private Network rootNetwork;
+    private Properties properties = new Properties(DEFAULT_PROPERTIES);
 
     public Scene() {
         rootNetwork = new Network();
@@ -40,6 +63,18 @@ public class Scene {
     public void execute(Context context, float time) {
         rootNetwork.execute(context, time);
     }
+
+    //// Properties ////
+
+    public String getProperty(String key) {
+        return properties.getProperty(key);
+    }
+
+    public void setProperty(String key, String value) {
+        properties.setProperty(key, value);
+    }
+
+    //// Loading ////
 
     /**
      * Load a scene from the given file.
@@ -95,6 +130,7 @@ public class Scene {
 
         private NodeManager manager;
         private Scene scene;
+        private Properties sceneProperties = new Properties();
         private Node currentNode;
         private Port currentPort;
         private ParseState state = ParseState.INVALID;
@@ -109,6 +145,8 @@ public class Scene {
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equals("ndbx")) {
                 startNdbxTag(attributes);
+            } else if (qName.equals("property")) {
+                startPropertyTag(attributes);
             } else if (qName.equals("node")) {
                 startNodeTag(attributes);
             } else if (qName.equals("port")) {
@@ -124,6 +162,9 @@ public class Scene {
         public void endElement(String uri, String localName, String qName) throws SAXException {
             if (qName.equals("ndbx")) {
                 // Top level element -- parsing finished.
+                endNdbxTag();
+            } else if (qName.equals("property")) {
+                // Do nothing after property tag
             } else if (qName.equals("node")) {
                 // Traverse up to the parent.
                 // This can result in currentNode being null if we traversed all the way up
@@ -175,6 +216,22 @@ public class Scene {
                 throw new SAXException("Unknown formatVersion " + formatVersion);
         }
 
+        private void endNdbxTag() throws SAXException {
+            if (scene == null) {
+                throw new SAXException("Empty ndbx file.");
+            }
+            scene.properties.putAll(sceneProperties);
+        }
+
+        private void startPropertyTag(Attributes attributes) throws SAXException {
+            if (currentNode != null) {
+                throw new SAXException("Property tags should appear right below the ndbx tag.");
+            }
+            String key = parseString(attributes, "key", "Key attribute is required in property tags.");
+            String value = parseString(attributes, "value", "Value attribute is required in property tags.");
+            sceneProperties.setProperty(key, value);
+        }
+
         private void startNodeTag(Attributes attributes) throws SAXException {
             // Since we're going to be adding a child node, check that the current node is a network.
             // The exception is if the currentNode is null, which means we're creating the root node.
@@ -213,7 +270,7 @@ public class Scene {
             if ("true".equals(attributes.getValue("rendered"))) {
                 newNode.setRenderedNode();
             }
-            
+
             // Go down into the current node; this will now become the current node.
             currentNode = newNode;
         }
@@ -295,6 +352,8 @@ public class Scene {
 
     }
 
+    //// Saving ////
+
     public void save(File f) {
         StreamResult streamResult = new StreamResult(f);
         write(this, streamResult);
@@ -316,6 +375,19 @@ public class Scene {
             Element rootElement = doc.createElement("ndbx");
             doc.appendChild(rootElement);
             rootElement.setAttribute("formatVersion", "3");
+
+            // Write out the scene properties.
+            for (Object key : scene.properties.keySet()) {
+                if (key instanceof String) {
+                    Object value = scene.properties.get(key);
+                    if (value instanceof String) {
+                        Element propertyElement = doc.createElement("property");
+                        rootElement.appendChild(propertyElement);
+                        propertyElement.setAttribute("key", (String) key);
+                        propertyElement.setAttribute("value", (String) value);
+                    }
+                }
+            }
 
             // Write out the root node.
             writeNode(doc, rootElement, scene.getRootNetwork());
