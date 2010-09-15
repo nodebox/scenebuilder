@@ -40,7 +40,7 @@ public class Scene {
         DEFAULT_PROPERTIES.setProperty(PROCESSING_FRAME_RATE, "60");
         DEFAULT_PROPERTIES.setProperty(PROCESSING_DRAW_BACKGROUND, "true");
         DEFAULT_PROPERTIES.setProperty(PROCESSING_BACKGROUND_COLOR, "200,200,200");
-        DEFAULT_PROPERTIES.setProperty(PROCESSING_SMOOTH, "false");
+        DEFAULT_PROPERTIES.setProperty(PROCESSING_SMOOTH, "true");
     }
 
     private Network rootNetwork;
