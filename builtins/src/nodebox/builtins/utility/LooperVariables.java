@@ -1,4 +1,4 @@
-package nodebox.builtins.looper;
+package nodebox.builtins.utility;
 
 import nodebox.node.*;
 

@@ -1,10 +1,10 @@
-package nodebox.builtins.looper;
+package nodebox.builtins.utility;
 
 import nodebox.node.*;
 
 /**
  * The looper is a network that executes its context multiple times, according to the amount.
- *
+ * <p/>
  * The accompanying looper variables node can be used to get information on the current iteration,
  * such as the index, total amount, and position (between 0.0-1.0).
  */

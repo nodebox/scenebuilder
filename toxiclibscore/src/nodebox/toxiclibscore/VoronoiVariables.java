@@ -6,7 +6,7 @@ import toxi.geom.Polygon2D;
 /**
  * The voronoi variables can be used in a VoronoiLooper network to get information on the current iteration.
  * <p/>
- * For each iteration, the looper variables provide the index, the total amount of executions,
+ * For each iteration, the voronoi variables provide the index, the total amount of executions,
  * the position (between 0.0-1.0) and the current polygon.
  */
 @Description("Variables that contain information for every voronoi region.")
