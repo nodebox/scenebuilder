@@ -13,11 +13,14 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.registerNodeClass(GridNode.class, "Geometry");
         m.registerNodeClass(LineNode.class, "Geometry");
         m.registerNodeClass(PolygonNode.class, "Geometry");
+        m.registerNodeClass(StarNode.class, "Geometry");
         m.registerNodeClass(RectNode.class, "Geometry");
         m.registerNodeClass(ResampleNode.class, "Geometry");
         m.registerNodeClass(SnapNode.class, "Geometry");
         m.registerNodeClass(TextPathNode.class, "Geometry");
         m.registerNodeClass(WiggleNode.class, "Geometry");
+        m.registerNodeClass(ScatterNode.class, "Geometry");
+        m.registerNodeClass(ColorNode.class, "Geometry");
     }
 
     public void stop(BundleContext context) throws Exception {
@@ -27,11 +30,14 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.unregisterNodeClass(GridNode.class);
         m.unregisterNodeClass(LineNode.class);
         m.unregisterNodeClass(PolygonNode.class);
+        m.unregisterNodeClass(StarNode.class);
         m.unregisterNodeClass(RectNode.class);
         m.unregisterNodeClass(ResampleNode.class);
         m.unregisterNodeClass(SnapNode.class);
         m.unregisterNodeClass(TextPathNode.class);
         m.unregisterNodeClass(WiggleNode.class);
+        m.unregisterNodeClass(ScatterNode.class);
+        m.unregisterNodeClass(ColorNode.class);
     }
 
      private NodeManager getNodeManager(BundleContext context) {
