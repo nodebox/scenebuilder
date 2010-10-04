@@ -153,7 +153,7 @@ public abstract class Port {
         if (this.direction == Direction.INPUT) {
             return this.canReceiveFrom(port);
         } else if (port.direction == Direction.INPUT) {
-            return this.canReceiveFrom(port);
+            return port.canReceiveFrom(this);
         } else {
             throw new AssertionError("No input ports. This should never happen.");
         }

@@ -22,4 +22,9 @@ public class PublishedPort extends Port {
     public void setValue(Object value) {
         originalPort.setValue(value);
     }
+
+    @Override
+    protected boolean canReceiveFrom(Port port) {
+        return originalPort.canReceiveFrom(port);
+    }
 }

@@ -176,14 +176,26 @@ public class Network extends Node {
         if (!hasChild(port.getNode()))
             throw new IllegalArgumentException(String.format("Node %s is not a child of this network.", port.getNode()));
         PublishedPort publishedPort = new PublishedPort(this, port);
-        addPort(publishedPort);
+        //addPort(publishedPort);
         return publishedPort;
     }
 
     public void unPublishPort(Port port) {
-        if (!hasChild(port.getNode()))
-            throw new IllegalArgumentException(String.format("Node %s is not a child of this network.", port.getNode()));
-        removePort(port.getName());
+        if (isPublished(port)) {
+            PublishedPort publishedPort = null;
+            for (Port p : getPorts()) {
+                if (p instanceof PublishedPort) {
+                    PublishedPort pp = (PublishedPort) p;
+                    if (pp.getOriginalPort() == port)
+                        publishedPort = pp;
+                }
+            }
+
+            if (getNetwork() != null && publishedPort.isConnected())
+                getNetwork().disconnect(publishedPort);
+
+            removePort(publishedPort);
+        }
     }
 
     public boolean isPublished(Port port) {
