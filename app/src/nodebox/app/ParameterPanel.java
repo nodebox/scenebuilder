@@ -132,27 +132,22 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
     private JComponent getWidgetForPort(Port port) {
         String widget = port.getWidget();
-
-        if (port instanceof PublishedPort)
-            port = ((PublishedPort) port).getOriginalPort();
+        Object value = port.getValue();
 
         if (widget.equals("boolean")) {
-            BooleanPort p = (BooleanPort) port;
-            JCheckBox checkBox = new JCheckBox("", p.get());
+            JCheckBox checkBox = new JCheckBox("", (Boolean) value);
             checkBox.setOpaque(false);
             checkBox.putClientProperty("JComponent.sizeVariant", "small");
             checkBox.addActionListener(this);
             return checkBox;
         } else if (widget.equals("float")) {
-            FloatPort p = (FloatPort) port;
             DraggableNumber number = new DraggableNumber();
-            number.setValue(p.get());
+            number.setValue((Float) value);
             number.addChangeListener(this);
             return number;
         } else if (widget.equals("int")) {
-            IntPort p = (IntPort) port;
             DraggableNumber number = new DraggableNumber();
-            number.setValue(p.get());
+            number.setValue((Integer) value);
             number.addChangeListener(this);
             NumberFormat intFormat = NumberFormat.getNumberInstance();
             intFormat.setMinimumFractionDigits(0);
@@ -160,14 +155,12 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             number.setNumberFormat(intFormat);
             return number;
         } else if (widget.equals("color")) {
-            ColorPort p = (ColorPort) port;
             ColorWell well = new ColorWell();
-            well.setColor(p.get());
+            well.setColor((Color) value);
             well.addChangeListener(this);
             return well;
         } else if (widget.equals("string")) {
-            StringPort p = (StringPort) port;
-            JTextField field = new JTextField(p.get());
+            JTextField field = new JTextField((String) value);
             field.setFont(PORT_VALUE_FONT);
             field.putClientProperty("JComponent.sizeVariant", "small");
             field.addActionListener(this);
@@ -207,10 +200,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     public void actionPerformed(ActionEvent e) {
         Port p = getPort((JComponent) e.getSource());
         if (p == null) return;
-        if (p instanceof BooleanPort) {
+        if (p.getWidget().equals("boolean")) {
             JCheckBox b = (JCheckBox) e.getSource();
             p.setValue(b.isSelected());
-        } else if (p instanceof StringPort) {
+        } else if (p.getWidget().equals("string")) {
             JTextField f = (JTextField) e.getSource();
             p.setValue(f.getText());
         }
@@ -219,13 +212,13 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     public void stateChanged(ChangeEvent e) {
         Port p = getPort((JComponent) e.getSource());
         if (p == null) return;
-        if (p instanceof FloatPort) {
+        if (p.getWidget().equals("float")) {
             DraggableNumber number = (DraggableNumber) e.getSource();
             p.setValue((float) number.getValue());
-        } else if (p instanceof IntPort) {
+        } else if (p.getWidget().equals("int")) {
             DraggableNumber number = (DraggableNumber) e.getSource();
             p.setValue((int) Math.round(number.getValue()));
-        } else if (p instanceof ColorPort) {
+        } else if (p.getWidget().equals("color")) {
             ColorWell well = (ColorWell) e.getSource();
             p.setValue(well.getColor());
         }
