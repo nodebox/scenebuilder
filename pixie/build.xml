@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="NodeBox Pixie" default="dist">
+
+    <property name="src" value="src"/>
+    <property name="lib" value="../lib"/>
+    <property name="build" value="build"/>
+    <property name="dist" value="../dist"/>
+
+    <path id="build.classpath">
+        <path path="${dist}/nodebox-core.jar"/>
+        <path path="${lib}/processing-core.jar"/>
+        <path path="${lib}/equinox.jar"/>
+    </path>
+
+    <target name="init">
+        <mkdir dir="${build}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" classpathref="build.classpath" source="1.5" target="1.5"/>
+    </target>
+
+    <target name="dist" depends="compile">
+        <mkdir dir="${dist}"/>
+        <jar jarfile="${dist}/nodebox-pixie.jar" basedir="${build}" manifest="manifest.mf"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+
+</project>
