@@ -93,7 +93,9 @@ public class Application implements BundleActivator {
             if (!d.shouldClose())
                 return false;
         }
-        hiddenFrame.dispose();
+        if (hiddenFrame != null) {
+            hiddenFrame.dispose();
+        }
         System.exit(0);
         return true;
     }
