@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class Scene {
 
@@ -42,6 +43,8 @@ public class Scene {
         DEFAULT_PROPERTIES.setProperty(PROCESSING_BACKGROUND_COLOR, "200,200,200");
         DEFAULT_PROPERTIES.setProperty(PROCESSING_SMOOTH, "true");
     }
+
+    private static Logger logger = Logger.getLogger(Scene.class.getName());
 
     private Network rootNetwork;
     private Properties properties = new Properties(DEFAULT_PROPERTIES);
@@ -125,7 +128,7 @@ public class Scene {
     private static class NDBXHandler extends DefaultHandler {
 
         enum ParseState {
-            INVALID, IN_PORT
+            INVALID, IN_DATA, IN_PORT
         }
 
         private NodeManager manager;
@@ -133,6 +136,7 @@ public class Scene {
         private Properties sceneProperties = new Properties();
         private Node currentNode;
         private Port currentPort;
+        private String currentDataKey;
         private ParseState state = ParseState.INVALID;
         private StringBuffer characterData;
 
@@ -149,6 +153,8 @@ public class Scene {
                 startPropertyTag(attributes);
             } else if (qName.equals("node")) {
                 startNodeTag(attributes);
+            } else if (qName.equals("data")) {
+                startDataTag(attributes);
             } else if (qName.equals("port")) {
                 startPortTag(attributes);
             } else if (qName.equals("conn")) {
@@ -169,6 +175,10 @@ public class Scene {
                 // Traverse up to the parent.
                 // This can result in currentNode being null if we traversed all the way up
                 currentNode = currentNode.getNetwork();
+            } else if (qName.equals("data")) {
+                setDataValue(characterData.toString());
+                currentDataKey = null;
+                resetState();
             } else if (qName.equals("port")) {
                 setPortValue(characterData.toString());
                 currentPort = null;
@@ -185,6 +195,10 @@ public class Scene {
         @Override
         public void characters(char[] ch, int start, int length) throws SAXException {
             switch (state) {
+                case IN_DATA:
+                    if (currentDataKey == null)
+                        throw new SAXException("Data value encountered, but no current data.");
+                    break;
                 case IN_PORT:
                     if (currentPort == null)
                         throw new SAXException("Port value encountered, but no current port.");
@@ -273,6 +287,23 @@ public class Scene {
 
             // Go down into the current node; this will now become the current node.
             currentNode = newNode;
+        }
+
+        private void startDataTag(Attributes attributes) throws SAXException {
+            state = ParseState.IN_DATA;
+            currentDataKey = parseString(attributes, "name", "Name attribute is required in data tags.");
+        }
+
+        /**
+         * Sets the value on the current port.
+         *
+         * @param stringValue the value of the parameter, to be parsed.
+         * @throws org.xml.sax.SAXException when there is no current port or if the value could not be parsed.
+         */
+        private void setDataValue(String stringValue) throws SAXException {
+            if (currentDataKey == null) throw new SAXException("There is no current data key.");
+            if (currentNode == null) throw new SAXException("There is no current node to set data for.");
+            currentNode.deserializeCustomValue(currentDataKey, stringValue);
         }
 
         private void startPortTag(Attributes attributes) throws SAXException {
@@ -421,6 +452,11 @@ public class Scene {
             el.setAttribute("rendered", "true");
         }
 
+        // Add custom data
+        for (String key : node.getCustomKeys()) {
+            writeCustomData(doc, el, node, key);
+        }
+
         // Add the input ports
         for (Port port : node.getInputPorts()) {
             writePort(doc, el, port);
@@ -440,6 +476,18 @@ public class Scene {
             for (Connection conn : network.getConnections()) {
                 writeConnection(doc, el, conn);
             }
+        }
+    }
+
+    private static void writeCustomData(Document doc, Element parent, Node node, String key) {
+        String value = node.serializeCustomValue(key);
+        if (value != null) {
+            Element el = doc.createElement("data");
+            parent.appendChild(el);
+            el.setAttribute("name", key);
+            el.appendChild(doc.createTextNode(value));
+        } else {
+            logger.info("Node " + node.getName() + " returned null when serializing value for " + key + ".");
         }
     }
 

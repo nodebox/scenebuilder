@@ -76,6 +76,13 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         nodeNameLabel.setFont(NODE_LABEL_FONT);
         add(nodeNameLabel);
         add(Box.createVerticalStrut(5));
+        // Include custom node interface.
+        JComponent customEditor = node.createCustomEditor();
+        if (customEditor != null) {
+            add(customEditor);
+            add(Box.createVerticalStrut(5));
+        }
+        // Include all ports
         for (Port port : node.getInputPorts()) {
             JPanel portRow = new JPanel(new BorderLayout());
             portRow.setLayout(new BoxLayout(portRow, BoxLayout.X_AXIS));
@@ -137,11 +144,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             add(portRow);
             add(Box.createVerticalStrut(5));
         }
-        JComponent c = node.createEditorComponent();
-        if (c != null) {
-            add(c);
-        }
-        add(Box.createVerticalStrut(10));
+        add(Box.createVerticalGlue());
         validate();
         repaint();
     }

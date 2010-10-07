@@ -5,6 +5,7 @@ import nodebox.util.Strings;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -225,10 +226,50 @@ public abstract class Node {
 
     //// Custom interface ////
 
-    public JComponent createEditorComponent() {
+    public JComponent createCustomEditor() {
         return null;
     }
 
+    /**
+     * Get a list of all custom keys for this node.
+     *
+     * @return a list of custom keys.
+     */
+    public java.util.List<String> getCustomKeys() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * Write out extra data for this node.
+     * <p/>
+     * This hook exists so that nodes can save additional data not saved in ports, such as custom UI or settings.
+     * <p/>
+     * The default implementation returns null, indicating that no extra data needs to be serialized.
+     * If you implement serialize, also implement deserialize to load the data back into your node.
+     *
+     * @param key the key to serialize
+     * @return a string with data that needs to be written to the file.
+     * @see #deserializeCustomValue(String, String)
+     */
+    public String serializeCustomValue(String key) {
+        return null;
+    }
+
+    /**
+     * Load extra data for this node that was previously saved in a file.
+     * <p/>
+     * This hook exists so that nodes can save additional data not saved in ports, such as custom UI or settings.
+     * <p/>
+     * The default implementation does not act on the data, because no extra is serialized.
+     * If you implement deserialize, also implement serialize to save the custom data from your node.
+     *
+     * @param key   the key to deserialize
+     * @param value the value to deserialize
+     * @see #serializeCustomValue(String)
+     */
+    public void deserializeCustomValue(String key, String value) {
+
+    }
 
     //// Execution ////
 
