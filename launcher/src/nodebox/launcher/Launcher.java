@@ -16,6 +16,7 @@ public class Launcher implements Runnable, BundleListener {
         try {
             context = EclipseStarter.startup(args, this);
             context.addBundleListener(this);
+            context.installBundle("file:dist/mvel2-2.0.18.jar");
             context.installBundle("file:dist/nodebox-core.jar");
             context.installBundle("file:dist/nodebox-builtins.jar");
             context.installBundle("file:dist/nodebox-graphics.jar");

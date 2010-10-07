@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <property key="processing.drawBackground" value="false"/>
+    <property key="processing.width" value="500"/>
+    <property key="processing.height" value="500"/>
+    <property key="processing.smooth" value="true"/>
+    <property key="processing.backgroundColor" value="192,192,192"/>
+    <property key="processing.frameRate" value="60"/>
+    <property key="processing.renderer" value="processing.core.PGraphicsJava2D"/>
+    <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="currentTime1" type="nodebox.builtins.time.CurrentTime" x="12" y="191"/>
+        <node name="ellipse1" rendered="true" type="nodebox.builtins.draw.Ellipse" x="443" y="60">
+            <port name="enabled">true</port>
+            <port name="x">85.42646</port>
+            <port name="y">343.2862</port>
+            <port name="width">50.0</port>
+            <port name="height">50.0</port>
+            <port name="fill">#ffffffff</port>
+            <port name="stroke">#000000ff</port>
+            <port name="strokeWeight">1.0</port>
+        </node>
+        <node name="expression1" type="nodebox.builtins.math.Expression" x="232" y="36">
+            <data name="expression">v + sin(time*2) * amplitude</data>
+            <port name="v">8.0</port>
+            <port name="time">160.664</port>
+            <port name="amplitude">100.0</port>
+        </node>
+        <node name="expression2" type="nodebox.builtins.math.Expression" x="241" y="147">
+            <data name="expression">v + cos(time*2) * amplitude</data>
+            <port name="v">280.0</port>
+            <port name="time">160.664</port>
+            <port name="amplitude">100.0</port>
+        </node>
+        <node name="mouse1" type="nodebox.builtins.device.Mouse" x="9" y="42"/>
+        <conn input="ellipse1" inputPort="x" output="expression1" outputPort="result"/>
+        <conn input="expression1" inputPort="time" output="currentTime1" outputPort="time"/>
+        <conn input="expression1" inputPort="v" output="mouse1" outputPort="x"/>
+        <conn input="expression2" inputPort="v" output="mouse1" outputPort="y"/>
+        <conn input="ellipse1" inputPort="y" output="expression2" outputPort="result"/>
+        <conn input="expression2" inputPort="time" output="currentTime1" outputPort="time"/>
+    </node>
+</ndbx>

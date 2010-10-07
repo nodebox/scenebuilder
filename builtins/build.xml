@@ -11,6 +11,7 @@
         <path path="${lib}/processing-core.jar"/>
         <path path="${lib}/equinox.jar"/>
         <path path="${lib}/ecj.jar"/>
+        <path path="${lib}/mvel2-2.0.18.jar"/>
     </path>
 
     <target name="init">

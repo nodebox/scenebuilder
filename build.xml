@@ -17,6 +17,7 @@
     <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
 
     <target name="dist">
+        <copy file="lib/mvel2-2.0.18.jar" todir="dist"/>
         <ant dir="${module.core}" antfile="build.xml" target="dist"/>
         <ant dir="${module.builtins}" antfile="build.xml" target="dist"/>
         <ant dir="${module.graphics}" antfile="build.xml" target="dist"/>
