@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,15 +18,17 @@ import java.util.ArrayList;
 public class AddressBar extends JPanel implements MouseListener {
 
 
-    public static Image addressGradient;
-    public static Image addressArrow;
+    private static BufferedImage addressGradient, addressArrow;
+    private static TexturePaint addressGradientPaint;
 
     private static final Font SMALL_BOLD_FONT = Theme.INFO_FONT;
     public static final Color TEXT_NORMAL_COLOR = new Color(60, 60, 60);
     public static final Color TEXT_ARMED_COLOR = new Color(0, 0, 0);
+    private static final int ADDRESS_BAR_HEIGHT = 25;
 
     static {
         addressGradient = PlatformUtils.loadImageResource("address-gradient.png");
+        addressGradientPaint = new TexturePaint(addressGradient, new Rectangle2D.Float(0, 0, addressGradient.getWidth(null),addressGradient.getHeight(null)));
         addressArrow = PlatformUtils.loadImageResource("address-arrow.png");
     }
 
@@ -37,9 +41,9 @@ public class AddressBar extends JPanel implements MouseListener {
     public AddressBar(SceneDocument document) {
         this.document = document;
         addMouseListener(this);
-        setMinimumSize(new Dimension(0, 25));
-        setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        setPreferredSize(new Dimension(Integer.MAX_VALUE, 25));
+        setMinimumSize(new Dimension(0, ADDRESS_BAR_HEIGHT));
+        setMaximumSize(new Dimension(Integer.MAX_VALUE, ADDRESS_BAR_HEIGHT));
+        setPreferredSize(new Dimension(Integer.MAX_VALUE, ADDRESS_BAR_HEIGHT));
         setLayout(null);
     }
 
@@ -67,7 +71,9 @@ public class AddressBar extends JPanel implements MouseListener {
 
         g2.setFont(SMALL_BOLD_FONT);
 
-        g2.drawImage(addressGradient, 0, 0, getWidth(), 25, null);
+        g2.setPaint(addressGradientPaint);
+        g2.fill(g2.getClipBounds());
+        //g2.drawImage(addressGradient, 0, 0, getWidth(), 26, null);
 
         int x = 14;
 
@@ -84,7 +90,7 @@ public class AddressBar extends JPanel implements MouseListener {
             int width = (int) g2.getFontMetrics().stringWidth(displayName);
             x += width + 5;
             positions[i] = x + 10;
-            g2.drawImage(addressArrow, x, 1, null);
+            g2.drawImage(addressArrow, x, 0, null);
             x += 15;
         }
 

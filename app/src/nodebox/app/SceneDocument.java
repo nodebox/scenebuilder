@@ -52,7 +52,6 @@ public class SceneDocument extends JFrame {
         addressBar = new AddressBar(this);
         rootPanel.add(addressBar, BorderLayout.NORTH);
         JPanel networkPanel = new JPanel(new BorderLayout(0, 0));
-        Pane networkPane = new Pane(new PaneHeader(), networkPanel);
         viewer = new NetworkViewer(this, scene);
         parameters = new ParameterPanel(this);
         viewer.addPropertyChangeListener(NetworkViewer.SELECT_PROPERTY, parameters);
@@ -62,7 +61,7 @@ public class SceneDocument extends JFrame {
 //        mainSplitter.setDividerSize(5);
 //        mainSplitter.setDividerLocation(300);
 //        mainSplitter.setBorder(null);
-        rootPanel.add(networkPane, BorderLayout.CENTER);
+        rootPanel.add(networkPanel, BorderLayout.CENTER);
         setContentPane(rootPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setJMenuBar(new MenuBar(this, manager));

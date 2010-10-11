@@ -8,6 +8,7 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
@@ -17,10 +18,18 @@ import java.util.Set;
 
 public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
 
+    public static final int LABEL_WIDTH = 114;
+
     private static final Font NODE_LABEL_FONT = Theme.SMALL_BOLD_FONT;
     private static final Font PORT_LABEL_FONT = Theme.INFO_FONT;
     private static final Font PORT_VALUE_FONT = Theme.INFO_FONT;
+    private static BufferedImage backgroundImage;
+    private static TexturePaint backgroundPaint;
 
+    static {
+        backgroundImage = PlatformUtils.loadImageResource("parameter-background.png");
+        backgroundPaint = new TexturePaint(backgroundImage, new Rectangle(0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null)));
+    }
 
     private Map<JComponent, Port> components = new HashMap<JComponent, Port>();
     private SceneDocument document;
@@ -33,6 +42,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         setMinimumSize(d);
         setPreferredSize(d);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setBackground(Color.DARK_GRAY);
         Timer updateValuesTimer = new Timer(100, new UpdateValues());
         updateValuesTimer.start();
     }
@@ -69,6 +79,16 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         c.setMinimumSize(d);
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        Rectangle clip = g2.getClipBounds();
+        g2.setPaint(backgroundPaint);
+        g2.fill(clip);
+        g2.setColor(new Color(255, 255, 255, 50));
+        g2.drawLine(getWidth()-1, 0, getWidth()-1, getHeight());
+    }
+
     private void makeInterfaceForNode(Node node) {
         JLabel nodeNameLabel = new JLabel(node.getName());
         forceSize(nodeNameLabel, 300, 20);
@@ -87,10 +107,9 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             JPanel portRow = new JPanel(new BorderLayout());
             portRow.setLayout(new BoxLayout(portRow, BoxLayout.X_AXIS));
             forceSize(portRow, 300, 20);
-            JLabel portLabel = new JLabel(port.getAttribute(Port.DISPLAY_NAME_ATTRIBUTE).toString());
-            forceSize(portLabel, 100, 20);
-            portLabel.setHorizontalAlignment(JLabel.RIGHT);
-            portLabel.setFont(PORT_LABEL_FONT);
+            JLabel portLabel = new ShadowLabel(port.getAttribute(Port.DISPLAY_NAME_ATTRIBUTE).toString());
+            portLabel.setOpaque(false);
+            forceSize(portLabel, LABEL_WIDTH, 20);
             portRow.add(portLabel);
             portRow.add(Box.createHorizontalStrut(5));
             Object value = port.getValue();
@@ -100,18 +119,21 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             if (port instanceof BooleanPort) {
                 BooleanPort p = (BooleanPort) port;
                 JCheckBox checkBox = new JCheckBox("", p.get());
+                checkBox.setOpaque(false);
                 checkBox.putClientProperty("JComponent.sizeVariant", "small");
                 checkBox.addActionListener(this);
                 c = checkBox;
             } else if (port instanceof FloatPort) {
                 FloatPort p = (FloatPort) port;
                 DraggableNumber number = new DraggableNumber();
+                number.setOpaque(false);
                 number.setValue(p.get());
                 number.addChangeListener(this);
                 c = number;
             } else if (port instanceof IntPort) {
                 IntPort p = (IntPort) port;
                 DraggableNumber number = new DraggableNumber();
+                number.setOpaque(false);
                 number.setValue(p.get());
                 number.addChangeListener(this);
                 c = number;
@@ -128,6 +150,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             } else if (port instanceof StringPort) {
                 StringPort p = (StringPort) port;
                 JTextField field = new JTextField(p.get());
+                field.setOpaque(false);
                 field.setFont(PORT_VALUE_FONT);
                 field.putClientProperty("JComponent.sizeVariant", "small");
                 field.addActionListener(this);

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.GeneralPath;
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +21,13 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
     private static final int GRID_SPACING = 50;
     private static final Color CONNECTION_COLOR = new Color(200, 120, 70);
     private static final Stroke CONNECTION_STROKE = new BasicStroke(2);
+    private static BufferedImage backgroundImage;
+    private static TexturePaint backgroundPaint;
+
+    static {
+        backgroundImage = PlatformUtils.loadImageResource("network-background.png");
+        backgroundPaint = new TexturePaint(backgroundImage, new Rectangle(0, 0, backgroundImage.getWidth(null), backgroundImage.getHeight(null)));
+    }
 
     private final Scene scene;
     private double zoomFactor = 1.0;
@@ -132,17 +140,8 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         Rectangle clip = g2.getClipBounds();
-        Dimension size = getSize();
-        g2.setColor(BACKGROUND_COLOR);
-        g2.fillRect(clip.x, clip.y, clip.width, clip.height);
-        g2.setColor(GRID_COLOR);
-        for (double y = centerY % GRID_SPACING; y < size.height; y += GRID_SPACING * zoomFactor) {
-            g2.drawLine(0, (int) y, size.width, (int) y);
-        }
-
-        for (double x = centerX % GRID_SPACING; x < size.width; x += GRID_SPACING * zoomFactor) {
-            g2.drawLine((int) x, 0, (int) x, size.height);
-        }
+        g2.setPaint(backgroundPaint);
+        g2.fill(clip);
 
         g2.scale(zoomFactor, zoomFactor);
         g2.translate(centerX, centerY);
