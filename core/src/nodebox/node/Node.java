@@ -159,6 +159,7 @@ public abstract class Node {
      * @param port the port to remove.
      */
     public void removePort(Port port) {
+        network.disconnect(port);
         ports.remove(port);
     }
 
