@@ -248,8 +248,11 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
     }
 
     public void mouseMoved(MouseEvent e) {
+        Port oldConnectionStartPort = connectionStartPort;
         connectionStartPort = getPortAt(e.getPoint());
-        repaint();
+        if (oldConnectionStartPort != connectionStartPort) {
+            repaint();
+        }
     }
 
     public void keyTyped(KeyEvent e) {
