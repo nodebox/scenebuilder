@@ -86,7 +86,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         g2.setPaint(backgroundPaint);
         g2.fill(clip);
         g2.setColor(new Color(255, 255, 255, 50));
-        g2.drawLine(getWidth()-1, 0, getWidth()-1, getHeight());
+        g2.drawLine(getWidth() - 1, 0, getWidth() - 1, getHeight());
     }
 
     private void makeInterfaceForNode(Node node) {
@@ -105,10 +105,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         // Include all ports
         for (Port port : node.getInputPorts()) {
             JPanel portRow = new JPanel(new BorderLayout());
+            portRow.setOpaque(false);
             portRow.setLayout(new BoxLayout(portRow, BoxLayout.X_AXIS));
             forceSize(portRow, 300, 20);
             JLabel portLabel = new ShadowLabel(port.getAttribute(Port.DISPLAY_NAME_ATTRIBUTE).toString());
-            portLabel.setOpaque(false);
             forceSize(portLabel, LABEL_WIDTH, 20);
             portRow.add(portLabel);
             portRow.add(Box.createHorizontalStrut(5));
@@ -126,7 +126,6 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             } else if (port instanceof FloatPort) {
                 FloatPort p = (FloatPort) port;
                 DraggableNumber number = new DraggableNumber();
-                number.setOpaque(false);
                 number.setValue(p.get());
                 number.addChangeListener(this);
                 c = number;
