@@ -14,6 +14,11 @@ public class BooleanPort extends Port implements PersistablePort {
     }
 
     @Override
+    public String getWidget() {
+        return "boolean";
+    }
+
+    @Override
     public Object getValue() {
         return value;
     }

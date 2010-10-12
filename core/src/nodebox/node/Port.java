@@ -41,6 +41,10 @@ public abstract class Port {
         return node;
     }
 
+    public String getWidget() {
+        return null;
+    }
+
     public String getName() {
         return name;
     }

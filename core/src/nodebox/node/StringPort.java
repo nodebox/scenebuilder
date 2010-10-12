@@ -14,6 +14,11 @@ public class StringPort extends Port implements PersistablePort {
     }
 
     @Override
+    public String getWidget() {
+        return "string";
+    }
+
+    @Override
     public Object getValue() {
         return value;
     }

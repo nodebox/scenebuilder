@@ -19,6 +19,11 @@ public class ColorPort extends Port implements PersistablePort {
     }
 
     @Override
+    public String getWidget() {
+        return "color";
+    }
+
+    @Override
     public Object getValue() {
         return value;
     }

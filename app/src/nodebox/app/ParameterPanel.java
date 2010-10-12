@@ -112,51 +112,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             forceSize(portLabel, LABEL_WIDTH, 20);
             portRow.add(portLabel);
             portRow.add(Box.createHorizontalStrut(5));
-            Object value = port.getValue();
-            String valueString = value == null ? "" : value.toString();
-
-            JComponent c;
-            if (port instanceof BooleanPort) {
-                BooleanPort p = (BooleanPort) port;
-                JCheckBox checkBox = new JCheckBox("", p.get());
-                checkBox.setOpaque(false);
-                checkBox.putClientProperty("JComponent.sizeVariant", "small");
-                checkBox.addActionListener(this);
-                c = checkBox;
-            } else if (port instanceof FloatPort) {
-                FloatPort p = (FloatPort) port;
-                DraggableNumber number = new DraggableNumber();
-                number.setValue(p.get());
-                number.addChangeListener(this);
-                c = number;
-            } else if (port instanceof IntPort) {
-                IntPort p = (IntPort) port;
-                DraggableNumber number = new DraggableNumber();
-                number.setOpaque(false);
-                number.setValue(p.get());
-                number.addChangeListener(this);
-                c = number;
-                NumberFormat intFormat = NumberFormat.getNumberInstance();
-                intFormat.setMinimumFractionDigits(0);
-                intFormat.setMaximumFractionDigits(0);
-                number.setNumberFormat(intFormat);
-            } else if (port instanceof ColorPort) {
-                ColorPort p = (ColorPort) port;
-                ColorWell well = new ColorWell();
-                well.setColor(p.get());
-                well.addChangeListener(this);
-                c = well;
-            } else if (port instanceof StringPort) {
-                StringPort p = (StringPort) port;
-                JTextField field = new JTextField(p.get());
-                field.setOpaque(false);
-                field.setFont(PORT_VALUE_FONT);
-                field.putClientProperty("JComponent.sizeVariant", "small");
-                field.addActionListener(this);
-                c = field;
-            } else {
+            JComponent c = getWidgetForPort(port);
+            if (c == null)
                 continue;
-            }
+
             if (port.isConnected()) {
                 c.setEnabled(false);
             }
@@ -169,6 +128,53 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         add(Box.createVerticalGlue());
         validate();
         repaint();
+    }
+
+    private JComponent getWidgetForPort(Port port) {
+        String widget = port.getWidget();
+
+        if (port instanceof PublishedPort)
+            port = ((PublishedPort) port).getOriginalPort();
+
+        if (widget.equals("boolean")) {
+            BooleanPort p = (BooleanPort) port;
+            JCheckBox checkBox = new JCheckBox("", p.get());
+            checkBox.setOpaque(false);
+            checkBox.putClientProperty("JComponent.sizeVariant", "small");
+            checkBox.addActionListener(this);
+            return checkBox;
+        } else if (widget.equals("float")) {
+            FloatPort p = (FloatPort) port;
+            DraggableNumber number = new DraggableNumber();
+            number.setValue(p.get());
+            number.addChangeListener(this);
+            return number;
+        } else if (widget.equals("int")) {
+            IntPort p = (IntPort) port;
+            DraggableNumber number = new DraggableNumber();
+            number.setValue(p.get());
+            number.addChangeListener(this);
+            NumberFormat intFormat = NumberFormat.getNumberInstance();
+            intFormat.setMinimumFractionDigits(0);
+            intFormat.setMaximumFractionDigits(0);
+            number.setNumberFormat(intFormat);
+            return number;
+        } else if (widget.equals("color")) {
+            ColorPort p = (ColorPort) port;
+            ColorWell well = new ColorWell();
+            well.setColor(p.get());
+            well.addChangeListener(this);
+            return well;
+        } else if (widget.equals("string")) {
+            StringPort p = (StringPort) port;
+            JTextField field = new JTextField(p.get());
+            field.setFont(PORT_VALUE_FONT);
+            field.putClientProperty("JComponent.sizeVariant", "small");
+            field.addActionListener(this);
+            return field;
+        } else {
+            return null;
+        }
     }
 
     private void updateValuesForNode(Node node) {

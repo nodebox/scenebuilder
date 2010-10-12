@@ -18,6 +18,11 @@ public class IntPort extends Port implements PersistablePort {
         this.value = value;
     }
 
+    @Override
+    public String getWidget() {
+        return "int";
+    }
+
     public Object getValue() {
         return value;
     }

@@ -20,6 +20,11 @@ public class FloatPort extends Port implements PersistablePort {
     }
 
     @Override
+    public String getWidget() {
+        return "float";
+    }
+
+    @Override
     public Object getValue() {
         return value;
     }

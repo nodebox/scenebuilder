@@ -10,6 +10,11 @@ public class PublishedPort extends Port {
         originalPort = port;
     }
 
+    @Override
+    public String getWidget() {
+        return originalPort.getWidget();
+    }
+
     public Port getOriginalPort() {
         return originalPort;
     }
