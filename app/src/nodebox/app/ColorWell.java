@@ -59,7 +59,7 @@ public class ColorWell extends JComponent implements ChangeListener {
     }
 
     public void showColorDialog() {
-        ColorDialog dialog = new ColorDialog(SwingUtilities.getWindowAncestor(this));
+        ColorDialog dialog = new ColorDialog((Frame) SwingUtilities.getWindowAncestor(this));
         dialog.setColor(color);
         dialog.setMinimumSize(new Dimension(400, 375));
         dialog.setPreferredSize(new Dimension(540, 375));
