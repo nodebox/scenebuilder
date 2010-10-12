@@ -132,8 +132,11 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
     private JComponent getWidgetForPort(Port port) {
         String widget = port.getWidget();
-        Object value = port.getValue();
+        if (widget == null) {
+            return null;
+        }
 
+        Object value = port.getValue();
         if (widget.equals("boolean")) {
             JCheckBox checkBox = new JCheckBox("", (Boolean) value);
             checkBox.setOpaque(false);
