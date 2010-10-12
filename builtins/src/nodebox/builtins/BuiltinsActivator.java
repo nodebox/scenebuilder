@@ -39,6 +39,7 @@ public class BuiltinsActivator implements BundleActivator {
         m.registerNodeClass(Angle.class, "Math");
         m.registerNodeClass(Clamp.class, "Math");
         m.registerNodeClass(ConvertRange.class, "Math");
+        m.registerNodeClass(Coordinates.class, "Math");
         m.registerNodeClass(Distance.class, "Math");
         m.registerNodeClass(Expression.class, "Math");
         m.registerNodeClass(SineWave.class, "Math");
@@ -69,6 +70,7 @@ public class BuiltinsActivator implements BundleActivator {
         m.unregisterNodeClass(Angle.class);
         m.unregisterNodeClass(Clamp.class);
         m.unregisterNodeClass(ConvertRange.class);
+        m.unregisterNodeClass(Coordinates.class);
         m.unregisterNodeClass(Distance.class);
         m.unregisterNodeClass(Expression.class);
         m.unregisterNodeClass(SineWave.class);
