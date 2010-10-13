@@ -16,6 +16,13 @@ public class ColorWell extends JComponent implements ChangeListener {
 
     private Color color = Color.LIGHT_GRAY;
 
+    /**
+     * Only one <code>ChangeEvent</code> is needed per color well
+     * instance since the event's only state is the source property.
+     * The source of events generated is always "this".
+     */
+    private transient ChangeEvent changeEvent;
+
     public ColorWell() {
         addMouseListener(new MouseAdapter() {
             @Override
@@ -85,9 +92,26 @@ public class ColorWell extends JComponent implements ChangeListener {
         listenerList.remove(ChangeListener.class, l);
     }
 
+
+    private void fireStateChanged() {
+        // Guaranteed to return a non-null array
+        Object[] listeners = listenerList.getListenerList();
+        // Process the listeners last to first, notifying
+        // those that are interested in this event
+        for (int i = listeners.length-2; i>=0; i-=2) {
+            if (listeners[i]==ChangeListener.class) {
+                // Lazily create the event:
+                if (changeEvent == null)
+                    changeEvent = new ChangeEvent(this);
+                ((ChangeListener)listeners[i+1]).stateChanged(changeEvent);
+            }
+        }
+    }
+
     public void stateChanged(ChangeEvent e) {
         ColorDialog dialog = (ColorDialog) e.getSource();
         color = dialog.getColor();
+        fireStateChanged();
         repaint();
     }
 }
