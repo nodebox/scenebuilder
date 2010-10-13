@@ -59,6 +59,6 @@ public class FloatPort extends Port implements PersistablePort {
     @Override
     protected boolean canReceiveFrom(Port output) {
         // Float ports can receive data from integer ports as well.
-        return (output instanceof FloatPort) || (output instanceof IntPort);
+        return (output.getPortClass() == FloatPort.class) || (output.getPortClass() == IntPort.class);
     }
 }

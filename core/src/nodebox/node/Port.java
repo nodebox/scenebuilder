@@ -119,6 +119,11 @@ public abstract class Port {
         return this instanceof PersistablePort;
     }
 
+
+    public Class getPortClass() {
+        return this.getClass();
+    }
+
     //// Connections ////
 
     /**
@@ -176,7 +181,7 @@ public abstract class Port {
      */
     protected boolean canReceiveFrom(Port output) {
         // Check if port classes are exactly the same.
-        return this.getClass().equals(output.getClass());
+        return this.getPortClass().equals(output.getPortClass());
     }
 
     @Override

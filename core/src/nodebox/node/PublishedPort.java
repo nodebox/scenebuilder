@@ -32,4 +32,9 @@ public class PublishedPort extends Port {
     protected boolean canReceiveFrom(Port port) {
         return originalPort.canReceiveFrom(port);
     }
+
+    @Override
+    public Class getPortClass() {
+        return originalPort.getClass();
+    }
 }
