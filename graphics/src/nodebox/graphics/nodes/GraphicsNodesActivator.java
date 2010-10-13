@@ -21,6 +21,7 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.registerNodeClass(WiggleNode.class, "Geometry");
         m.registerNodeClass(ScatterNode.class, "Geometry");
         m.registerNodeClass(ColorNode.class, "Geometry");
+        m.registerNodeClass(TransformNode.class, "Geometry");
     }
 
     public void stop(BundleContext context) throws Exception {
@@ -38,6 +39,7 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.unregisterNodeClass(WiggleNode.class);
         m.unregisterNodeClass(ScatterNode.class);
         m.unregisterNodeClass(ColorNode.class);
+        m.unregisterNodeClass(TransformNode.class);
     }
 
      private NodeManager getNodeManager(BundleContext context) {
