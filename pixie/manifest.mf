@@ -4,4 +4,4 @@ Bundle-SymbolicName: nodebox.pixie
 Bundle-Name: Node-Pixie
 Bundle-Version: 1.0.0
 Bundle-Activator: nodebox.pixie.PixieActivator
-Import-Package: org.osgi.framework, org.osgi.util.tracker, processing.core, nodebox.node, nodebox.util
+Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util

@@ -4,5 +4,5 @@ Bundle-SymbolicName: nodebox.graphics
 Bundle-Name: NodeBox-Graphics
 Bundle-Version: 1.0.0
 Bundle-Activator: nodebox.graphics.nodes.GraphicsNodesActivator
-Import-Package: org.osgi.framework, org.osgi.util.tracker, processing.core, nodebox.node, nodebox.util
+Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util
 Export-Package: nodebox.graphics

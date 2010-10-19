@@ -54,7 +54,7 @@ public class Application implements BundleActivator {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        registerForMacOSXEvents();
+        //registerForMacOSXEvents();
     }
 
     private void readVersion() {
