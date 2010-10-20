@@ -42,6 +42,7 @@ public class BuiltinsActivator implements BundleActivator {
         m.registerNodeClass(Coordinates.class, "Math");
         m.registerNodeClass(Distance.class, "Math");
         m.registerNodeClass(Expression.class, "Math");
+        m.registerNodeClass(Reflect.class, "Math");
         m.registerNodeClass(SineWave.class, "Math");
         m.registerNodeClass(Calendar.class, "Time");
         m.registerNodeClass(CurrentTime.class, "Time");
@@ -73,6 +74,7 @@ public class BuiltinsActivator implements BundleActivator {
         m.unregisterNodeClass(Coordinates.class);
         m.unregisterNodeClass(Distance.class);
         m.unregisterNodeClass(Expression.class);
+        m.unregisterNodeClass(Reflect.class);
         m.unregisterNodeClass(SineWave.class);
         m.unregisterNodeClass(Calendar.class);
         m.unregisterNodeClass(CurrentTime.class);
