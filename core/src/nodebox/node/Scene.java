@@ -314,6 +314,14 @@ public class Scene {
             } catch (IllegalArgumentException e) {
                 throw new SAXException("The port " + name + " on node" + currentNode + " could not be found.", e);
             }
+            String published = attributes.getValue("published");
+            if (published != null) {
+                if ("true".equals(published)) {
+                    Network network = currentNode.getNetwork();
+                    if (network != null)
+                        network.publishPort(currentPort);
+                }
+            }
         }
 
         private void startConnectionTag(Attributes attributes) throws SAXException {
@@ -457,11 +465,11 @@ public class Scene {
             writeCustomData(doc, el, node, key);
         }
 
-        // Add the input ports
-        for (Port port : node.getInputPorts()) {
+        // Add the input ports and published output ports
+        for (Port port : node.getPorts()) {
             writePort(doc, el, port);
         }
-
+        
         if (node instanceof Network) {
             Network network = (Network) node;
 
@@ -495,9 +503,19 @@ public class Scene {
         if (port.isPersistable()) {
             PersistablePort persistablePort = (PersistablePort) port;
             Element el = doc.createElement("port");
-            parent.appendChild(el);
             el.setAttribute("name", port.getName());
-            el.appendChild(doc.createTextNode(persistablePort.getValueAsString()));
+
+            Network network = port.getNode().getNetwork();
+            if (network != null && network.isPublished(port)) {
+                el.setAttribute("published", "true");
+                if (port.isOutputPort())
+                    parent.appendChild(el);
+            }
+            
+            if (port.isInputPort()) {
+                el.appendChild(doc.createTextNode(persistablePort.getValueAsString()));
+                parent.appendChild(el);
+            }
         }
     }
 
