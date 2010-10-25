@@ -399,6 +399,7 @@ public class ColorDialog extends JDialog implements ChangeListener {
             Dimension d = new Dimension(270, 75);
             setMinimumSize(d);
             setPreferredSize(d);
+            setBorder(new EmptyBorder(0, 0, 0, 0));
             addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     if (e.getX() >= 2 && e.getX() <= 70 && e.getY() >= 38 && e.getY() <= 70)
