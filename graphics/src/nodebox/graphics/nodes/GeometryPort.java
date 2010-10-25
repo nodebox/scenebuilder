@@ -22,7 +22,7 @@ public class GeometryPort extends Port {
 
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
-        if (value instanceof Geometry) {
+        if (value instanceof Geometry || value == null) {
             set((Geometry) value);
         } else {
             throw new IllegalArgumentException("Value is not a Geometry.");

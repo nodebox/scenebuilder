@@ -23,7 +23,7 @@ public class Polygon2DPort extends Port {
 
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
-        if (value instanceof Polygon2D) {
+        if (value instanceof Polygon2D || value == null) {
             set((Polygon2D) value);
         } else {
             throw new IllegalArgumentException("Value is not a Polygon2D.");

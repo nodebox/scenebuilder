@@ -36,6 +36,8 @@ public class ColorPort extends Port implements PersistablePort {
     public void setValue(Object value) throws IllegalArgumentException {
         if (value instanceof Color) {
             set((Color) value);
+        } else if (value == null) {
+            set(new Color(0, 0, 0));
         } else {
             throw new IllegalArgumentException("The given value is not a color.");
         }

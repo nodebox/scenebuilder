@@ -31,6 +31,8 @@ public class StringPort extends Port implements PersistablePort {
     public void setValue(Object value) throws IllegalArgumentException {
         if (value instanceof String) {
             this.value = (String) value;
+        } else if (value == null) {
+            set("");
         } else {
             throw new IllegalArgumentException("Given value is not a string.");
         }

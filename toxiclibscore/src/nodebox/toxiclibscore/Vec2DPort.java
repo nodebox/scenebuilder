@@ -21,7 +21,7 @@ public class Vec2DPort extends Port implements PersistablePort {
 
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
-        if (value instanceof ReadonlyVec2D) {
+        if (value instanceof ReadonlyVec2D || value == null) {
             this.value = (ReadonlyVec2D) value;
         } else {
             throw new IllegalArgumentException("Value is not a Vec2D.");

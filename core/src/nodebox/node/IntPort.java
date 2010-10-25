@@ -45,6 +45,8 @@ public class IntPort extends Port implements PersistablePort {
             set((Integer) value);
         } else if (value instanceof Float) {
             set(Math.round((Float) value));
+        } else if (value == null) {
+            set(0);
         } else {
             throw new IllegalArgumentException(this + ": Value is not an integer.");
         }

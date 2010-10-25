@@ -31,6 +31,8 @@ public class BooleanPort extends Port implements PersistablePort {
     public void setValue(Object value) throws IllegalArgumentException {
         if (value instanceof Boolean) {
             set((Boolean) value);
+        } else if (value == null) {
+            set(false);
         } else {
             throw new IllegalArgumentException("The given value is not a boolean.");
         }

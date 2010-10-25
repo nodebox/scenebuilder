@@ -39,6 +39,8 @@ public class FloatPort extends Port implements PersistablePort {
             set((Float) value);
         } else if (value instanceof Integer) {
             set((float) (Integer) value);
+        } else if (value == null) {
+            set(0f);
         } else {
             throw new IllegalArgumentException("The given value is not a float.");
         }

@@ -26,7 +26,7 @@ public class ImagePort extends Port {
 
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
-        if (value instanceof PImage) {
+        if (value instanceof PImage || value == null) {
             set((PImage)value);
         } else {
             throw new IllegalArgumentException("The given value is not a PImage.");
