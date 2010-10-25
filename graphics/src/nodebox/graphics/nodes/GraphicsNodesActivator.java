@@ -14,6 +14,8 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.registerNodeClass(PolygonNode.class, "Geometry");
         m.registerNodeClass(StarNode.class, "Geometry");
         m.registerNodeClass(RectNode.class, "Geometry");
+        m.registerNodeClass(CopyNode.class, "Geometry");
+        m.registerNodeClass(CopyVariables.class, "Geometry");
         m.registerNodeClass(PlaceNode.class, "Geometry");
         m.registerNodeClass(ResampleNode.class, "Geometry");
         m.registerNodeClass(SnapNode.class, "Geometry");
@@ -32,6 +34,8 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.unregisterNodeClass(PolygonNode.class);
         m.unregisterNodeClass(StarNode.class);
         m.unregisterNodeClass(RectNode.class);
+        m.unregisterNodeClass(CopyNode.class);
+        m.unregisterNodeClass(CopyVariables.class);
         m.unregisterNodeClass(PlaceNode.class);
         m.unregisterNodeClass(ResampleNode.class);
         m.unregisterNodeClass(SnapNode.class);
