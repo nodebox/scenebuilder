@@ -1,6 +1,8 @@
 package nodebox.app;
 
-import nodebox.node.*;
+import nodebox.node.IntPort;
+import nodebox.node.Node;
+import nodebox.node.Port;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -15,6 +17,7 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
 
@@ -119,7 +122,6 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             if (port.isConnected()) {
                 c.setEnabled(false);
             }
-            forceSize(c, 200, 20);
             components.put(c, port);
             portRow.add(c);
             add(portRow);
@@ -157,6 +159,21 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             intFormat.setMaximumFractionDigits(0);
             number.setNumberFormat(intFormat);
             return number;
+        } else if (widget.equals("menu")) {
+            IntPort intPort = (IntPort) port;
+            int selectedValue = intPort.get();
+            MenuItem selectedItem = null;
+            Vector<MenuItem> v = new Vector<MenuItem>();
+            for (Map.Entry<Integer, String> entry : intPort.getMenuItems().entrySet()) {
+                MenuItem item = new MenuItem(entry.getKey(), entry.getValue());
+                v.add(item);
+                if (entry.getKey() == selectedValue)
+                    selectedItem = item;
+            }
+            JComboBox menu = new JComboBox(v);
+            menu.setSelectedItem(selectedItem);
+            menu.addActionListener(this);
+            return menu;
         } else if (widget.equals("color")) {
             ColorWell well = new ColorWell();
             well.setColor((Color) value);
@@ -209,6 +226,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         } else if (p.getWidget().equals("string")) {
             JTextField f = (JTextField) e.getSource();
             p.setValue(f.getText());
+        } else if (p.getWidget().equals("menu")) {
+            JComboBox b = (JComboBox) e.getSource();
+            MenuItem item = (MenuItem) b.getSelectedItem();
+            p.setValue(item.key);
         }
     }
 
@@ -236,4 +257,20 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             }
         }
     }
+
+    private class MenuItem {
+        private int key;
+        private String label;
+
+        private MenuItem(int key, String label) {
+            this.key = key;
+            this.label = label;
+        }
+
+        @Override
+        public String toString() {
+            return this.label;
+        }
+    }
+
 }
