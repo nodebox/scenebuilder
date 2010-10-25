@@ -24,6 +24,7 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.registerNodeClass(ScatterNode.class, "Geometry");
         m.registerNodeClass(ColorNode.class, "Geometry");
         m.registerNodeClass(TransformNode.class, "Geometry");
+        m.registerNodeClass(ReflectNode.class, "Geometry");
     }
 
     public void stop(BundleContext context) throws Exception {
@@ -44,6 +45,7 @@ public class GraphicsNodesActivator  implements BundleActivator {
         m.unregisterNodeClass(ScatterNode.class);
         m.unregisterNodeClass(ColorNode.class);
         m.unregisterNodeClass(TransformNode.class);
+        m.unregisterNodeClass(ReflectNode.class);
     }
 
      private NodeManager getNodeManager(BundleContext context) {
