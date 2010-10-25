@@ -8,7 +8,6 @@ import org.osgi.framework.ServiceReference;
 public class GraphicsNodesActivator  implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
-        m.registerNodeClass(DrawGeometry.class, "Draw");
         m.registerNodeClass(EllipseNode.class, "Geometry");
         m.registerNodeClass(GridNode.class, "Geometry");
         m.registerNodeClass(LineNode.class, "Geometry");
@@ -27,7 +26,6 @@ public class GraphicsNodesActivator  implements BundleActivator {
 
     public void stop(BundleContext context) throws Exception {
         NodeManager m = getNodeManager(context);
-        m.unregisterNodeClass(DrawGeometry.class);
         m.unregisterNodeClass(EllipseNode.class);
         m.unregisterNodeClass(GridNode.class);
         m.unregisterNodeClass(LineNode.class);

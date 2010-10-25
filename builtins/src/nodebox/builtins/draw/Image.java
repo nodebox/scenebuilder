@@ -5,7 +5,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 
 @Description("Draw an image")
-public class Image extends DrawingNode {
+public class Image extends Node {
 
     public final ImagePort pImage = new ImagePort(this, "image", Port.Direction.INPUT);
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);

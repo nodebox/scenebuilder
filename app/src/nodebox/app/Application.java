@@ -124,17 +124,7 @@ public class Application implements BundleActivator {
     }
 
     public SceneDocument createNewDocument() {
-        Scene scene = new Scene();
-        Network root = scene.getRootNetwork();
-        Node sequence = root.createChild(manager.getNodeClass("nodebox.builtins.draw.Sequence"));
-        sequence.setPosition(200, 10);
-        Node rect = root.createChild(manager.getNodeClass("nodebox.builtins.draw.Rect"));
-        rect.setPosition(10, 10);
-        rect.setValue("x", 20);
-        rect.setValue("y", 30);
-        root.connect(rect.getPort("output"), sequence.getPort("step1"));
-        sequence.setRenderedNode();
-        SceneDocument doc = new SceneDocument(manager, scene);
+        SceneDocument doc = new SceneDocument(manager, new Scene());
         addDocument(doc);
         return doc;
     }

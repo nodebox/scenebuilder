@@ -10,7 +10,7 @@ import toxi.geom.mesh2d.Voronoi;
 import java.util.Random;
 
 @Description("Draw a voronoi shape at the given position.")
-public class VoronoiDrawer extends DrawingNode {
+public class VoronoiDrawer extends Node {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
     public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT, 0f);

@@ -8,7 +8,7 @@ import java.awt.*;
 
 
 @Description("Clear the canvas.")
-public class Clear extends DrawingNode {
+public class Clear extends Node {
 
     public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.INPUT, Color.LIGHT_GRAY);
 

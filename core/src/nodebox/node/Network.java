@@ -1,5 +1,7 @@
 package nodebox.node;
 
+import processing.core.PGraphics;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -212,7 +214,7 @@ public class Network extends Node {
 
 
     /**
-     * Render all nodes with the render function.
+     * Execute the rendered child node in the network.
      *
      * @param context the rendering context
      * @param time    the current time
@@ -221,6 +223,19 @@ public class Network extends Node {
     public void execute(Context context, float time) {
         if (renderedNode != null) {
             renderedNode.update(context, time);
+        }
+    }
+
+    /**
+     * Draw the rendered child node in the network.
+     *
+     * @param context the rendering context
+     * @param time    the current time
+     */
+    @Override
+    public void draw(PGraphics g, Context context, float time) {
+        if (renderedNode != null) {
+            renderedNode.draw(g, context, time);
         }
     }
 

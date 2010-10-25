@@ -19,4 +19,5 @@ public class SineWave extends Node {
         float value = (float) (Math.sin(pPosition.get() / phase) * pAmplitude.get() + pOffset.get());
         pValue.set(value);
     }
+
 }

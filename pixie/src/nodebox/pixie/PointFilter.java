@@ -5,6 +5,7 @@ import nodebox.node.ImagePort;
 import nodebox.node.Node;
 import nodebox.node.Port;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 import processing.core.PImage;
 
 public abstract class PointFilter extends Node {
@@ -32,6 +33,11 @@ public abstract class PointFilter extends Node {
         }
         out.updatePixels();
         pOutput.set(out);
+    }
+
+    @Override
+    public void draw(PGraphics g, Context context, float time) {
+        g.image(pOutput.get(), 0, 0);
     }
 
     public abstract int filter(int x, int y, int v);

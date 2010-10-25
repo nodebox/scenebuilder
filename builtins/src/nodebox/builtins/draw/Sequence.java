@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Description("Define the order in which input nodes are executed.")
-public class Sequence extends DrawingNode {
+public class Sequence extends Node {
 
     private List<BooleanPort> stepPorts = new ArrayList<BooleanPort>();
 
@@ -22,11 +22,6 @@ public class Sequence extends DrawingNode {
         BooleanPort port = new BooleanPort(this, stepName, Port.Direction.INPUT);
         stepPorts.add(port);
         return port;
-    }
-
-    @Override
-    public void updateDependencies(Context context, float time) {
-        // Overridden so that the dependencies do not update themselves and draw something.
     }
 
     @Override

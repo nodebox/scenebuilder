@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw a four-sided polygon")
-public class Quad extends DrawingNode {
+public class Quad extends Node {
 
     public final FloatPort pX1 = new FloatPort(this, "x1", Port.Direction.INPUT, 0f);
     public final FloatPort pY1 = new FloatPort(this, "y1", Port.Direction.INPUT, 0f);

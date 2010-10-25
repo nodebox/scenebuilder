@@ -51,8 +51,9 @@ public class SceneRenderer extends PApplet {
         if (drawBackground) {
             background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
         }
-        // Execute the scene.
+        // Execute and draw the scene.
         scene.execute(context, time);
+        scene.draw(context.getGraphics(), context, time);
     }
 
 

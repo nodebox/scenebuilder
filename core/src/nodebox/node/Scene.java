@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import processing.core.PGraphics;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.OutputKeys;
@@ -65,6 +66,10 @@ public class Scene {
 
     public void execute(Context context, float time) {
         rootNetwork.execute(context, time);
+    }
+
+    public void draw(PGraphics g, Context context, float time) {
+        rootNetwork.draw(g, context, time);
     }
 
     //// Properties ////

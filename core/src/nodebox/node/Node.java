@@ -1,6 +1,7 @@
 package nodebox.node;
 
 import nodebox.util.Strings;
+import processing.core.PGraphics;
 
 import javax.swing.*;
 import java.awt.*;
@@ -313,11 +314,35 @@ public abstract class Node {
 
     /**
      * Process the node and update the values of the output ports.
+     * <p/>
+     * This method should not cause any side effects, such as drawing to the canvas.
+     * It is up to the system to decide if it needs to call this method.
+     *
+     * Currently, this method is called once per frame for every node, but as soon as we implement dirty management,
+     * this method will be called only when the input ports of a node change, causing it to become dirty. When that
+     * happens, we'll add a method (hasExternalInputs) that can indicate that the node has inputs from outside of the
+     * network (such as the mouse or network) so that it needs to be updated every frame.
      *
      * @param context the drawing context
      * @param time    the current time
      */
-    public abstract void execute(Context context, float time);
+    public void execute(Context context, float time) {
+        // The default implementation does nothing.
+    }
+
+    /**
+     * Draw the output of the node.
+     * <p/>
+     * If the node is the rendered node, this method is called to show the output of the rendered node.
+     * This method can cause side effects by drawing to the canvas.
+     *
+     * @param g       the graphics context to draw on
+     * @param context the execution context
+     * @param time    the current time
+     */
+    public void draw(PGraphics g, Context context, float time) {
+        // The default implementation does nothing.
+    }
 
     @Override
     public String toString() {

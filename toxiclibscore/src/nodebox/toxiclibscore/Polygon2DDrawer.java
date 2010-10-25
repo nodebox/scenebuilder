@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.Iterator;
 
 @Description("Draw a 2-dimensional polygon.")
-public class Polygon2DDrawer extends DrawingNode {
+public class Polygon2DDrawer extends Node {
 
     public final Polygon2DPort pPolygon = new Polygon2DPort(this, "polygon", Port.Direction.INPUT);
     public final ColorPort pFill = new ColorPort(this, "color", Port.Direction.INPUT, Color.WHITE);

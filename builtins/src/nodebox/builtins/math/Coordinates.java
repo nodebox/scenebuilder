@@ -4,7 +4,7 @@ import nodebox.node.*;
 
 @Description("Calculates the location of a point based on angle and distance")
 
-public class Coordinates extends Node{
+public class Coordinates extends Node {
 
     public FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);
     public FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT);
@@ -16,11 +16,10 @@ public class Coordinates extends Node{
 
     @Override
     public void execute(Context context, float time) {
-
-    float x1 = (float) (pX.get() + Math.cos(Math.toRadians(pAngle.get()))*pDistance.get());
-    float y1 = (float) (pY.get() + Math.sin(Math.toRadians(pAngle.get()))*pDistance.get());
-    pOutputValue.set(x1);
-    pOutputValue2.set(y1);
+        float x1 = (float) (pX.get() + Math.cos(Math.toRadians(pAngle.get())) * pDistance.get());
+        float y1 = (float) (pY.get() + Math.sin(Math.toRadians(pAngle.get())) * pDistance.get());
+        pOutputValue.set(x1);
+        pOutputValue2.set(y1);
     }
 
 }

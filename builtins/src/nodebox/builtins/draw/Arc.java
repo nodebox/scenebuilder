@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw an arc.")
-public class Arc extends DrawingNode {
+public class Arc extends Node {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
     public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT, 0f);
@@ -26,4 +26,5 @@ public class Arc extends DrawingNode {
         float stop = pStop.get() * ProcessingSupport.TO_RADIANS;
         g.arc(pX.get(), pY.get(), pWidth.get(), pHeight.get(), start, stop);
     }
+    
 }

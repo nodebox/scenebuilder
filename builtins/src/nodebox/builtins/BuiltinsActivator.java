@@ -33,6 +33,7 @@ public class BuiltinsActivator implements BundleActivator {
         m.registerNodeClass(Sequence.class, "Draw");
         m.registerNodeClass(Line.class, "Draw");
         m.registerNodeClass(Point.class, "Draw");
+        m.registerNodeClass(Quad.class, "Draw");
         m.registerNodeClass(Rect.class, "Draw");
         m.registerNodeClass(LoadImage.class, "Image");
         m.registerNodeClass(RandomFloat.class, "Random");
@@ -65,6 +66,7 @@ public class BuiltinsActivator implements BundleActivator {
         m.unregisterNodeClass(Line.class);
         m.unregisterNodeClass(Sequence.class);
         m.unregisterNodeClass(Point.class);
+        m.unregisterNodeClass(Quad.class);
         m.unregisterNodeClass(Rect.class);
         m.unregisterNodeClass(LoadImage.class);
         m.unregisterNodeClass(RandomFloat.class);
