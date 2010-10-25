@@ -5,10 +5,7 @@ import processing.core.PGraphics;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
@@ -203,6 +200,27 @@ public abstract class Node {
         throw new IllegalArgumentException("This node has no port named " + name);
     }
 
+    /**
+     * Return a list of nodes this node depends on.
+     * <p/>
+     * This method is not recursive: only the direct dependencies of this node are returned. Ask the dependencies
+     * for *their* dependencies to get a full list.
+     * <p/>
+     * The default implementation checks the connections on the input ports.
+     *
+     * @return the dependent nodes.
+     */
+    public Set<Node> getDependencies() {
+        Set<Node> dependencies = new HashSet<Node>();
+        for (Port p : ports) {
+            if (p.isInputPort() && p.isConnected()) {
+                Connection c = p.getConnection();
+                dependencies.add(c.getOutputNode());
+            }
+        }
+        return dependencies;
+    }
+
     //// Port values ////
 
     public void setValue(String portName, Object value) {
@@ -273,13 +291,28 @@ public abstract class Node {
 
     }
 
-    //// Execution ////
+    //// Node life cycle methods ////
 
-    public boolean startExecution(Context context) {
-        return true;
+    /**
+     * This method is called when the node is created. This is called just after the node is constructed and put
+     * in the network. This method is called only once for every node instance.
+     * It is the counterpart of the destroy method.
+     * <p/>
+     * The default implementation does nothing.
+     */
+    public void initialize() {
     }
 
-    public void stopExecution(Context context) {
+    /**
+     * This method is called when the node is reachable from the rendered node,
+     * which means that it will be executed later. This method can be used to initialize a web
+     * camera or open a network socket. It is the counterpart of the deactivate method.
+     * <p/>
+     * The default implementation does nothing.
+     *
+     * @see #deactivate()
+     */
+    public void activate() {
     }
 
     /**
@@ -311,23 +344,23 @@ public abstract class Node {
         }
     }
 
-
     /**
      * Process the node and update the values of the output ports.
      * <p/>
      * This method should not cause any side effects, such as drawing to the canvas.
      * It is up to the system to decide if it needs to call this method.
-     *
+     * <p/>
      * Currently, this method is called once per frame for every node, but as soon as we implement dirty management,
      * this method will be called only when the input ports of a node change, causing it to become dirty. When that
      * happens, we'll add a method (hasExternalInputs) that can indicate that the node has inputs from outside of the
      * network (such as the mouse or network) so that it needs to be updated every frame.
+     * <p/>
+     * The default implementation does nothing.
      *
      * @param context the drawing context
      * @param time    the current time
      */
     public void execute(Context context, float time) {
-        // The default implementation does nothing.
     }
 
     /**
@@ -335,14 +368,40 @@ public abstract class Node {
      * <p/>
      * If the node is the rendered node, this method is called to show the output of the rendered node.
      * This method can cause side effects by drawing to the canvas.
+     * <p/>
+     * The default implementation does nothing.
      *
      * @param g       the graphics context to draw on
      * @param context the execution context
      * @param time    the current time
      */
     public void draw(PGraphics g, Context context, float time) {
-        // The default implementation does nothing.
     }
+
+    /**
+     * This method is called when the node is no longer reachable from the rendered node,
+     * and will not be executed or drawn. This method can be used to stop a web camera or close a
+     * network socket. It is the counterpart of the activate method.
+     * <p/>
+     * The default implementation does nothing.
+     *
+     * @see #activate()
+     */
+    public void deactivate() {
+    }
+
+    /**
+     * This method is called just before the node is removed from the network or the scene is closed.
+     * It can do any final cleanup not done in deactivate. It is the counterpart of initialize.
+     * <p/>
+     * The default implementation does nothing.
+     *
+     * @see #initialize()
+     */
+    public void destroy() {
+    }
+
+    //// Object class overrides ////
 
     @Override
     public String toString() {

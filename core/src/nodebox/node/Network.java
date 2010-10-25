@@ -18,6 +18,7 @@ public class Network extends Node {
     private List<Connection> connections;
     private Set<Port> publishedPorts;
     private Node renderedNode;
+    private Set<Node> activatedNodes = Collections.emptySet();
 
     public Network() {
         children = new LinkedList<Node>();
@@ -45,6 +46,7 @@ public class Network extends Node {
         }
         n.setName(uniqueChildName(n.getName()));
         addChild(n);
+        n.initialize();
         return n;
     }
 
@@ -54,9 +56,13 @@ public class Network extends Node {
     }
 
     public void removeChild(Node child) {
+        if (child.isRenderedNode()) {
+            setRenderedNode(null);
+        }
         disconnect(child);
         children.remove(child);
         child.setNetwork(null);
+        child.destroy();
     }
 
     public Node getChild(String childName) {
@@ -103,6 +109,52 @@ public class Network extends Node {
         }
     }
 
+    //// Activate/deactivate nodes ////
+
+    private Set<Node> reachableNodes() {
+        return reachableNodes(getRenderedNode(), new HashSet<Node>());
+    }
+
+    private Set<Node> reachableNodes(Node node, Set<Node> reachableNodes) {
+        if (node == null) return reachableNodes;
+        reachableNodes.add(node);
+        for (Node dependency : node.getDependencies()) {
+            reachableNodes(dependency, reachableNodes);
+        }
+        return reachableNodes;
+    }
+
+    private boolean isActivated(Node node) {
+        return activatedNodes.contains(node);
+    }
+
+    /**
+     * Activate/deactivate nodes. Call this method whenever network reachability changes, such as connecting/disconnecting
+     * a node or removing a node.
+     *
+     * @param oldReachableNodes the list of old reachable nodes
+     * @param newReachableNodes the list of newly reachable node.
+     */
+    private void updateNodeActivation(Set<Node> oldReachableNodes, Set<Node> newReachableNodes) {
+        // The nodes to activate are all newly reachable nodes, minus the ones that were already active.
+        Set<Node> nodesToActivate = new HashSet<Node>(newReachableNodes);
+        nodesToActivate.removeAll(this.activatedNodes);
+
+        // The nodes to deactivate are all the old reachable nodes, minus the nodes that are still active.
+        // These nodes do not need to be deactivated since they will be reachable afterwards.
+        Set<Node> nodesToDeactivate = new HashSet<Node>(oldReachableNodes);
+        nodesToDeactivate.removeAll(newReachableNodes);
+
+        for (Node n : nodesToDeactivate) {
+            n.deactivate();
+        }
+        for (Node n : nodesToActivate) {
+            n.activate();
+        }
+
+        this.activatedNodes = newReachableNodes;
+    }
+
     //// Rendered node ////
 
     public Node getRenderedNode() {
@@ -110,7 +162,10 @@ public class Network extends Node {
     }
 
     public void setRenderedNode(Node renderedNode) {
+        Set<Node> oldReachableNodes = reachableNodes();
         this.renderedNode = renderedNode;
+        Set<Node> newReachableNodes = reachableNodes();
+        updateNodeActivation(oldReachableNodes, newReachableNodes);
     }
 
     //// Connections ////
@@ -151,6 +206,9 @@ public class Network extends Node {
     public void disconnect(Node node) {
         checkNotNull(node);
         checkArgument(node.getNetwork() == this, "Node %s is not a child of this network.", node);
+
+        Set<Node> oldReachableNodes = reachableNodes();
+
         LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputNode() == node || c.getOutputNode() == node) {
@@ -158,11 +216,21 @@ public class Network extends Node {
             }
         }
         connections.removeAll(connectionsToRemove);
+
+        if (node.isRenderedNode()) {
+            setRenderedNode(null);
+        }
+
+        Set<Node> newReachableNodes = reachableNodes();
+        updateNodeActivation(oldReachableNodes, newReachableNodes);
     }
 
     public void disconnect(Port port) {
         checkNotNull(port);
         checkArgument(port.getNode().getNetwork() == this, "Port %s is not a child of this network.", port);
+
+        Set<Node> oldReachableNodes = reachableNodes();
+
         LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputPort() == port || c.getOutputPort() == port) {
@@ -170,6 +238,9 @@ public class Network extends Node {
             }
         }
         connections.removeAll(connectionsToRemove);
+
+        Set<Node> newReachableNodes = reachableNodes();
+        updateNodeActivation(oldReachableNodes, newReachableNodes);
     }
 
     //// Published Ports ////
