@@ -60,12 +60,14 @@ public class CopyNode extends Network {
         float sy = pSy.get();
         String order = orderings[pOrder.get()];
 
+        float delta = copies > 2 ? 1f / (copies - 1f) : 1;
+
         GeometryPort pGeometry = getGeometryOutputPort(getRenderedNode());
         Geometry g = new Geometry();
         boolean hasOutput = false;
 
         for (int i = 0; i < copies; i++) {
-            float position = i / (float) copies;
+            float position = i * delta;
             Context childContext = new Context(context);
             childContext.setValueForNodeKey(this, KEY_AMOUNT, copies);
             childContext.setValueForNodeKey(this, KEY_INDEX, i);

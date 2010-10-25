@@ -19,9 +19,10 @@ public class Looper extends Network {
     @Override
     public void execute(Context context, float time) {
         int amount = pAmount.get();
+        float delta = amount > 2 ? 1f / (amount - 1f) : 1;
         float position;
         for (int i = 0; i < amount; i++) {
-            position = i / (float) amount;
+            position = i * delta;
             Context childContext = new Context(context);
             childContext.setValueForNodeKey(this, KEY_AMOUNT, amount);
             childContext.setValueForNodeKey(this, KEY_INDEX, i);
