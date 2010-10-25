@@ -1,8 +1,13 @@
 package nodebox.node;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class StringPort extends Port implements PersistablePort {
 
     private String value;
+    private Map<String, String> menuItems;
 
     public StringPort(Node node, String name, Direction direction) {
         super(node, name, direction);
@@ -15,7 +20,11 @@ public class StringPort extends Port implements PersistablePort {
 
     @Override
     public String getWidget() {
-        return "string";
+        if (hasMenu()) {
+            return "menu";
+        } else {
+            return "string";
+        }
     }
 
     @Override
@@ -48,5 +57,30 @@ public class StringPort extends Port implements PersistablePort {
 
     public String getValueAsString() {
         return value;
+    }
+
+    //// Menu support ////
+
+    public boolean hasMenu() {
+        return menuItems != null && menuItems.size() > 0;
+    }
+
+    public void addMenuItem(String key, String label) {
+        ensureMenuItems();
+        menuItems.put(key, label);
+    }
+
+    public void removeMenuItem(int key) {
+        if (menuItems == null) return;
+        menuItems.remove(key);
+    }
+
+    public Map<String, String> getMenuItems() {
+        return menuItems != null ? menuItems : Collections.<String, String>emptyMap();
+    }
+
+    private void ensureMenuItems() {
+        if (menuItems == null)
+            menuItems = new HashMap<String, String>();
     }
 }
