@@ -9,8 +9,16 @@ import processing.core.PGraphics;
 @Description("Create multiple copies of a shape.")
 public class CopyNode extends Network {
 
+    public final String[] orderings = {"srt", "str", "rst", "rts", "tsr", "trs"};
+    public final int ORDER_SCALE_ROT_TRANS = 0;
+    public final int ORDER_SCALE_TRANS_ROT = 1;
+    public final int ORDER_ROT_SCALE_TRANS = 2;
+    public final int ORDER_ROT_TRANS_SCALE = 3;
+    public final int ORDER_TRANS_SCALE_ROT = 4;
+    public final int ORDER_TRANS_ROT_SCALE = 5;
+
     public final IntPort pCopies = new IntPort(this, "copies", Port.Direction.INPUT, 1);
-    public final StringPort pOrder = new StringPort(this, "order", Port.Direction.INPUT, "tsr");
+    public final IntPort pOrder = new IntPort(this, "order", Port.Direction.INPUT, ORDER_TRANS_SCALE_ROT);
     public final FloatPort pTx = new FloatPort(this, "translate x", Port.Direction.INPUT);
     public final FloatPort pTy = new FloatPort(this, "translate y", Port.Direction.INPUT);
     public final FloatPort pR = new FloatPort(this, "rotate", Port.Direction.INPUT);
@@ -21,6 +29,15 @@ public class CopyNode extends Network {
     public static final String KEY_AMOUNT = "amount";
     public static final String KEY_INDEX = "index";
     public static final String KEY_POSITION = "position";
+
+    public CopyNode() {
+        pOrder.addMenuItem(ORDER_SCALE_ROT_TRANS, "Scale Rot Trans");
+        pOrder.addMenuItem(ORDER_SCALE_TRANS_ROT, "Scale Trans Rot");
+        pOrder.addMenuItem(ORDER_ROT_SCALE_TRANS, "Rot Scale Trans");
+        pOrder.addMenuItem(ORDER_ROT_TRANS_SCALE, "Rot Trans Scale");
+        pOrder.addMenuItem(ORDER_TRANS_SCALE_ROT, "Trans Scale Rot");
+        pOrder.addMenuItem(ORDER_TRANS_ROT_SCALE, "Trans Rot Scale");
+    }
 
     public GeometryPort getGeometryOutputPort(Node node) {
         if (node == null) return null;
@@ -41,7 +58,7 @@ public class CopyNode extends Network {
         float r = pR.get();
         float sx = pSx.get();
         float sy = pSy.get();
-        String order = pOrder.get();
+        String order = orderings[pOrder.get()];
 
         GeometryPort pGeometry = getGeometryOutputPort(getRenderedNode());
         Geometry g = new Geometry();
