@@ -2,10 +2,7 @@ package nodebox.graphics.nodes;
 
 import nodebox.graphics.Geometry;
 import nodebox.graphics.Point;
-import nodebox.node.BooleanPort;
-import nodebox.node.Context;
-import nodebox.node.FloatPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
 import static nodebox.util.ProcessingSupport.angle;
 import static nodebox.util.ProcessingSupport.coordinates;
@@ -13,6 +10,7 @@ import static nodebox.util.ProcessingSupport.distance;
 import static nodebox.util.ProcessingSupport.radians;
 
 
+@Description("Mirrors and copies geometry across an invisible axis.")
 public class ReflectNode extends FilterNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 50);
