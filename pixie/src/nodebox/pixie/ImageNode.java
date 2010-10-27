@@ -1,11 +1,27 @@
 package nodebox.pixie;
 
-/**
- * Created by IntelliJ IDEA.
- * User: fdb
- * Date: Oct 27, 2010
- * Time: 12:36:18 PM
- * To change this template use File | Settings | File Templates.
- */
-public class ImageNode {
+import nodebox.node.Context;
+import nodebox.node.ImagePort;
+import nodebox.node.Node;
+import nodebox.node.Port;
+import processing.core.PGraphics;
+import processing.core.PImage;
+
+public abstract class ImageNode extends Node {
+
+    public final ImagePort pOutput = new ImagePort(this, "output", Port.Direction.OUTPUT);
+
+    @Override
+    public void execute(Context context, float time) {
+        PImage image = cook(context, time);
+        pOutput.set(image);
+    }
+
+    @Override
+    public void draw(PGraphics g, Context context, float time) {
+        g.image(pOutput.get(), 0, 0);
+    }
+
+    public abstract PImage cook(Context context, float time);
+
 }

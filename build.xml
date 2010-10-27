@@ -8,6 +8,7 @@
     <property name="module.builtins" value="builtins"/>
     <property name="module.graphics" value="graphics"/>
     <property name="module.pixie" value="pixie"/>
+    <property name="module.video" value="video"/>
     <property name="module.toxiclibscore" value="toxiclibscore"/>
     <property name="module.app" value="app"/>
     <property name="app.res.mac" value="app/platform/mac/res"/>
@@ -25,6 +26,7 @@
         <ant dir="${module.builtins}" antfile="build.xml" target="dist"/>
         <ant dir="${module.graphics}" antfile="build.xml" target="dist"/>
         <ant dir="${module.pixie}" antfile="build.xml" target="dist"/>
+        <ant dir="${module.video}" antfile="build.xml" target="dist"/>
         <!-- <ant dir="${module.toxiclibscore}" antfile="build.xml" target="dist"/> -->
         <ant dir="${module.app}" antfile="build.xml" target="dist"/>
         <mkdir dir="dist/configuration"/>
@@ -39,6 +41,7 @@
         <ant dir="${module.builtins}" antfile="build.xml" target="clean"/>
         <ant dir="${module.graphics}" antfile="build.xml" target="dist"/>
         <ant dir="${module.pixie}" antfile="build.xml" target="dist"/>
+        <ant dir="${module.video}" antfile="build.xml" target="dist"/>
         <ant dir="${module.toxiclibscore}" antfile="build.xml" target="clean"/>
         <ant dir="${module.app}" antfile="build.xml" target="clean"/>
         <delete dir="dist"/>
@@ -48,6 +51,7 @@
         <java fork="true" dir="dist" classpath="dist/equinox.jar" classname="org.eclipse.core.runtime.adaptor.EclipseStarter">
             <arg value="-console"/>
             <arg value="-clean"/>
+            <jvmarg value="-d32"/>
         </java>
     </target>
     

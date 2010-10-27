@@ -1,0 +1,8 @@
+Manifest-Version: 1
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: nodebox.video
+Bundle-Name: Node-Video
+Bundle-Version: 1.0.0
+Bundle-Activator: nodebox.video.VideoActivator
+Bundle-ClassPath: .,QTJava.zip,processing-video.jar
+Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util, javax.swing

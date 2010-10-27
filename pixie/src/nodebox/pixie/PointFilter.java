@@ -8,16 +8,14 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
-public abstract class PointFilter extends Node {
+public abstract class PointFilter extends ImageNode {
 
     public final ImagePort pImage = new ImagePort(this, "image", Port.Direction.INPUT);
-    public final ImagePort pOutput = new ImagePort(this, "output", Port.Direction.OUTPUT);
-
 
     @Override
-    public void execute(Context context, float time) {
+    public PImage cook(Context context, float time) {
         PImage in = pImage.get();
-        if (in == null) return;
+        if (in == null) return null;
         in.loadPixels();
         PImage out = context.getApplet().createImage(in.width, in.height, PConstants.RGB);
         out.loadPixels();
@@ -32,7 +30,7 @@ public abstract class PointFilter extends Node {
             }
         }
         out.updatePixels();
-        pOutput.set(out);
+        return out;
     }
 
     @Override
