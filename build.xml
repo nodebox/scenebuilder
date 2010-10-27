@@ -12,13 +12,16 @@
     <property name="module.toxiclibscore" value="toxiclibscore"/>
     <property name="module.app" value="app"/>
     <property name="app.res.mac" value="app/platform/mac/res"/>
+    <property name="dist.mac.dir" value="dist/mac"/>
     <property name="dist.mac" value="dist/mac/${ant.project.name}"/>
+    <property name="dist.mac.examples" value="${dist.mac}/Examples"/>
     <property name="dist.mac.app" value="${dist.mac}/${ant.project.name}.app"/>
     <property name="dist.mac.stub" location="${dist.mac.app}/Contents/MacOS/${ant.project.name}"/>
     <property name="dist.mac.contents" location="${dist.mac.app}/Contents"/>
     <property name="dist.mac.res" location="${dist.mac.contents}/Resources"/>
     <property name="dist.mac.java" location="${dist.mac.res}"/>
-    <property name="apple.appstub" location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
+    <property name="apple.appstub"
+              location="/System/Library/Frameworks/JavaVM.framework/Resources/MacOS/JavaApplicationStub"/>
 
     <target name="dist">
         <copy file="lib/mvel2.jar" todir="dist"/>
@@ -49,16 +52,18 @@
     </target>
 
     <target name="run" depends="dist">
-        <java fork="true" dir="dist" classpath="dist/equinox.jar" classname="org.eclipse.core.runtime.adaptor.EclipseStarter">
+        <java fork="true" dir="dist" classpath="dist/equinox.jar"
+              classname="org.eclipse.core.runtime.adaptor.EclipseStarter">
             <arg value="-console"/>
             <arg value="-clean"/>
             <jvmarg value="-d32"/>
         </java>
     </target>
-    
+
     <target name="dist-mac" depends="dist" description="Make a double-clickable Mac OS X application">
         <mkdir dir="${dist.mac.app}"/>
         <mkdir dir="${dist.mac.java}"/>
+        <mkdir dir="${dist.mac.examples}"/>
         <!-- Copy library and program archives-->
         <copy todir="${dist.mac.java}">
             <fileset dir="lib">
@@ -83,19 +88,31 @@
             <fileset dir="${app.res.mac}"/>
         </copy>
         <mkdir dir="${dist.mac.java}/configuration"/>
-        <copy  todir="${dist.mac.java}/configuration">
+        <copy todir="${dist.mac.java}/configuration">
             <fileset dir="app/res/configuration"/>
         </copy>
         <!-- Replace version number -->
         <replace file="${dist.mac.contents}/Info.plist" token="@@VERSION@@" value="${app.version}"/>
         <!-- Copy version number -->
-        <copy file="version.properties" todir="${dist.mac.res}" />
+        <copy file="version.properties" todir="${dist.mac.res}"/>
         <!-- Make directory into a bundle -->
         <exec executable="/Developer/Tools/SetFile">
             <arg line="-a B ${dist.mac.app}"/>
         </exec>
+        <!-- Copy examples -->
+        <copy todir="${dist.mac.examples}">
+            <fileset dir="examples"/>
+        </copy>
+        <!-- Bundle into DMG -->
+        <exec executable="hdiutil">
+            <arg line="create -srcfolder ${dist.mac}  ${dist.mac.dir}/${ant.project.name}-${app.version}.dmg"/>
+        </exec>
+        <!-- Internet-enable DMG -->
+        <exec executable="hdiutil">
+            <arg line="internet-enable ${dist.mac.dir}/${ant.project.name}-${app.version}.dmg"/>
+        </exec>
     </target>
-    
+
     <target name="run-mac" depends="dist-mac" description="Run the double-clickable application">
         <!-- Use the exec task to open the application -->
         <exec executable="/usr/bin/open" os="Mac OS X">
