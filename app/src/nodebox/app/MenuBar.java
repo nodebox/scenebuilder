@@ -65,7 +65,6 @@ public class MenuBar extends JMenuBar {
         if (manager != null) {
             for (String category : manager.getNodeCategories()) {
                 JMenu categoryMenu = createMenu(category);
-                categoryMenu.getPopupMenu().setLightWeightPopupEnabled(false);
                 for (Class<? extends Node> nodeClass : manager.getNodeClasses(category)) {
                     categoryMenu.add(new CreateNodeAction(document, nodeClass.getSimpleName(), nodeClass));
                 }
@@ -77,7 +76,6 @@ public class MenuBar extends JMenuBar {
 
     private JMenu createMenu(String title) {
         JMenu menu = new JMenu(title);
-        menu.getPopupMenu().setLightWeightPopupEnabled(false);
         return menu;
     }
 
