@@ -45,16 +45,20 @@ public class SceneRenderer extends PApplet {
 
     @Override
     public void draw() {
-        // Initialize the context.
-        float time = (float) ((System.currentTimeMillis() - startMillis) / 1000.0);
-        Context context = new Context(this);
-        // Draw the background, if needed.
-        if (drawBackground) {
-            background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+        try {
+            // Initialize the context.
+            float time = (float) ((System.currentTimeMillis() - startMillis) / 1000.0);
+            Context context = new Context(this);
+            // Draw the background, if needed.
+            if (drawBackground) {
+                background(backgroundColor.getRed(), backgroundColor.getGreen(), backgroundColor.getBlue());
+            }
+            // Execute and draw the scene.
+            scene.execute(context, time);
+            scene.draw(context.getGraphics(), context, time);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // Execute and draw the scene.
-        scene.execute(context, time);
-        scene.draw(context.getGraphics(), context, time);
     }
 
 
