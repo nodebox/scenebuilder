@@ -5,6 +5,7 @@ import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import processing.core.PApplet;
 import processing.core.PGraphics;
 
 import javax.xml.parsers.*;
@@ -49,19 +50,30 @@ public class Scene {
 
     private Network rootNetwork;
     private Properties properties = new Properties(DEFAULT_PROPERTIES);
+    private transient PApplet applet;
 
     public Scene() {
         rootNetwork = new Network();
+        rootNetwork.setScene(this);
         rootNetwork.setName("root");
         rootNetwork.setDisplayName("Root");
     }
 
     private Scene(Network root) {
         rootNetwork = root;
+        rootNetwork.setScene(this);
     }
 
     public Network getRootNetwork() {
         return rootNetwork;
+    }
+
+    public PApplet getApplet() {
+        return applet;
+    }
+
+    public void setApplet(PApplet applet) {
+        this.applet = applet;
     }
 
     public void execute(Context context, float time) {

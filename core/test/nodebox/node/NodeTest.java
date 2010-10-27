@@ -6,7 +6,8 @@ import processing.core.PGraphics;
 public class NodeTest extends TestCase {
 
     public void testLifeCycleMethods() {
-        Network net = new Network();
+        Scene scene = new Scene();
+        Network net = scene.getRootNetwork();
         LifeCycleNode alpha = (LifeCycleNode) net.createChild(LifeCycleNode.class);
         net.execute(new MockContext(), 0f);
 
@@ -52,7 +53,8 @@ public class NodeTest extends TestCase {
      */
     public void testActivation() {
         // Create a network such that alpha <- beta <- gamma and alpha <- delta.
-        Network net = new Network();
+        Scene scene = new Scene();
+        Network net = scene.getRootNetwork();
         LifeCycleNode alpha = (LifeCycleNode) net.createChild(LifeCycleNode.class);
         LifeCycleNode beta = (LifeCycleNode) net.createChild(LifeCycleNode.class);
         LifeCycleNode gamma = (LifeCycleNode) net.createChild(LifeCycleNode.class);
@@ -84,7 +86,8 @@ public class NodeTest extends TestCase {
 
     public void testBreakChain() {
         // Create a network such that alpha <- beta <- gamma.
-        Network net = new Network();
+        Scene scene = new Scene();
+        Network net = scene.getRootNetwork();
         LifeCycleNode alpha = (LifeCycleNode) net.createChild(LifeCycleNode.class);
         LifeCycleNode beta = (LifeCycleNode) net.createChild(LifeCycleNode.class);
         LifeCycleNode gamma = (LifeCycleNode) net.createChild(LifeCycleNode.class);

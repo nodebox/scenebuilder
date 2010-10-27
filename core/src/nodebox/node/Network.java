@@ -45,6 +45,7 @@ public class Network extends Node {
             throw new RuntimeException(e);
         }
         n.setName(uniqueChildName(n.getName()));
+        n.setScene(getScene());
         addChild(n);
         n.initialize();
         return n;
@@ -53,6 +54,7 @@ public class Network extends Node {
     public void addChild(Node child) {
         children.add(child);
         child.setNetwork(this);
+        child.setScene(getScene());
     }
 
     public void removeChild(Node child) {

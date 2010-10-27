@@ -21,6 +21,7 @@ public class SceneRenderer extends PApplet {
 
     public SceneRenderer(Scene scene) {
         this.scene = scene;
+        scene.setApplet(this);
     }
 
     @Override
