@@ -34,6 +34,7 @@
             <fileset dir="app/res/configuration"/>
         </copy>
         <copy todir="dist" file="lib/equinox.jar"/>
+        <copy todir="dist" file="version.properties"/>
     </target>
 
     <target name="clean">

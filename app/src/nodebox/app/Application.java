@@ -29,7 +29,6 @@ public class Application implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         System.out.println("Starting up application.");
         instance = this;
-        version = context.getBundle().getVersion().toString();
         manager = getNodeManager(context);
         createNewDocument();
     }
@@ -54,6 +53,7 @@ public class Application implements BundleActivator {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        readVersion();
         //registerForMacOSXEvents();
     }
 
