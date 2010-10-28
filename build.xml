@@ -43,9 +43,9 @@
     <target name="clean">
         <ant dir="${module.core}" antfile="build.xml" target="clean"/>
         <ant dir="${module.builtins}" antfile="build.xml" target="clean"/>
-        <ant dir="${module.graphics}" antfile="build.xml" target="dist"/>
-        <ant dir="${module.pixie}" antfile="build.xml" target="dist"/>
-        <ant dir="${module.video}" antfile="build.xml" target="dist"/>
+        <ant dir="${module.graphics}" antfile="build.xml" target="clean"/>
+        <ant dir="${module.pixie}" antfile="build.xml" target="clean"/>
+        <ant dir="${module.video}" antfile="build.xml" target="clean"/>
         <ant dir="${module.toxiclibscore}" antfile="build.xml" target="clean"/>
         <ant dir="${module.app}" antfile="build.xml" target="clean"/>
         <delete dir="dist"/>
