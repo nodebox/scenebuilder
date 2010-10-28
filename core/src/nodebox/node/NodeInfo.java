@@ -1,11 +1,12 @@
 package nodebox.node;
 
-import java.lang.annotation.Annotation;
 import java.util.Comparator;
 
 import static nodebox.util.Preconditions.checkNotNull;
 
 public final class NodeInfo {
+
+    public static final AlphabeticComparator ALPHABETIC_COMPARATOR = new AlphabeticComparator();
 
     public static NodeInfo nodeInfoFromClass(Class<? extends Node> nodeClass) {
         Description descriptionAnnotation = nodeClass.getAnnotation(Description.class);
@@ -44,5 +45,13 @@ public final class NodeInfo {
     public String toString() {
         return nodeClass.getName();
     }
-    
+
+    public static class AlphabeticComparator implements Comparator<NodeInfo> {
+        public int compare(NodeInfo info1, NodeInfo info2) {
+            String name1 = info1.getNodeClass().getSimpleName();
+            String name2 = info2.getNodeClass().getSimpleName();
+            return name1.compareTo(name2);
+        }
+    }
+
 }

@@ -2,7 +2,6 @@ package nodebox.node;
 
 import java.util.*;
 
-import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
 
 public class NodeManager {
@@ -78,13 +77,16 @@ public class NodeManager {
 
     public List<String> getNodeCategories() {
         updateCategoryMap();
-        return new ArrayList<String>(categoryMap.keySet());
+        List<String> categories = new ArrayList<String>(categoryMap.keySet());
+        Collections.sort(categories);
+        return categories;
     }
 
     public List<NodeInfo> getNodeInfoList(String category) {
         checkNotNull(category);
         updateCategoryMap();
         List<NodeInfo> nodeInfoList = new ArrayList<NodeInfo>(categoryMap.get(category));
+        Collections.sort(nodeInfoList, NodeInfo.ALPHABETIC_COMPARATOR);
         return nodeInfoList;
     }
 
