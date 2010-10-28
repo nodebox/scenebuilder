@@ -1,24 +1,19 @@
 package nodebox.app;
 
 import nodebox.node.Network;
-import nodebox.node.Node;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
-public class AddressBar extends JPanel implements MouseListener {
+public class AddressBar extends JPanel implements MouseListener, ExceptionListener {
 
 
-    private static BufferedImage addressGradient, addressArrow;
+    private static BufferedImage addressGradient, addressArrow, addressExclamation;
     private static TexturePaint addressGradientPaint;
 
     private static final Font SMALL_BOLD_FONT = Theme.INFO_FONT;
@@ -28,8 +23,9 @@ public class AddressBar extends JPanel implements MouseListener {
 
     static {
         addressGradient = PlatformUtils.loadImageResource("address-gradient.png");
-        addressGradientPaint = new TexturePaint(addressGradient, new Rectangle2D.Float(0, 0, addressGradient.getWidth(null),addressGradient.getHeight(null)));
+        addressGradientPaint = new TexturePaint(addressGradient, new Rectangle2D.Float(0, 0, addressGradient.getWidth(null), addressGradient.getHeight(null)));
         addressArrow = PlatformUtils.loadImageResource("address-arrow.png");
+        addressExclamation = PlatformUtils.loadImageResource("address-exclamation.png");
     }
 
     //private ArrayList<Node> parts = new List<Node>[]{"root", "poster", "background"};
@@ -37,9 +33,11 @@ public class AddressBar extends JPanel implements MouseListener {
     private int armed = -1;
 
     private SceneDocument document;
+    private Exception renderException;
 
     public AddressBar(SceneDocument document) {
         this.document = document;
+        document.getRenderer().addExceptionListener(this);
         addMouseListener(this);
         setMinimumSize(new Dimension(0, ADDRESS_BAR_HEIGHT));
         setMaximumSize(new Dimension(Integer.MAX_VALUE, ADDRESS_BAR_HEIGHT));
@@ -95,11 +93,26 @@ public class AddressBar extends JPanel implements MouseListener {
         }
 
         String version = Application.getInstance().getVersion();
+        int versionX = getWidth() - g2.getFontMetrics().stringWidth(version) - 10;
+        SwingUtils.drawShadowText(g2, version, versionX, 16);
 
-        SwingUtils.drawShadowText(g2, version, getWidth() - g2.getFontMetrics().stringWidth(version) - 10, 16);
+        if (renderException != null) {
+            g2.drawImage(addressExclamation, versionX - 30, 0, null);
+        }
+
     }
 
+    // TODO: Check if the mouse was clicked on the right side and show ExceptionDialog(renderException)
+
     public void mouseClicked(MouseEvent e) {
+        if (renderException != null) {
+            int mx = e.getX();
+            if (mx > getWidth() - 100) {
+                ExceptionDialog dialog = new ExceptionDialog(null, renderException);
+                dialog.setModal(true);
+                dialog.setVisible(true);
+            }
+        }
     }
 
     public void mousePressed(MouseEvent e) {
@@ -136,5 +149,23 @@ public class AddressBar extends JPanel implements MouseListener {
                 return i;
         }
         return -1;
+    }
+
+    public void exceptionThrown(Exception e) {
+        boolean hadRenderException = renderException != null;
+        renderException = e;
+        if (!hadRenderException) {
+            repaint();
+        }
+        setToolTipText(e.toString());
+    }
+
+    public void exceptionCleared() {
+        boolean hadRenderException = renderException != null;
+        renderException = null;
+        if (hadRenderException) {
+            repaint();
+        }
+        setToolTipText("");
     }
 }

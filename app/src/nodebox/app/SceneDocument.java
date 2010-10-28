@@ -48,6 +48,9 @@ public class SceneDocument extends JFrame {
         this.scene = scene;
         currentNetwork = scene.getRootNetwork();
         setSize(900, 500);
+
+        initRenderer();
+
         JPanel rootPanel = new JPanel(new BorderLayout());
         addressBar = new AddressBar(this);
         rootPanel.add(addressBar, BorderLayout.NORTH);
@@ -71,8 +74,10 @@ public class SceneDocument extends JFrame {
                 close();
             }
         });
+    }
 
-        initRenderer();
+    public SceneRenderer getRenderer() {
+        return renderer;
     }
 
     @Override

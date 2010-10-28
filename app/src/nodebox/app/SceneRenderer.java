@@ -6,6 +6,7 @@ import nodebox.util.Strings;
 import processing.core.PApplet;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class SceneRenderer extends PApplet {
@@ -18,6 +19,8 @@ public class SceneRenderer extends PApplet {
     private double time;
     private boolean drawBackground;
     private Color backgroundColor;
+    private Exception renderException;
+    private java.util.List<ExceptionListener> exceptionListeners = new ArrayList<ExceptionListener>();
 
     public SceneRenderer(Scene scene) {
         this.scene = scene;
@@ -56,11 +59,45 @@ public class SceneRenderer extends PApplet {
             // Execute and draw the scene.
             scene.execute(context, time);
             scene.draw(context.getGraphics(), context, time);
+
+            // Since everything worked, clear out the render exception.
+            clearRenderException();
         } catch (Exception e) {
-            e.printStackTrace();
+            setRenderException(e);
         }
     }
 
+    private void clearRenderException() {
+        if (renderException != null) {
+            fireExceptionCleared();
+            renderException = null;
+        }
+    }
+
+    private void setRenderException(Exception e) {
+        renderException = e;
+        fireExceptionThrown(e);
+    }
+
+    public void addExceptionListener(ExceptionListener listener) {
+        exceptionListeners.add(listener);
+    }
+
+    public void removeExceptionListener(ExceptionListener listener) {
+        exceptionListeners.remove(listener);
+    }
+
+    private void fireExceptionThrown(Exception e) {
+        for (ExceptionListener listener: exceptionListeners) {
+            listener.exceptionThrown(e);
+        }
+    }
+
+    private void fireExceptionCleared() {
+        for (ExceptionListener listener: exceptionListeners) {
+            listener.exceptionCleared();
+        }
+    }
 
     public static void main(String[] args) {
 //        Scene scene = Application.basicLFOScene();

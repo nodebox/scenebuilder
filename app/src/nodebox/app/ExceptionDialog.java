@@ -30,26 +30,25 @@ public class ExceptionDialog extends JDialog implements ClipboardOwner {
         textArea.setFont(Theme.EDITOR_FONT);
         StringBuffer sb = new StringBuffer();
         StringWriter sw = new StringWriter();
+        // Write out the exception message, if available.
+        if (exception.getMessage() != null) {
+            sb.append(exception.getMessage());
+            sb.append("\n\n");
+        }
+        // Write out the stack trace.
         exception.printStackTrace(new PrintWriter(sw));
         sb.append(sw.toString());
-        sb.append(exception.getMessage());
-        sb.append("\n");
-        for (StackTraceElement ste : exception.getStackTrace()) {
-            sb.append(ste.toString());
-            sb.append("\n");
-        }
-
+        // Write out all the causes.
         Throwable cause = exception.getCause();
         while (cause != null) {
             sb.append("Caused by: \n");
-            sb.append(cause.toString());
-            sb.append("\n");
-            sb.append(cause.getMessage());
-            sb.append("\n");
-            for (StackTraceElement ste : cause.getStackTrace()) {
-                sb.append(ste.toString());
-                sb.append("\n");
+            if (cause.getMessage() != null) {
+                sb.append(cause.getMessage());
+                sb.append("\n\n");
             }
+            sw = new StringWriter();
+            exception.printStackTrace(new PrintWriter(sw));
+            sb.append(sw.toString());
             cause = cause.getCause();
         }
         log = sb.toString();
