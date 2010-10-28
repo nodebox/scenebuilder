@@ -128,7 +128,7 @@ public class Application implements BundleActivator {
      *
      * @param bundle the bundle to inspect.
      */
-    private void loadNodeClassesFromBundle(Bundle bundle) {
+    public void loadNodeClassesFromBundle(Bundle bundle) {
         String exportedNodes = getBundleHeader(bundle, "Export-Node");
         if (exportedNodes == null) return;
         for (String exportedNode : exportedNodes.split(",")) {
@@ -231,4 +231,8 @@ public class Application implements BundleActivator {
         currentDocument = document;
     }
 
+    public void showNodeLibraryManager() {
+        NodeLibraryManager manager = new NodeLibraryManager(bundleContext);
+        manager.setVisible(true);
+    }
 }

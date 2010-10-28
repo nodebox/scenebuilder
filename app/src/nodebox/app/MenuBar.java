@@ -42,7 +42,8 @@ public class MenuBar extends JMenuBar {
         fileMenu.add(new SaveAsDocumentAction(document));
         fileMenu.addSeparator();
         fileMenu.add(new ScenePropertiesAction(document));
-        //fileMenu.add(new ExportAction());
+        fileMenu.addSeparator();
+        fileMenu.add(new NodeLibrariesAction());
         if (!PlatformUtils.isMac()) {
             fileMenu.addSeparator();
             fileMenu.add(new ExitAction());
