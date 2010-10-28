@@ -10,6 +10,7 @@ import toxi.geom.Polygon2D;
  * the position (between 0.0-1.0) and the current polygon.
  */
 @Description("Variables that contain information for every voronoi region.")
+@Category("Toxiclibs 2D")
 public class VoronoiVariables extends Node {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.OUTPUT);

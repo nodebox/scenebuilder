@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 @Description("Run the contents of this network for each region of the voronoi.")
+@Category("Toxiclibs 2D")
 public class VoronoiLooper extends Network {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);
