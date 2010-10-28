@@ -10,7 +10,6 @@
     <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
         <node name="currentTime1" type="nodebox.builtins.time.CurrentTime" x="12" y="191"/>
         <node name="ellipse1" rendered="true" type="nodebox.builtins.draw.Ellipse" x="443" y="60">
-            <port name="enabled">true</port>
             <port name="x">85.42646</port>
             <port name="y">343.2862</port>
             <port name="width">50.0</port>

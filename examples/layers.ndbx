@@ -2,7 +2,6 @@
 <ndbx formatVersion="3">
     <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
         <node name="ellipse1" type="nodebox.builtins.draw.Ellipse" x="34" y="206">
-            <port name="enabled">true</port>
             <port name="x">185.0</port>
             <port name="y">158.0</port>
             <port name="width">100.0</port>
@@ -11,16 +10,7 @@
             <port name="stroke">#000000ff</port>
             <port name="strokeWeight">1.0</port>
         </node>
-        <node name="layers1" rendered="true" type="nodebox.builtins.draw.Layers" x="254" y="52">
-            <port name="enabled">true</port>
-            <port name="clear">true</port>
-            <port name="clearColor">#c0c0c0ff</port>
-            <port name="layer1">false</port>
-            <port name="layer2">false</port>
-            <port name="layer3">false</port>
-        </node>
         <node name="rect1" type="nodebox.builtins.draw.Rect" x="32" y="16">
-            <port name="enabled">true</port>
             <port name="x">83.0</port>
             <port name="y">66.0</port>
             <port name="width">100.0</port>
@@ -29,7 +19,5 @@
             <port name="stroke">#000000ff</port>
             <port name="strokeWeight">1.0</port>
         </node>
-        <conn input="layers1" inputPort="layer1" output="rect1" outputPort="output"/>
-        <conn input="layers1" inputPort="layer2" output="ellipse1" outputPort="output"/>
     </node>
 </ndbx>

@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ndbx formatVersion="3">
+    <property key="processing.drawBackground" value="false"/>
+    <property key="processing.width" value="500"/>
+    <property key="processing.height" value="500"/>
+    <property key="processing.smooth" value="true"/>
+    <property key="processing.backgroundColor" value="192,192,192"/>
+    <property key="processing.frameRate" value="60"/>
+    <property key="processing.renderer" value="processing.core.PGraphicsJava2D"/>
     <node name="root" type="nodebox.node.Network" x="0" y="0">
-        <node name="Clear2" type="nodebox.builtins.render.Clear" x="250" y="50">
-            <port name="enabled">false</port>
-            <port name="color">#404040ff</port>
-        </node>
-        <node name="Mouse1" type="nodebox.builtins.device.Mouse" x="46" y="190">
-            <port name="x">457</port>
-            <port name="y">508</port>
-        </node>
-        <node name="Rect2" type="nodebox.builtins.render.Rect" x="250" y="150">
-            <port name="enabled">true</port>
-            <port name="x">457.0</port>
-            <port name="y">508.0</port>
+        <node name="Mouse1" type="nodebox.builtins.device.Mouse" x="46" y="190"/>
+        <node name="Rect2" rendered="true" type="nodebox.builtins.draw.Rect" x="250" y="150">
+            <port name="x">36.0</port>
+            <port name="y">329.0</port>
             <port name="width">20.0</port>
             <port name="height">20.0</port>
             <port name="fill">#010303a7</port>

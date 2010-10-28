@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ndbx formatVersion="3">
+    <property key="processing.drawBackground" value="false"/>
+    <property key="processing.width" value="500"/>
+    <property key="processing.height" value="500"/>
+    <property key="processing.smooth" value="true"/>
+    <property key="processing.backgroundColor" value="192,192,192"/>
+    <property key="processing.frameRate" value="60"/>
+    <property key="processing.renderer" value="processing.core.PGraphicsJava2D"/>
     <node name="root" type="nodebox.node.Network" x="0" y="0">
         <node name="Mouse1" type="nodebox.builtins.device.Mouse" x="6" y="185"/>
         <node name="RGBColor1" type="nodebox.builtins.color.RGBColor" x="381" y="262">
-            <port name="red">119.15729</port>
-            <port name="green">119.15729</port>
-            <port name="blue">119.15729</port>
+            <port name="red">251.03769</port>
+            <port name="green">251.03769</port>
+            <port name="blue">251.03769</port>
             <port name="alpha">210.0</port>
             <port name="range">255.0</port>
         </node>
         <node name="RandomFloat1" type="nodebox.builtins.random.RandomFloat" x="187" y="270">
             <port name="minimum">0.0</port>
             <port name="maximum">255.0</port>
-            <port name="seed">26</port>
+            <port name="seed">7</port>
         </node>
         <node name="Rect1" rendered="true" type="nodebox.builtins.draw.Rect" x="535" y="84">
-            <port name="enabled">true</port>
-            <port name="x">26.0</port>
+            <port name="x">7.0</port>
             <port name="y">0.0</port>
             <port name="width">100.0</port>
             <port name="height">352.0</port>
-            <port name="fill">#777777d2</port>
+            <port name="fill">#fbfbfbd2</port>
             <port name="stroke">#000000ff</port>
             <port name="strokeWeight">1.0</port>
         </node>

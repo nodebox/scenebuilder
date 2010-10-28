@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ndbx formatVersion="3">
+    <property key="processing.drawBackground" value="false"/>
+    <property key="processing.width" value="500"/>
+    <property key="processing.height" value="500"/>
+    <property key="processing.smooth" value="true"/>
+    <property key="processing.backgroundColor" value="192,192,192"/>
+    <property key="processing.frameRate" value="60"/>
+    <property key="processing.renderer" value="processing.core.PGraphicsJava2D"/>
     <node name="root" type="nodebox.node.Network" x="0" y="0">
-        <node name="Clear1" type="nodebox.builtins.draw.Clear" x="391" y="21">
-            <port name="enabled">false</port>
-            <port name="color">#c0c0c0ff</port>
-        </node>
         <node name="CurrentTime1" type="nodebox.builtins.time.CurrentTime" x="22" y="43"/>
         <node name="Ellipse1" rendered="true" type="nodebox.builtins.draw.Ellipse" x="462" y="115">
-            <port name="enabled">true</port>
-            <port name="x">470.11713</port>
-            <port name="y">406.84967</port>
+            <port name="x">512.19116</port>
+            <port name="y">260.72177</port>
             <port name="width">20.0</port>
             <port name="height">20.0</port>
             <port name="fill">#ffffffff</port>
@@ -17,19 +19,19 @@
             <port name="strokeWeight">1.0</port>
         </node>
         <node name="SineWave1" type="nodebox.builtins.math.SineWave" x="215" y="69">
-            <port name="position">1.694</port>
-            <port name="amplitude">208.42955</port>
+            <port name="position">2.87</port>
+            <port name="amplitude">214.15381</port>
             <port name="phase">0.2</port>
             <port name="offset">300.0</port>
         </node>
         <node name="SineWave2" type="nodebox.builtins.math.SineWave" x="202" y="201">
-            <port name="position">1.694</port>
-            <port name="amplitude">208.42955</port>
+            <port name="position">2.87</port>
+            <port name="amplitude">214.15381</port>
             <port name="phase">1.0</port>
             <port name="offset">200.0</port>
         </node>
         <node name="SineWave3" type="nodebox.builtins.math.SineWave" x="17" y="195">
-            <port name="position">1.694</port>
+            <port name="position">2.87</port>
             <port name="amplitude">50.0</port>
             <port name="phase">10.0</port>
             <port name="offset">200.0</port>

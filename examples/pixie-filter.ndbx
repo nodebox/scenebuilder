@@ -2,7 +2,6 @@
 <ndbx formatVersion="3">
     <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
         <node name="image1" rendered="true" type="nodebox.builtins.draw.Image" x="417" y="147">
-            <port name="enabled">true</port>
             <port name="x">0.0</port>
             <port name="y">0.0</port>
         </node>
@@ -12,7 +11,7 @@
         <node name="loadImage1" type="nodebox.builtins.image.LoadImage" x="38" y="95">
             <port name="fileName">examples/test.png</port>
         </node>
-        <conn input="lighten1" inputPort="image" output="loadImage1" outputPort="image"/>
+        <conn input="lighten1" inputPort="image" output="loadImage1" outputPort="output"/>
         <conn input="image1" inputPort="image" output="lighten1" outputPort="output"/>
     </node>
 </ndbx>
