@@ -1,6 +1,7 @@
 package nodebox.builtins.utility;
 
 import nodebox.node.*;
+import processing.core.PGraphics;
 
 /**
  * The looper is a network that executes its context multiple times, according to the amount.
@@ -29,6 +30,11 @@ public class Looper extends Network {
             childContext.setValueForNodeKey(this, KEY_INDEX, i);
             childContext.setValueForNodeKey(this, KEY_POSITION, position);
             super.execute(childContext, time);
+            super.draw(context.getGraphics(), childContext, time);
         }
+    }
+
+    @Override
+    public void draw(PGraphics g, Context context, float time) {
     }
 }

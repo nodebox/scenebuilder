@@ -1,6 +1,7 @@
 package nodebox.builtins.utility;
 
 import nodebox.node.*;
+import processing.core.PGraphics;
 
 @Description("Loop over a grid of points.")
 @Category("Utility")
@@ -42,9 +43,12 @@ public class Grid extends Network {
                 childContext.setValueForNodeKey(this, KEY_ROW_INDEX, rowIndex);
                 childContext.setValueForNodeKey(this, KEY_COLUMN_INDEX, columnIndex);
                 super.execute(childContext, time);
+                super.draw(context.getGraphics(), childContext, time);
             }
         }
+    }
 
-
+    @Override
+    public void draw(PGraphics g, Context context, float time) {
     }
 }

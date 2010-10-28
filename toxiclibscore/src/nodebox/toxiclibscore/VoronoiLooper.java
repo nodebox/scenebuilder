@@ -1,6 +1,7 @@
 package nodebox.toxiclibscore;
 
 import nodebox.node.*;
+import processing.core.PGraphics;
 import toxi.geom.Polygon2D;
 import toxi.geom.Vec2D;
 import toxi.geom.mesh2d.Voronoi;
@@ -50,8 +51,13 @@ public class VoronoiLooper extends Network {
             childContext.setValueForNodeKey(this, KEY_POSITION, position);
             childContext.setValueForNodeKey(this, KEY_POLYGON, polygon);
             super.execute(childContext, time);
+            super.draw(context.getGraphics(), childContext, time);
             index++;
         }
+    }
+
+    @Override
+    public void draw(PGraphics g, Context context, float time) {
     }
 
 }
