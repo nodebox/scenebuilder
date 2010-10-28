@@ -93,10 +93,9 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     }
 
     private void makeInterfaceForNode(Node node) {
-        JLabel nodeNameLabel = new JLabel(node.getName());
+        JLabel nodeNameLabel = new ShadowLabel(node.getName());
         forceSize(nodeNameLabel, 300, 20);
         nodeNameLabel.setHorizontalAlignment(JLabel.LEFT);
-        nodeNameLabel.setFont(NODE_LABEL_FONT);
         add(nodeNameLabel);
         add(Box.createVerticalStrut(5));
         // Include custom node interface.
