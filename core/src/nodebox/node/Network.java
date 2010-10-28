@@ -10,6 +10,7 @@ import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
 
 @Description("A node that contain other nodes")
+@Category("Utility")
 public class Network extends Node {
 
     private static final Pattern NUMBER_AT_THE_END = Pattern.compile("^(.*?)(\\d*)$");

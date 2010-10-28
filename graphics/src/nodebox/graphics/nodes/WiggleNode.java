@@ -7,6 +7,7 @@ import nodebox.node.*;
 import java.util.Random;
 
 @Description("Shift points by a random amount.")
+@Category("Geometry")
 public class WiggleNode extends FilterNode {
 
     public final FloatPort pWx = new FloatPort(this, "wx", Port.Direction.INPUT, 10);

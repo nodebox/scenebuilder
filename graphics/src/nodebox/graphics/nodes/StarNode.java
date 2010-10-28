@@ -2,18 +2,14 @@ package nodebox.graphics.nodes;
 
 import nodebox.graphics.Geometry;
 import nodebox.graphics.Path;
-import nodebox.node.Description;
-import nodebox.node.ColorPort;
-import nodebox.node.Context;
-import nodebox.node.FloatPort;
-import nodebox.node.IntPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
 import java.awt.*;
 
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Create a star shape.")
+@Category("Geometry")
 public class StarNode extends GeneratorNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);

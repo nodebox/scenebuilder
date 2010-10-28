@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.builtins
 Bundle-Name: Node-Builtins
 Bundle-Version: 1.0.0
-Bundle-Activator: nodebox.builtins.BuiltinsActivator
 Import-Package: org.osgi.framework,
   processing.core,
   nodebox.node,
@@ -12,3 +11,34 @@ Import-Package: org.osgi.framework,
   javax.swing,
   javax.swing.event,
   javax.swing.text
+Export-Node: nodebox.builtins.color.RGBColor,
+  nodebox.builtins.device.Keyboard,
+  nodebox.builtins.device.Mouse,
+  nodebox.builtins.draw.Arc,
+  nodebox.builtins.draw.Box,
+  nodebox.builtins.draw.Clear,
+  nodebox.builtins.draw.Ellipse,
+  nodebox.builtins.draw.Image,
+  nodebox.builtins.draw.Line,
+  nodebox.builtins.draw.Point,
+  nodebox.builtins.draw.Quad,
+  nodebox.builtins.draw.Rect,
+  nodebox.builtins.draw.Sequence,
+  nodebox.builtins.draw.Triangle,
+  nodebox.builtins.image.LoadImage,
+  nodebox.builtins.math.Angle,
+  nodebox.builtins.math.Clamp,
+  nodebox.builtins.math.ConvertRange,
+  nodebox.builtins.math.Coordinates,
+  nodebox.builtins.math.Distance,
+  nodebox.builtins.math.Expression,
+  nodebox.builtins.math.Reflect,
+  nodebox.builtins.math.SineWave,
+  nodebox.builtins.random.RandomFloat,
+  nodebox.builtins.time.Calendar,
+  nodebox.builtins.time.CurrentTime,
+  nodebox.builtins.utility.Grid,
+  nodebox.builtins.utility.GridVariables,
+  nodebox.builtins.utility.Looper,
+  nodebox.builtins.utility.LooperVariables
+

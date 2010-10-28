@@ -7,6 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw a rectangle.")
+@Category("Draw")
 public class Rect extends Node {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);

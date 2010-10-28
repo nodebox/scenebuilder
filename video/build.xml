@@ -22,7 +22,8 @@
     </target>
 
     <target name="embed-dependencies" depends="init">
-        <copy file="/System/Library/Java/Extensions/QTJava.zip" todir="${build}"/>
+        <!-- QTJava.zip in this location only exists on Mac. Ignore errors. -->
+        <copy file="/System/Library/Java/Extensions/QTJava.zip" todir="${build}" failonerror="false"/>
         <copy file="${lib}/processing-video.jar" todir="${build}"/>
     </target>
 

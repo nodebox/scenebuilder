@@ -7,7 +7,8 @@ import processing.core.PGraphics;
 /**
  * Even though mouse values are integers, X & Y coordinates are stored as float for compatibility.
  */
-@Description("Provide access to mouse coordinates")
+@Description("Provide access to mouse coordinates.")
+@Category("Device")
 public class Mouse extends Node {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.OUTPUT);

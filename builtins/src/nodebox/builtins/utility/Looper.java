@@ -9,6 +9,7 @@ import nodebox.node.*;
  * such as the index, total amount, and position (between 0.0-1.0).
  */
 @Description("Run the contents of this network multiple times.")
+@Category("Utility")
 public class Looper extends Network {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.INPUT, 10);

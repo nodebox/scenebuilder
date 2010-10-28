@@ -7,6 +7,7 @@ import java.awt.Color;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Change the color of a shape.")
+@Category("Geometry")
 public class ColorNode extends FilterNode {
 
     public final ColorPort pFill = new ColorPort(this, "fill", Port.Direction.INPUT, Color.WHITE);

@@ -3,8 +3,8 @@ package nodebox.builtins.math;
 import nodebox.node.*;
 
 
-@Description("Calculates the distance between two points")
-
+@Description("Calculate the distance between two points.")
+@Category("Math")
 public class Distance extends Node {
 
     public FloatPort p1X = new FloatPort(this, "x1", Port.Direction.INPUT);

@@ -1,9 +1,10 @@
 package nodebox.app;
 
-import nodebox.node.Network;
 import nodebox.node.Node;
+import nodebox.node.NodeInfo;
 import nodebox.node.NodeManager;
 import nodebox.node.Scene;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,9 @@ public class Application implements BundleActivator {
     public void start(BundleContext context) throws Exception {
         System.out.println("Starting up application.");
         instance = this;
+        this.bundleContext = context;
         manager = getNodeManager(context);
+        initializeNodeManager();
         createNewDocument();
     }
 
@@ -46,6 +50,7 @@ public class Application implements BundleActivator {
     private java.util.List<SceneDocument> documents = new ArrayList<SceneDocument>();
     private SceneDocument currentDocument;
     private JFrame hiddenFrame;
+    private BundleContext bundleContext;
 
     public Application() {
         try {
@@ -107,6 +112,52 @@ public class Application implements BundleActivator {
     private NodeManager getNodeManager(BundleContext context) {
         ServiceReference ref = context.getServiceReference(NodeManager.class.getName());
         return (NodeManager) context.getService(ref);
+    }
+
+    /**
+     * Given a valid node manager, go through all the bundles and find the declared node classes.
+     */
+    private void initializeNodeManager() {
+        for (Bundle bundle : bundleContext.getBundles()) {
+            loadNodeClassesFromBundle(bundle);
+        }
+    }
+
+    /**
+     * Go through the bundle, find the declared node classes, and add them to the node manager.
+     *
+     * @param bundle the bundle to inspect.
+     */
+    private void loadNodeClassesFromBundle(Bundle bundle) {
+        String exportedNodes = getBundleHeader(bundle, "Export-Node");
+        if (exportedNodes == null) return;
+        for (String exportedNode : exportedNodes.split(",")) {
+            exportedNode = exportedNode.trim();
+            try {
+                Class<? extends Node> nodeClass = (Class<? extends Node>) loadNodeClassFromBundle(bundle, exportedNode);
+                if (nodeClass == null) {
+                    logger.warning("Bundle " + bundle.getSymbolicName() + ": could not load class " + exportedNode);
+                    continue;
+                }
+                manager.registerNodeClass(nodeClass);
+            } catch (ClassCastException e) {
+                logger.warning("Bundle " + bundle.getSymbolicName() + ": "+ exportedNode + " is not a Node class.");
+            }
+        }
+    }
+
+    private String getBundleHeader(Bundle bundle, String header) {
+        Dictionary d = bundle.getHeaders();
+        Object value = d.get(header);
+        return value == null ? null : value.toString();
+    }
+
+    private Class loadNodeClassFromBundle(Bundle bundle, String nodeClass) {
+        try {
+            return bundle.loadClass(nodeClass);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 
     //// Document management ////

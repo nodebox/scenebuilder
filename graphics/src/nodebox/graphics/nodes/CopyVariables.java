@@ -9,6 +9,7 @@ import nodebox.node.*;
  * and the position (between 0.0-1.0).
  */
 @Description("Variables that contain information for every loop execution.")
+@Category("Geometry")
 public class CopyVariables extends Node {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.OUTPUT);

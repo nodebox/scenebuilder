@@ -3,6 +3,8 @@ package nodebox.graphics.nodes;
 import nodebox.graphics.Geometry;
 import nodebox.node.*;
 
+@Description("Generates new points evenly spaced along the given geometry.")
+@Category("Geometry")
 public class ResampleNode extends FilterNode {
 
     public static final String METHOD_LENGTH = "length";

@@ -2,6 +2,7 @@ package nodebox.node;
 
 import java.util.*;
 
+import static nodebox.util.Preconditions.checkArgument;
 import static nodebox.util.Preconditions.checkNotNull;
 
 public class NodeManager {
@@ -15,28 +16,35 @@ public class NodeManager {
         return nodeId(node.getClass());
     }
 
+    public static String nodeId(NodeInfo info) {
+        checkNotNull(info);
+        return nodeId(info.getNodeClass());
+    }
+
     public static String nodeId(Class<? extends Node> nodeClass) {
         checkNotNull(nodeClass);
         return nodeClass.getName();
     }
 
     public NodeManager() {
-        registerNodeClass(Network.class, "Utility");
+        registerNodeInfo(NodeInfo.nodeInfoFromClass(Network.class));
     }
 
-    public void registerNodeClass(Class<? extends Node> nodeClass, String category) {
-        checkNotNull(nodeClass);
-        checkNotNull(category);
-        System.out.println("Adding node class " + nodeId(nodeClass));
-        NodeInfo info = new NodeInfo(nodeClass, category);
-        nodeInfoMap.put(nodeId(nodeClass), info);
+    public void registerNodeClass(Class<? extends Node> nodeClass) {
+        registerNodeInfo(NodeInfo.nodeInfoFromClass(nodeClass));
+    }
+
+    public void registerNodeInfo(NodeInfo info) {
+        checkNotNull(info);
+        System.out.println("Adding node class " + nodeId(info));
+        nodeInfoMap.put(nodeId(info), info);
         invalidateCategoryMap();
     }
 
-    public void unregisterNodeClass(Class<? extends Node> nodeClass) {
-        checkNotNull(nodeClass);
-        System.out.println("Removing node class " + nodeClass);
-        nodeInfoMap.remove(nodeClass.getName());
+    public void unregisterNodeInfo(String nodeId) {
+        checkNotNull(nodeId);
+        System.out.println("Removing node class " + nodeId);
+        nodeInfoMap.remove(nodeId);
         invalidateCategoryMap();
     }
 
@@ -44,7 +52,7 @@ public class NodeManager {
         checkNotNull(nodeId);
         NodeInfo info = nodeInfoMap.get(nodeId);
         if (info != null) {
-            return info.nodeClass;
+            return info.getNodeClass();
         } else {
             return null;
         }
@@ -58,8 +66,8 @@ public class NodeManager {
         if (categoryMap != null) return;
         categoryMap = new HashMap<String, Set<NodeInfo>>(nodeInfoMap.size() / 2);
         for (NodeInfo info : nodeInfoMap.values()) {
-            String category = info.category;
-            Set<NodeInfo> nodeInfoSet = categoryMap.get(info.category);
+            String category = info.getCategory();
+            Set<NodeInfo> nodeInfoSet = categoryMap.get(info.getCategory());
             if (nodeInfoSet == null) {
                 nodeInfoSet = new HashSet<NodeInfo>();
                 categoryMap.put(category, nodeInfoSet);
@@ -68,9 +76,16 @@ public class NodeManager {
         }
     }
 
-    public Set<String> getNodeCategories() {
+    public List<String> getNodeCategories() {
         updateCategoryMap();
-        return categoryMap.keySet();
+        return new ArrayList<String>(categoryMap.keySet());
+    }
+
+    public List<NodeInfo> getNodeInfoList(String category) {
+        checkNotNull(category);
+        updateCategoryMap();
+        List<NodeInfo> nodeInfoList = new ArrayList<NodeInfo>(categoryMap.get(category));
+        return nodeInfoList;
     }
 
     public Set<Class<? extends Node>> getNodeClasses(String category) {
@@ -87,7 +102,7 @@ public class NodeManager {
     private Set<Class<? extends Node>> extractNodeClasses(Collection<NodeInfo> nodeInfoSet) {
         HashSet<Class<? extends Node>> nodeClassSet = new HashSet<Class<? extends Node>>();
         for (NodeInfo nodeInfo : nodeInfoSet) {
-            nodeClassSet.add(nodeInfo.nodeClass);
+            nodeClassSet.add(nodeInfo.getNodeClass());
         }
         return nodeClassSet;
     }
@@ -111,16 +126,6 @@ public class NodeManager {
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    private class NodeInfo {
-        public final Class<? extends Node> nodeClass;
-        public final String category;
-
-        private NodeInfo(Class<? extends Node> nodeClass, String category) {
-            this.nodeClass = nodeClass;
-            this.category = category;
         }
     }
 

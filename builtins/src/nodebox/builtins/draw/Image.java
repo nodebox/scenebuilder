@@ -4,7 +4,8 @@ import nodebox.node.*;
 import processing.core.PGraphics;
 import processing.core.PImage;
 
-@Description("Draw an image")
+@Description("Draw an image.")
+@Category("Draw")
 public class Image extends Node {
 
     public final ImagePort pImage = new ImagePort(this, "image", Port.Direction.INPUT);

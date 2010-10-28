@@ -1,10 +1,12 @@
 package nodebox.pixie;
 
+import nodebox.node.Category;
 import nodebox.node.Description;
 import nodebox.node.IntPort;
 import nodebox.node.Port;
 
-@Description("Grays out an image by averaging each pixel with white")
+@Description("Gray out an image by averaging each pixel with white.")
+@Category("Image")
 public class Grayscale extends PointFilter {
 
     @Override

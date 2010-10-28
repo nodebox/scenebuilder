@@ -4,7 +4,8 @@ import nodebox.graphics.Geometry;
 import nodebox.graphics.Transform;
 import nodebox.node.*;
 
-@Description("Transforms the location, rotation and scale of a shape.")
+@Description("Transform the location, rotation and scale of a shape.")
+@Category("Geometry")
 public class TransformNode extends FilterNode {
 
     public final StringPort pOrder = new StringPort(this, "order", Port.Direction.INPUT, "trs");

@@ -4,7 +4,8 @@ import nodebox.node.*;
 
 import static nodebox.util.ProcessingSupport.clamp;
 
-@Description("Contain a value between a given minimum and maximum")
+@Description("Contain a value between a given minimum and maximum.")
+@Category("Math")
 public class Clamp extends Node {
 
     public FloatPort pValue = new FloatPort(this, "value", Port.Direction.INPUT);

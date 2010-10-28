@@ -2,11 +2,10 @@ package nodebox.graphics.nodes;
 
 import nodebox.graphics.Geometry;
 import nodebox.graphics.Path;
-import nodebox.node.Context;
-import nodebox.node.FloatPort;
-import nodebox.node.IntPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
+@Description("Generate a number of points in a rectangular grid.")
+@Category("Geometry")
 public class GridNode extends GeneratorNode {
 
     public final FloatPort pWidth = new FloatPort(this, "width", Port.Direction.INPUT, 300f);

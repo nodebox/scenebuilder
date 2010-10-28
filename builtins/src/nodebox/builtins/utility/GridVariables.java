@@ -8,6 +8,7 @@ import nodebox.node.*;
  * For each iteration, the grid variables provide the row and column index and the total amount of rows and columns.
  */
 @Description("Variables that contain information for every point in the grid.")
+@Category("Utility")
 public class GridVariables extends Node {
 
     public final IntPort pRows = new IntPort(this, "rows", Port.Direction.OUTPUT);

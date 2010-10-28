@@ -6,6 +6,8 @@ import nodebox.graphics.Transform;
 import nodebox.node.*;
 import java.util.List;
 
+@Description("Places geometry on the points of the template geometry.")
+@Category("Geometry")
 public class PlaceNode extends FilterNode {
 
     public final GeometryPort pTemplate = new GeometryPort(this, "template", Port.Direction.INPUT);

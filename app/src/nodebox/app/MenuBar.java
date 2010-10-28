@@ -2,6 +2,7 @@ package nodebox.app;
 
 import nodebox.app.actions.*;
 import nodebox.node.Node;
+import nodebox.node.NodeInfo;
 import nodebox.node.NodeManager;
 
 import javax.swing.*;
@@ -65,8 +66,8 @@ public class MenuBar extends JMenuBar {
         if (manager != null) {
             for (String category : manager.getNodeCategories()) {
                 JMenu categoryMenu = createMenu(category);
-                for (Class<? extends Node> nodeClass : manager.getNodeClasses(category)) {
-                    categoryMenu.add(new CreateNodeAction(document, nodeClass.getSimpleName(), nodeClass));
+                for (NodeInfo nodeInfo: manager.getNodeInfoList(category)) {
+                    categoryMenu.add(new CreateNodeAction(document, nodeInfo));
                 }
                 createMenu.add(categoryMenu);
             }

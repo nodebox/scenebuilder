@@ -2,8 +2,8 @@ package nodebox.builtins.math;
 
 import nodebox.node.*;
 
-@Description("Calculates the location of a point based on angle and distance")
-
+@Description("Calculates the location of a point based on angle and distance.")
+@Category("Math")
 public class Coordinates extends Node {
 
     public FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);

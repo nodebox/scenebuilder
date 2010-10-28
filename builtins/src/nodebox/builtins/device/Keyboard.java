@@ -4,7 +4,8 @@ import nodebox.node.*;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 
-@Description("Provide access to keyboard data")
+@Description("Provide access to keyboard data.")
+@Category("Device")
 public class Keyboard extends Node {
 
     public final StringPort pKey = new StringPort(this, "key", Port.Direction.OUTPUT, "");

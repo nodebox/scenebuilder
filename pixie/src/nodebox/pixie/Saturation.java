@@ -1,10 +1,12 @@
 package nodebox.pixie;
 
+import nodebox.node.Category;
 import nodebox.node.Description;
 import nodebox.node.IntPort;
 import nodebox.node.Port;
 
-@Description("Saturates an image.")
+@Description("Saturate an image.")
+@Category("Image")
 public class Saturation extends PointFilter {
 
     public final IntPort pValue = new IntPort(this, "value", Port.Direction.INPUT,5);

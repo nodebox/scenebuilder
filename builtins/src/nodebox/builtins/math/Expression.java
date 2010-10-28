@@ -17,7 +17,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Description("Write a mathematical expression.")
+@Description("Evaluate a mathematical expression.")
+@Category("Math")
 public class Expression extends Node {
 
     private static ParserContext parserContext = new ParserContext();

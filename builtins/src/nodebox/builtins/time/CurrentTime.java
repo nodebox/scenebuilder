@@ -2,7 +2,8 @@ package nodebox.builtins.time;
 
 import nodebox.node.*;
 
-@Description("Provides access to the current time, as the seconds from the start of the run.")
+@Description("Provide access to the current time, as the seconds from the start of the run.")
+@Category("Time")
 public class CurrentTime extends Node {
 
     public FloatPort pTime = new FloatPort(this, "time", Port.Direction.OUTPUT);

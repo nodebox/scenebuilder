@@ -3,7 +3,8 @@ package nodebox.builtins.random;
 import nodebox.node.*;
 import nodebox.util.ProcessingSupport;
 
-@Description("Generates a pseudo-random value between minimum and maximum.")
+@Description("Generate a pseudo-random value between minimum and maximum.")
+@Category("Random")
 public class RandomFloat extends Node {
 
     public FloatPort pMinimum = new FloatPort(this, "minimum", Port.Direction.INPUT, 0f);

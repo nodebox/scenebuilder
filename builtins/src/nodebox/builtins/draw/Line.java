@@ -6,7 +6,8 @@ import processing.core.PGraphics;
 
 import java.awt.*;
 
-@Description("Draw a line")
+@Description("Draw a line.")
+@Category("Draw")
 public class Line extends Node {
 
     public final FloatPort pX1 = new FloatPort(this, "x1", Port.Direction.INPUT, 0f);

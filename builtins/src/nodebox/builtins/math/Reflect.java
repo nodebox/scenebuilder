@@ -2,9 +2,8 @@ package nodebox.builtins.math;
 
 import nodebox.node.*;
 
-@Description("Calculates the angle between two points")
-
-
+@Description("Calculate the angle between two points.")
+@Category("Math")
 public class Reflect extends Node {
 
     public FloatPort p1X = new FloatPort(this, "x1", Port.Direction.INPUT);

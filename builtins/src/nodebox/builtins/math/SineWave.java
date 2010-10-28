@@ -4,7 +4,8 @@ import nodebox.node.*;
 
 import static nodebox.util.ProcessingSupport.clamp;
 
-@Description("A sine wave generator")
+@Description("Generate a sine wave.")
+@Category("Math")
 public class SineWave extends Node {
 
     public FloatPort pPosition = new FloatPort(this, "position", Port.Direction.INPUT);

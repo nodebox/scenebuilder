@@ -7,6 +7,7 @@ import nodebox.node.Network;
 import processing.core.PGraphics;
 
 @Description("Create multiple copies of a shape.")
+@Category("Geometry")
 public class CopyNode extends Network {
 
     public final String[] orderings = {"srt", "str", "rst", "rts", "tsr", "trs"};

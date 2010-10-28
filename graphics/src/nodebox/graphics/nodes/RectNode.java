@@ -9,6 +9,7 @@ import java.awt.*;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Create rectangles and rounded rectangles.")
+@Category("Geometry")
 public class RectNode extends GeneratorNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);

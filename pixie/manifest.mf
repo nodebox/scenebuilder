@@ -3,5 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.pixie
 Bundle-Name: Node-Pixie
 Bundle-Version: 1.0.0
-Bundle-Activator: nodebox.pixie.PixieActivator
 Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util
+Export-Node: nodebox.pixie.Grayscale,
+  nodebox.pixie.Invert,
+  nodebox.pixie.InvertAlpha,
+  nodebox.pixie.Lighten,
+  nodebox.pixie.Posterize,
+  nodebox.pixie.RGBAdjust,
+  nodebox.pixie.Saturation

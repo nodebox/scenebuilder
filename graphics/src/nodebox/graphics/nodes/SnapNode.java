@@ -2,12 +2,10 @@ package nodebox.graphics.nodes;
 
 import nodebox.graphics.Geometry;
 import nodebox.graphics.Point;
-import nodebox.node.Context;
-import nodebox.node.Description;
-import nodebox.node.FloatPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
 @Description("Snap geometry to a grid.")
+@Category("Geometry")
 public class SnapNode extends FilterNode {
 
     public FloatPort pDistance = new FloatPort(this, "distance", Port.Direction.INPUT, 10f);

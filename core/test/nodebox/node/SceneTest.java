@@ -2,7 +2,6 @@ package nodebox.node;
 
 import junit.framework.TestCase;
 import processing.core.PApplet;
-import processing.core.PGraphics;
 
 import java.awt.*;
 import java.io.File;
@@ -14,9 +13,9 @@ public class SceneTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         manager = new NodeManager();
-        manager.registerNodeClass(AllTypesNode.class, "Test");
-        manager.registerNodeClass(OutputNode.class, "Test");
-        manager.registerNodeClass(InputNode.class, "Test");
+        manager.registerNodeInfo(AllTypesNode.class, "Test");
+        manager.registerNodeInfo(OutputNode.class, "Test");
+        manager.registerNodeInfo(InputNode.class, "Test");
     }
 
     public void testLoad() {

@@ -3,6 +3,7 @@ package nodebox.builtins.utility;
 import nodebox.node.*;
 
 @Description("Loop over a grid of points.")
+@Category("Utility")
 public class Grid extends Network {
 
     public final IntPort pRows = new IntPort(this, "rows", Port.Direction.INPUT, 10);

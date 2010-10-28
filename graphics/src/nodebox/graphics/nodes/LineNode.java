@@ -9,6 +9,8 @@ import java.awt.*;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 import static nodebox.util.ProcessingSupport.coordinates;
 
+@Description("Generates a line based on a starting point and angle/distance.")
+@Category("Geometry")
 public class LineNode extends GeneratorNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);

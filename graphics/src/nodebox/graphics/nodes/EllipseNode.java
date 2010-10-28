@@ -2,15 +2,14 @@ package nodebox.graphics.nodes;
 
 import nodebox.graphics.Geometry;
 import nodebox.graphics.Path;
-import nodebox.node.ColorPort;
-import nodebox.node.Context;
-import nodebox.node.FloatPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
 import java.awt.*;
 
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
+@Description("Generate ellipses and circles.")
+@Category("Geometry")
 public class EllipseNode extends GeneratorNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);

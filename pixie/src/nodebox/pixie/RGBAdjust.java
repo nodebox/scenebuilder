@@ -1,11 +1,9 @@
 package nodebox.pixie;
 
-import nodebox.node.Description;
-import nodebox.node.FloatPort;
-import nodebox.node.IntPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
-@Description("Grays out an image by averaging each pixel with white")
+@Description("Adjust the red green and blue component of the image.")
+@Category("Image")
 public class RGBAdjust extends PointFilter {
 
     public final FloatPort pRed = new FloatPort(this, "red", Port.Direction.INPUT,(float).5);

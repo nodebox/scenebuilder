@@ -4,6 +4,7 @@ import nodebox.node.*;
 import processing.core.PGraphics;
 
 @Description("Captures video images.")
+@Category("Video")
 public class Capture extends Node {
 
     private static final int CAPTURE_WIDTH = 320;

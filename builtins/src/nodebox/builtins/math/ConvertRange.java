@@ -4,7 +4,8 @@ import nodebox.node.*;
 
 import static nodebox.util.ProcessingSupport.clamp;
 
-@Description("Given a value and its range, convert the value to the new range")
+@Description("Given a value and its range, convert the value to the new range.")
+@Category("Math")
 public class ConvertRange extends Node {
 
     public final int OVERFLOW_IGNORE = 0;

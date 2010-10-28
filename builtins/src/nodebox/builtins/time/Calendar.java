@@ -3,6 +3,7 @@ package nodebox.builtins.time;
 import nodebox.node.*;
 
 @Description("Provide the current time in different formats")
+@Category("Calendar")
 public class Calendar extends Node {
 
     public IntPort pDay = new IntPort(this, "day", Port.Direction.OUTPUT);

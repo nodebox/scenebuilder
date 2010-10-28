@@ -9,6 +9,8 @@ import java.awt.*;
 
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
+@Description("Generate a path made up of text.")
+@Category("Geometry")
 public class TextPathNode extends GeneratorNode {
 
     public StringPort pText = new StringPort(this, "text", Port.Direction.INPUT, "hello");

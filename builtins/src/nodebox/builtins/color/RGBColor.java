@@ -7,6 +7,7 @@ import java.awt.*;
 import static nodebox.util.ProcessingSupport.clamp;
 
 @Description("Create a color using RGB values.")
+@Category("Color")
 public class RGBColor extends Node {
 
     public final FloatPort pRed = new FloatPort(this, "red", Port.Direction.INPUT);

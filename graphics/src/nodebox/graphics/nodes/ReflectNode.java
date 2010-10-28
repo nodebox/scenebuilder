@@ -11,6 +11,7 @@ import static nodebox.util.ProcessingSupport.radians;
 
 
 @Description("Mirrors and copies geometry across an invisible axis.")
+@Category("Geometry")
 public class ReflectNode extends FilterNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 50);

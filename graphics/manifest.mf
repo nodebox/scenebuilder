@@ -3,6 +3,23 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.graphics
 Bundle-Name: NodeBox-Graphics
 Bundle-Version: 1.0.0
-Bundle-Activator: nodebox.graphics.nodes.GraphicsNodesActivator
 Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util
 Export-Package: nodebox.graphics
+Export-Node: nodebox.graphics.nodes.ColorNode,
+  nodebox.graphics.nodes.CopyNode,
+  nodebox.graphics.nodes.CopyVariables,
+  nodebox.graphics.nodes.EllipseNode,
+  nodebox.graphics.nodes.GridNode,
+  nodebox.graphics.nodes.LineNode,
+  nodebox.graphics.nodes.PlaceNode,
+  nodebox.graphics.nodes.PolygonNode,
+  nodebox.graphics.nodes.RectNode,
+  nodebox.graphics.nodes.ReflectNode,
+  nodebox.graphics.nodes.ResampleNode,
+  nodebox.graphics.nodes.ScatterNode,
+  nodebox.graphics.nodes.SnapNode,
+  nodebox.graphics.nodes.StarNode,
+  nodebox.graphics.nodes.TextPathNode,
+  nodebox.graphics.nodes.TransformNode,
+  nodebox.graphics.nodes.WiggleNode
+

@@ -4,9 +4,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * The description provides a helpful text for node users.
+ * The category provides a taxonomy for nodes.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Description {
+public @interface Category {
     String value();
 }

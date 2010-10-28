@@ -10,6 +10,8 @@ import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 import static nodebox.util.ProcessingSupport.angle;
 import static nodebox.util.ProcessingSupport.coordinates;
 
+@Description("Draws a polygon with an arbitrary number of sides.")
+@Category("Geometry")
 public class PolygonNode extends GeneratorNode {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);

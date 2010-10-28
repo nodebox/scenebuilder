@@ -3,6 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.toxiclibscore
 Bundle-Name: Node-ToxiclibsCore
 Bundle-Version: 1.0.0
-Bundle-Activator: nodebox.toxiclibscore.ToxiclibsCoreActivator
 Bundle-ClassPath: .,toxiclibscore.jar
 Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util
+Export-Node: nodebox.toxiclibscore.Polygon2DDrawer,
+  nodebox.toxiclibscore.VoronoiDrawer,
+  nodebox.toxiclibscore.VoronoiLooper,
+  nodebox.toxiclibscore.VoronoiVariables

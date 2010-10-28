@@ -1,10 +1,12 @@
 package nodebox.pixie;
 
+import nodebox.node.Category;
 import nodebox.node.Description;
 import nodebox.node.IntPort;
 import nodebox.node.Port;
 
 @Description("Lighten an image.")
+@Category("Image")
 public class Lighten extends PointFilter {
 
     public final IntPort pValue = new IntPort(this, "value", Port.Direction.INPUT);

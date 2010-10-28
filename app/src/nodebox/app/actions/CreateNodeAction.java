@@ -3,23 +3,23 @@ package nodebox.app.actions;
 import nodebox.app.SceneDocument;
 import nodebox.node.Description;
 import nodebox.node.Node;
+import nodebox.node.NodeInfo;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class CreateNodeAction extends AbstractDocumentAction {
 
-    private Class<? extends Node> nodeClass;
+    private NodeInfo nodeInfo;
 
-    public CreateNodeAction(SceneDocument document, String name, Class<? extends Node> nodeClass) {
+    public CreateNodeAction(SceneDocument document, NodeInfo info) {
         super(document);
-        putValue(NAME, name);
-        this.nodeClass = nodeClass;
-        Description description = nodeClass.getAnnotation(Description.class);
-        putValue(SHORT_DESCRIPTION, description);
+        this.nodeInfo = info;
+        putValue(NAME, info.getNodeClass().getSimpleName());
+        putValue(SHORT_DESCRIPTION, info.getDescription());
     }
 
     public void actionPerformed(ActionEvent e) {
-        getDocument().createNode(nodeClass);
+        getDocument().createNode(nodeInfo.getNodeClass());
     }
 }

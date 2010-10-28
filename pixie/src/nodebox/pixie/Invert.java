@@ -1,8 +1,10 @@
 package nodebox.pixie;
 
+import nodebox.node.Category;
 import nodebox.node.Description;
 
-@Description("Inverts an image.")
+@Description("Invert an image.")
+@Category("Image")
 public class Invert extends PointFilter {
 
     @Override

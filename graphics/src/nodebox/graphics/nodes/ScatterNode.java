@@ -9,6 +9,7 @@ import nodebox.node.*;
 import java.util.Random;
 
 @Description("Generate points within the boundaries of a shape.")
+@Category("Geometry")
 public class ScatterNode extends FilterNode {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.INPUT, 20);
