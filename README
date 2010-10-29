@@ -1,6 +1,17 @@
-NodeBox is a node-based app on top of Processing for visual coders.
+SceneBuilder is the next generation of NodeBox: a node-based interface to Processing for visual coders. 
 
-To run NodeBox:
+SceneBuilder can be considered to be in "alpha" state: it runs, but a lot of important features are still missing. Do not depend on it for day-to-day work, and don't forget to save early and often!
 
+To start hacking on it:
+
+  git clone git://github.com/nodebox/scenebuilder.git
+  cd scenebuilder
   ant run
 
+To make a full Mac app:
+
+  ant dist-mac
+
+The resulting DMG file is in dist/mac/Scenebuilder-[version].dmg
+
+Note that the application does not run from the DMG: copy the app to the desktop first.
