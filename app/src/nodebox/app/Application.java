@@ -54,10 +54,11 @@ public class Application implements BundleActivator {
 
     public Application() {
         try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
         readVersion();
         //registerForMacOSXEvents();
     }
