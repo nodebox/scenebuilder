@@ -42,5 +42,6 @@ Export-Node: nodebox.builtins.color.RGBColor,
   nodebox.builtins.utility.Grid,
   nodebox.builtins.utility.GridVariables,
   nodebox.builtins.utility.Looper,
-  nodebox.builtins.utility.LooperVariables
+  nodebox.builtins.utility.LooperVariables,
+  nodebox.builtins.utility.Trigger
 
