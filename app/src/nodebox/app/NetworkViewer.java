@@ -193,6 +193,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
     }
 
     public void mouseClicked(MouseEvent e) {
+        requestFocusInWindow();
         NodeView view = getNodeAt(e.getPoint());
         if (view == null) return;
         if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2) {
@@ -261,6 +262,13 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             spaceDown = true;
+        } else if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+            for (Node node : selection) {
+                if (node.getNetwork() != null) {
+                    node.getNetwork().removeChild(node);
+                }
+            }
+            updateView();
         }
     }
 
