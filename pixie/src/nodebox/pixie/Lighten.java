@@ -3,7 +3,7 @@ package nodebox.pixie;
 import nodebox.node.*;
 
 @Description("Lighten an image.")
-@Drawable(true)
+@Drawable
 @Category("Image")
 public class Lighten extends PointFilter {
 

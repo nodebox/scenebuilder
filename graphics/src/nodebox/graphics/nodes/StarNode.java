@@ -9,7 +9,7 @@ import java.awt.*;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Create a star shape.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class StarNode extends GeneratorNode {
 

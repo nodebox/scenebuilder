@@ -5,7 +5,7 @@ import nodebox.graphics.Path;
 import nodebox.node.*;
 
 @Description("Generate a number of points in a rectangular grid.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class GridNode extends GeneratorNode {
 

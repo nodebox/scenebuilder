@@ -11,7 +11,7 @@ import static nodebox.util.ProcessingSupport.angle;
 import static nodebox.util.ProcessingSupport.coordinates;
 
 @Description("Draws a polygon with an arbitrary number of sides.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class PolygonNode extends GeneratorNode {
 

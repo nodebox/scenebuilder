@@ -5,7 +5,7 @@ import nodebox.graphics.Transform;
 import nodebox.node.*;
 
 @Description("Transform the location, rotation and scale of a shape.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class TransformNode extends FilterNode {
 

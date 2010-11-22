@@ -3,7 +3,7 @@ package nodebox.pixie;
 import nodebox.node.*;
 
 @Description("Saturate an image.")
-@Drawable(true)
+@Drawable
 @Category("Image")
 public class Saturation extends PointFilter {
 

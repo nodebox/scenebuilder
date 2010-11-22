@@ -5,7 +5,7 @@ import nodebox.graphics.Point;
 import nodebox.node.*;
 
 @Description("Snap geometry to a grid.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class SnapNode extends FilterNode {
 

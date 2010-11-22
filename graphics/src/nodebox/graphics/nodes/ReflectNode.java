@@ -11,7 +11,7 @@ import static nodebox.util.ProcessingSupport.radians;
 
 
 @Description("Mirrors and copies geometry across an invisible axis.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class ReflectNode extends FilterNode {
 

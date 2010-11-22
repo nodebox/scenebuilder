@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw a triangle.")
-@Drawable(true)
+@Drawable
 @Category("Draw")
 public class Triangle extends Node {
 

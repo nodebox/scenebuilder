@@ -7,7 +7,7 @@ import java.awt.Color;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Change the color of a shape.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class ColorNode extends FilterNode {
 

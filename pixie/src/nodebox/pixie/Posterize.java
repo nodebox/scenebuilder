@@ -3,7 +3,7 @@ package nodebox.pixie;
 import nodebox.node.*;
 
 @Description("Reduce the number of colors in an image.")
-@Drawable(true)
+@Drawable
 @Category("Image")
 public class Posterize extends PointFilter {
 

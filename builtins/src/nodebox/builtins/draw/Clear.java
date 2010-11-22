@@ -8,7 +8,7 @@ import java.awt.*;
 
 
 @Description("Clear the canvas.")
-@Drawable(true)
+@Drawable
 @Category("Draw")
 public class Clear extends Node {
 

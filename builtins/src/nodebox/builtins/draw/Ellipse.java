@@ -7,8 +7,8 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw an ellipse.")
-@Drawable(true)
 @Category("Draw")
+@Drawable
 public class Ellipse extends Node {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 0f);

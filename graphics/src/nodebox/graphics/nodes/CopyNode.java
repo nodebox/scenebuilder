@@ -7,7 +7,7 @@ import nodebox.node.Network;
 import processing.core.PGraphics;
 
 @Description("Create multiple copies of a shape.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class CopyNode extends Network {
 

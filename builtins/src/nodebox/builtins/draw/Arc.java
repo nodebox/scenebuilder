@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw an arc.")
-@Drawable(true)
+@Drawable
 @Category("Draw")
 public class Arc extends Node {
 

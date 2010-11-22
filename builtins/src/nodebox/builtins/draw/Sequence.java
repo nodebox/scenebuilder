@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Description("Define the order in which input nodes are executed.")
-@Drawable(true)
+@Drawable
 @Category("Draw")
 public class Sequence extends Node {
 

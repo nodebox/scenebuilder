@@ -5,7 +5,7 @@ import nodebox.node.Description;
 import nodebox.node.Drawable;
 
 @Description("Invert an image.")
-@Drawable(true)
+@Drawable
 @Category("Image")
 public class Invert extends PointFilter {
 

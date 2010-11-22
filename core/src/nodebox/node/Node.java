@@ -42,11 +42,7 @@ public abstract class Node {
 
     public boolean canDraw() {
         Drawable drawable = getClass().getAnnotation(Drawable.class);
-        if (drawable != null) {
-            return drawable.value();
-        } else {
-            return false;
-        }
+        return (drawable != null);
     }
 
     public Scene getScene() {

@@ -7,7 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw a rectangle.")
-@Drawable(true)
+@Drawable
 @Category("Draw")
 public class Rect extends Node {
 

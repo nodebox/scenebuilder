@@ -9,7 +9,7 @@ import java.awt.*;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Create rectangles and rounded rectangles.")
-@Drawable(true)
+@Drawable
 @Category("Geometry")
 public class RectNode extends GeneratorNode {
 

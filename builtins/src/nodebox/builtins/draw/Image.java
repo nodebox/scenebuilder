@@ -5,7 +5,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 
 @Description("Draw an image.")
-@Drawable(true)
+@Drawable
 @Category("Draw")
 public class Image extends Node {
 

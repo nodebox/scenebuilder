@@ -5,7 +5,7 @@ import processing.core.PGraphics;
 import processing.core.PImage;
 
 @Description("Load an image from disk.")
-@Drawable(true)
+@Drawable
 @Category("Image")
 public class LoadImage extends Node {
 
