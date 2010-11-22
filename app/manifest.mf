@@ -8,6 +8,7 @@ Bundle-ClassPath: .,jna.jar,miglayout.jar
 Import-Package: org.osgi.framework,
     javax.swing,
     javax.swing.border,
+    javax.swing.text,
     javax.swing.event,
     javax.swing.filechooser,
     javax.imageio,

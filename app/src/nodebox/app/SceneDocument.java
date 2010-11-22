@@ -76,6 +76,10 @@ public class SceneDocument extends JFrame {
         });
     }
 
+    public NodeManager getManager() {
+        return manager;
+    }
+
     public SceneRenderer getRenderer() {
         return renderer;
     }

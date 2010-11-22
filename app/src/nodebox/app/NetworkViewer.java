@@ -54,6 +54,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         setLayout(null);
         setFocusable(true);
         initPopupMenus();
+        setFocusTraversalKeysEnabled(false);
     }
 
     public Network getCurrentNetwork() {
@@ -269,6 +270,8 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
                 }
             }
             updateView();
+        } else if (e.getKeyCode() == KeyEvent.VK_TAB) {
+            showNodeSelectionDialog();
         }
     }
 
@@ -307,6 +310,16 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         nodeViewPopup.add(new DeleteAction(node));
         nodeViewPopup.show(NetworkViewer.this, e.getX(), e.getY());
         return true;
+    }
+
+    //// Node manager ////
+
+    public void showNodeSelectionDialog() {
+        NodeSelectionDialog dialog = new NodeSelectionDialog(document, document.getManager());
+        dialog.setVisible(true);
+        if (dialog.getSelectedNodeInfo() != null) {
+            document.createNode(dialog.getSelectedNodeInfo().getNodeClass());
+        }
     }
 
     //// Connections ////

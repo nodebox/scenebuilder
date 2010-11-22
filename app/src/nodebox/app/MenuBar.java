@@ -63,7 +63,7 @@ public class MenuBar extends JMenuBar {
         add(editMenu);
 
         // Node menu
-        JMenu createMenu = createMenu("Create");
+/*        JMenu createMenu = createMenu("Create");
         if (manager != null) {
             for (String category : manager.getNodeCategories()) {
                 JMenu categoryMenu = createMenu(category);
@@ -73,7 +73,7 @@ public class MenuBar extends JMenuBar {
                 createMenu.add(categoryMenu);
             }
         }
-        add(createMenu);
+        add(createMenu); */
     }
 
     private JMenu createMenu(String title) {
