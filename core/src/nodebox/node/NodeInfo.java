@@ -13,20 +13,24 @@ public final class NodeInfo {
         String description = descriptionAnnotation != null ? descriptionAnnotation.value() : "";
         Category categoryAnnotation = nodeClass.getAnnotation(Category.class);
         String category = categoryAnnotation != null ? categoryAnnotation.value() : "Uncategorized";
-        return new NodeInfo(nodeClass, description, category);
+        Drawable drawableAnnotation = nodeClass.getAnnotation(Drawable.class);
+        boolean drawable = (drawableAnnotation != null);
+        return new NodeInfo(nodeClass, description, category, drawable);
     }
 
     private final Class<? extends Node> nodeClass;
     private final String description;
     private final String category;
+    private final boolean drawable;
 
-    public NodeInfo(Class<? extends Node> nodeClass, String description, String category) {
+    public NodeInfo(Class<? extends Node> nodeClass, String description, String category, boolean drawable) {
         checkNotNull(nodeClass);
         checkNotNull(description);
         checkNotNull(category);
         this.nodeClass = nodeClass;
         this.description = description;
         this.category = category;
+        this.drawable = drawable;
     }
 
     public Class<? extends Node> getNodeClass() {
@@ -39,6 +43,10 @@ public final class NodeInfo {
 
     public String getCategory() {
         return category;
+    }
+
+    public boolean isDrawable() {
+        return drawable;
     }
 
     @Override
