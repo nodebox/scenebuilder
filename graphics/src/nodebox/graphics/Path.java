@@ -1013,7 +1013,13 @@ public class Path extends AbstractGeometry implements Colorizable, Iterable<Poin
         if (getPointCount() == 0) return;
         setStyle(g, fillColor, strokeColor, strokeWidth);
         g.beginShape();
+        boolean firstContour = true;
         for (Contour c : contours) {
+            if (firstContour) {
+                Point pt = c.getPoints().get(0);
+                g.vertex(pt.x, pt.y);
+                firstContour = false;
+            }
             c.innerDraw(g);
             g.breakShape();
         }

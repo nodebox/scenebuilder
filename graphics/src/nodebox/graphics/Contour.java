@@ -410,7 +410,6 @@ public class Contour extends AbstractGeometry {
         if (closed) {
             // Close bezier path manually, because we use breakShape.
             pt = points.get(0);
-            // TODO the first contour doesn't close.
             g.vertex(pt.x, pt.y);
         }
     }
