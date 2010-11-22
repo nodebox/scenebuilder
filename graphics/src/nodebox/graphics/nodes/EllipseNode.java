@@ -9,6 +9,7 @@ import java.awt.*;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Generate ellipses and circles.")
+@Drawable(true)
 @Category("Geometry")
 public class EllipseNode extends GeneratorNode {
 

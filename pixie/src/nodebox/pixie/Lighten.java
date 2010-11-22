@@ -1,11 +1,9 @@
 package nodebox.pixie;
 
-import nodebox.node.Category;
-import nodebox.node.Description;
-import nodebox.node.IntPort;
-import nodebox.node.Port;
+import nodebox.node.*;
 
 @Description("Lighten an image.")
+@Drawable(true)
 @Category("Image")
 public class Lighten extends PointFilter {
 

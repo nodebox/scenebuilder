@@ -27,11 +27,6 @@ public class Network extends Node {
         publishedPorts = new LinkedHashSet<Port>();
     }
 
-    @Override
-    public boolean canDraw() {
-        return true;
-    }
-
     //// Children ////
 
     public List<Node> getChildren() {

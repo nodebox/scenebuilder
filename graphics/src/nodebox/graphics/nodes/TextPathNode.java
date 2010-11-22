@@ -10,6 +10,7 @@ import java.awt.*;
 import static nodebox.graphics.nodes.GraphicsSupport.setStyle;
 
 @Description("Generate a path made up of text.")
+@Drawable(true)
 @Category("Geometry")
 public class TextPathNode extends GeneratorNode {
 

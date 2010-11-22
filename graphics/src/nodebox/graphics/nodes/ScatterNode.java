@@ -9,6 +9,7 @@ import nodebox.node.*;
 import java.util.Random;
 
 @Description("Generate points within the boundaries of a shape.")
+@Drawable(true)
 @Category("Geometry")
 public class ScatterNode extends FilterNode {
 

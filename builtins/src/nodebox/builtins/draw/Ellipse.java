@@ -7,6 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw an ellipse.")
+@Drawable(true)
 @Category("Draw")
 public class Ellipse extends Node {
 

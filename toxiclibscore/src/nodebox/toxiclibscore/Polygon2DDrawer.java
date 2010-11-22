@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.Iterator;
 
 @Description("Draw a 2-dimensional polygon.")
+@Drawable(true)
 @Category("Toxiclibs 2D")
 public class Polygon2DDrawer extends Node {
 

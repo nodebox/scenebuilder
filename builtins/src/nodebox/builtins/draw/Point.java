@@ -7,6 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw a point.")
+@Drawable(true)
 @Category("Draw")
 public class Point extends Node {
 

@@ -4,6 +4,7 @@ import nodebox.node.*;
 import processing.core.PGraphics;
 
 @Description("Draw a 3-dimensional cube or box.")
+@Drawable(true)
 @Category("Draw")
 public class Box extends Node {
 

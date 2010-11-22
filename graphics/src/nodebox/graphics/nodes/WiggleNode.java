@@ -7,6 +7,7 @@ import nodebox.node.*;
 import java.util.Random;
 
 @Description("Shift points by a random amount.")
+@Drawable(true)
 @Category("Geometry")
 public class WiggleNode extends FilterNode {
 

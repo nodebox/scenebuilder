@@ -2,8 +2,10 @@ package nodebox.pixie;
 
 import nodebox.node.Category;
 import nodebox.node.Description;
+import nodebox.node.Drawable;
 
 @Description("Invert an image.")
+@Drawable(true)
 @Category("Image")
 public class Invert extends PointFilter {
 

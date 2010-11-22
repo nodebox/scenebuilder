@@ -7,6 +7,7 @@ import processing.core.PGraphics;
 import java.awt.*;
 
 @Description("Draw a four-sided polygon.")
+@Drawable(true)
 @Category("Draw")
 public class Quad extends Node {
 

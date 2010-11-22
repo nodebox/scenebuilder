@@ -7,6 +7,7 @@ import nodebox.node.*;
 import java.util.List;
 
 @Description("Places geometry on the points of the template geometry.")
+@Drawable(true)
 @Category("Geometry")
 public class PlaceNode extends FilterNode {
 

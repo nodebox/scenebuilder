@@ -4,6 +4,7 @@ import nodebox.graphics.Geometry;
 import nodebox.node.*;
 
 @Description("Generates new points evenly spaced along the given geometry.")
+@Drawable(true)
 @Category("Geometry")
 public class ResampleNode extends FilterNode {
 

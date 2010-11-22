@@ -10,6 +10,7 @@ import toxi.geom.mesh2d.Voronoi;
 import java.util.Random;
 
 @Description("Draw a voronoi shape at the given position.")
+@Drawable(true)
 @Category("Toxiclibs 2D")
 public class VoronoiDrawer extends Node {
 

@@ -4,6 +4,7 @@ import nodebox.node.*;
 import processing.core.PGraphics;
 
 @Description("Captures video images.")
+@Drawable(true)
 @Category("Video")
 public class Capture extends Node {
 
