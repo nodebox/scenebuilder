@@ -77,7 +77,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
 
     private void initPopupMenus() {
         viewerPopup = new JPopupMenu();
-        //viewerPopup.add(new NewNodeAction());
+        viewerPopup.add(new NewNodeAction());
         viewerPopup.add(new ResetViewAction());
         //viewerPopup.add(new GoUpAction());
         nodeViewPopup = new JPopupMenu();
@@ -388,6 +388,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
             if (checkForNodeViewPopup(e)) return;
             if (e.isPopupTrigger()) {
                 viewerPopup.removeAll();
+                viewerPopup.add(new NewNodeAction());
                 if (getCurrentNetwork().getNetwork() != null)
                     viewerPopup.add(new EditParentNetworkAction(getCurrentNetwork().getNetwork()));
                 viewerPopup.add(new ResetViewAction());
@@ -400,6 +401,16 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         centerX = centerY = 0;
         zoomFactor = 1.0;
         repaint();
+    }
+
+    private class NewNodeAction extends AbstractAction {
+        private NewNodeAction() {
+            super("New Node");
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            showNodeSelectionDialog();
+        }
     }
 
     private class ResetViewAction extends AbstractAction {
