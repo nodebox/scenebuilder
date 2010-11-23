@@ -13,9 +13,9 @@ public class SceneTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         manager = new NodeManager();
-        manager.registerNodeInfo(AllTypesNode.class, "Test");
-        manager.registerNodeInfo(OutputNode.class, "Test");
-        manager.registerNodeInfo(InputNode.class, "Test");
+        manager.registerNodeClass(AllTypesNode.class);
+        manager.registerNodeClass(OutputNode.class);
+        manager.registerNodeClass(InputNode.class);
     }
 
     public void testLoad() {
@@ -35,6 +35,7 @@ public class SceneTest extends TestCase {
         assertTrue(output1.getPort("output").isConnected());
         assertTrue(input1.getPort("input").isConnected());
         assertEquals(0, input1.getValue("input"));
+        input1.setRenderedNode();
         root.execute(new Context((PApplet) null), 0);
         assertEquals(99, input1.getValue("input"));
     }
@@ -53,6 +54,7 @@ public class SceneTest extends TestCase {
         assertTrue(newRoot.getChild("outputNode1").getPort("output").isConnected());
     }
 
+    @Category("Test")
     public static class AllTypesNode extends Node {
         public final IntPort pInt = new IntPort(this, "int", Port.Direction.INPUT, 42);
         public final FloatPort pFloat = new FloatPort(this, "float", Port.Direction.INPUT, 1.23f);
@@ -60,10 +62,12 @@ public class SceneTest extends TestCase {
         public final ColorPort pColor = new ColorPort(this, "color", Port.Direction.INPUT, Color.RED);
     }
 
+    @Category("Test")
     public static class OutputNode extends Node {
         public final IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT, 99);
     }
 
+    @Category("Test")
     public static class InputNode extends Node {
         public final IntPort pInput = new IntPort(this, "input", Port.Direction.INPUT, 0);
     }
