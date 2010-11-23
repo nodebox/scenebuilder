@@ -3,7 +3,7 @@ package nodebox.pixie;
 import nodebox.node.*;
 
 @Description("Adjust the red green and blue component of the image.")
-@Drawable(true)
+@Drawable
 @Category("Image")
 public class RGBAdjust extends PointFilter {
 
