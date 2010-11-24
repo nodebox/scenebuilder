@@ -4,7 +4,7 @@
         <node name="Looper1" rendered="true" type="nodebox.builtins.utility.Looper" x="468" y="113">
             <port name="amount">393</port>
             <node name="ConvertRange1" type="nodebox.builtins.math.ConvertRange" x="314" y="114">
-                <port name="value">392.0</port>
+                <port name="inputValue">392.0</port>
                 <port name="sourceMinimum">0.0</port>
                 <port name="sourceMaximum">393.0</port>
                 <port name="targetMinimum">0.0</port>
@@ -20,8 +20,8 @@
             </node>
             <node name="LooperVariables1" type="nodebox.builtins.utility.LooperVariables" x="19" y="114"/>
             <node name="Mouse2" type="nodebox.builtins.device.Mouse" x="300" y="258"/>
-            <conn input="Image2" inputPort="image" output="LoadImage2" outputPort="output"/>
-            <conn input="ConvertRange1" inputPort="value" output="LooperVariables1" outputPort="index"/>
+            <conn input="Image2" inputPort="image" output="LoadImage2" outputPort="image"/>
+            <conn input="ConvertRange1" inputPort="outputValue" output="LooperVariables1" outputPort="index"/>
             <conn input="Image2" inputPort="x" output="ConvertRange1" outputPort="outputValue"/>
             <conn input="Image2" inputPort="y" output="Mouse2" outputPort="y"/>
             <conn input="ConvertRange1" inputPort="sourceMaximum" output="LooperVariables1" outputPort="amount"/>

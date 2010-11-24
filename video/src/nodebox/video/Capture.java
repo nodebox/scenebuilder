@@ -12,7 +12,7 @@ public class Capture extends Node {
     private static final int CAPTURE_HEIGHT = 240;
     private static final int CAPTURE_FRAME_RATE = 30;
 
-    public final ImagePort pOutput = new ImagePort(this, "output", Port.Direction.OUTPUT);
+    public final ImagePort pImage = new ImagePort(this, "image", Port.Direction.OUTPUT);
     private processing.video.Capture capture;
 
     @Override
@@ -29,12 +29,12 @@ public class Capture extends Node {
         if (capture.available()) {
             capture.read();
         }
-        pOutput.set(capture.get());
+        pImage.set(capture.get());
     }
 
     @Override
     public void draw(PGraphics g, Context context, float time) {
-        g.image(pOutput.get(), 0, 0);
+        g.image(pImage.get(), 0, 0);
     }
 
     @Override

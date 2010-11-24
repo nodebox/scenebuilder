@@ -36,7 +36,7 @@
         </node>
         <node name="Calendar1" type="nodebox.builtins.time.Calendar" x="17" y="24"/>
         <node name="ConvertRange1" type="nodebox.builtins.math.ConvertRange" x="212" y="101">
-            <port name="value">16.0</port>
+            <port name="inputValue">16.0</port>
             <port name="sourceMinimum">0.0</port>
             <port name="sourceMaximum">24.0</port>
             <port name="targetMinimum">0.0</port>
@@ -44,7 +44,7 @@
             <port name="overflow">3</port>
         </node>
         <node name="ConvertRange2" type="nodebox.builtins.math.ConvertRange" x="228" y="232">
-            <port name="value">37.0</port>
+            <port name="inputValue">37.0</port>
             <port name="sourceMinimum">0.0</port>
             <port name="sourceMaximum">60.0</port>
             <port name="targetMinimum">0.0</port>
@@ -52,18 +52,18 @@
             <port name="overflow">3</port>
         </node>
         <node name="ConvertRange3" type="nodebox.builtins.math.ConvertRange" x="240" y="367">
-            <port name="value">48.0</port>
+            <port name="inputValue">48.0</port>
             <port name="sourceMinimum">0.0</port>
             <port name="sourceMaximum">60.0</port>
             <port name="targetMinimum">0.0</port>
             <port name="targetMaximum">360.0</port>
             <port name="overflow">3</port>
         </node>
-        <conn input="ConvertRange1" inputPort="value" output="Calendar1" outputPort="hours24"/>
+        <conn input="ConvertRange1" inputPort="inputValue" output="Calendar1" outputPort="hours24"/>
         <conn input="Arc1" inputPort="stop" output="ConvertRange1" outputPort="outputValue"/>
-        <conn input="ConvertRange2" inputPort="value" output="Calendar1" outputPort="minutes"/>
+        <conn input="ConvertRange2" inputPort="inputValue" output="Calendar1" outputPort="minutes"/>
         <conn input="Arc2" inputPort="stop" output="ConvertRange2" outputPort="outputValue"/>
-        <conn input="ConvertRange3" inputPort="value" output="Calendar1" outputPort="seconds"/>
+        <conn input="ConvertRange3" inputPort="inputValue" output="Calendar1" outputPort="seconds"/>
         <conn input="Arc3" inputPort="stop" output="ConvertRange3" outputPort="outputValue"/>
     </node>
 </ndbx>

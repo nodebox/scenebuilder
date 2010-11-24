@@ -6,12 +6,12 @@
             <port name="y">0.0</port>
         </node>
         <node name="lighten1" type="nodebox.pixie.Lighten" x="210" y="171">
-            <port name="value">19</port>
+            <port name="amount">19</port>
         </node>
         <node name="loadImage1" type="nodebox.builtins.image.LoadImage" x="38" y="95">
             <port name="fileName">examples/test.png</port>
         </node>
-        <conn input="lighten1" inputPort="image" output="loadImage1" outputPort="output"/>
+        <conn input="lighten1" inputPort="image" output="loadImage1" outputPort="image"/>
         <conn input="image1" inputPort="image" output="lighten1" outputPort="output"/>
     </node>
 </ndbx>

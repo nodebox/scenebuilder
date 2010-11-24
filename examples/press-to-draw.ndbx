@@ -11,6 +11,7 @@
         </node>
         <node name="Mouse1" type="nodebox.builtins.device.Mouse" x="5" y="135"/>
         <conn input="Line1" inputPort="x1" output="Mouse1" outputPort="x"/>
+        <conn input="Line1" inputPort="y1" output="Mouse1" outputPort="y"/>
         <conn input="Line1" inputPort="x2" output="Mouse1" outputPort="previousX"/>
         <conn input="Line1" inputPort="y2" output="Mouse1" outputPort="previousY"/>
     </node>

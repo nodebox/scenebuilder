@@ -13,7 +13,7 @@ public class LoadImage extends Node {
     private PImage loadedImage;
 
     public final StringPort pFileName = new StringPort(this, "fileName", Port.Direction.INPUT);
-    public final ImagePort pImage = new ImagePort(this, "output", Port.Direction.OUTPUT);
+    public final ImagePort pImage = new ImagePort(this, "image", Port.Direction.OUTPUT);
 
 
     @Override

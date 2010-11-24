@@ -6,20 +6,26 @@ import nodebox.node.*;
 @Category("Math")
 public class Coordinates extends Node {
 
-    public FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);
-    public FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT);
+    public FloatPort pInputX = new FloatPort(this, "inputX", Port.Direction.INPUT);
+    public FloatPort pInputY = new FloatPort(this, "inputY", Port.Direction.INPUT);
     public FloatPort pDistance = new FloatPort(this, "distance", Port.Direction.INPUT);
     public FloatPort pAngle = new FloatPort(this, "angle", Port.Direction.INPUT);
-    public FloatPort pOutputValue = new FloatPort(this, "x1", Port.Direction.OUTPUT);
-    public FloatPort pOutputValue2 = new FloatPort(this, "y1", Port.Direction.OUTPUT);
+    public FloatPort pOutputX = new FloatPort(this, "outputX", Port.Direction.OUTPUT);
+    public FloatPort pOutputY = new FloatPort(this, "outputY", Port.Direction.OUTPUT);
 
+    public Coordinates() {
+        pInputX.setDisplayName("x");
+        pInputY.setDisplayName("y");
+        pOutputX.setDisplayName("x");
+        pOutputY.setDisplayName("y");    
+    }
 
     @Override
     public void execute(Context context, float time) {
-        float x1 = (float) (pX.get() + Math.cos(Math.toRadians(pAngle.get())) * pDistance.get());
-        float y1 = (float) (pY.get() + Math.sin(Math.toRadians(pAngle.get())) * pDistance.get());
-        pOutputValue.set(x1);
-        pOutputValue2.set(y1);
+        float x = (float) (pInputX.get() + Math.cos(Math.toRadians(pAngle.get())) * pDistance.get());
+        float y = (float) (pInputY.get() + Math.sin(Math.toRadians(pAngle.get())) * pDistance.get());
+        pOutputX.set(x);
+        pOutputY.set(y);
     }
 
 }

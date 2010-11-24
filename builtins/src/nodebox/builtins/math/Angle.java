@@ -10,12 +10,12 @@ public class Angle extends Node {
     public FloatPort p1Y = new FloatPort(this, "y1", Port.Direction.INPUT);
     public FloatPort p2X = new FloatPort(this, "x2", Port.Direction.INPUT);
     public FloatPort p2Y = new FloatPort(this, "y2", Port.Direction.INPUT);
-    public FloatPort pOutputValue = new FloatPort(this, "outputValue", Port.Direction.OUTPUT);
+    public FloatPort pAngle = new FloatPort(this, "angle", Port.Direction.OUTPUT);
 
     @Override
     public void execute(Context context, float time) {
-        float value = (float) Math.toDegrees(Math.atan2(p2Y.get() - p1Y.get(), p2X.get() - p1X.get()));
-        pOutputValue.set(value);
+        float angle = (float) Math.toDegrees(Math.atan2(p2Y.get() - p1Y.get(), p2X.get() - p1X.get()));
+        pAngle.set(angle);
     }
 
 }

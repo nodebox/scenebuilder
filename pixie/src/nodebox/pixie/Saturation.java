@@ -7,7 +7,7 @@ import nodebox.node.*;
 @Category("Image")
 public class Saturation extends PointFilter {
 
-    public final IntPort pValue = new IntPort(this, "value", Port.Direction.INPUT,5);
+    public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.INPUT,5);
 
     public static int clamp(int c) {
 		if (c < 0)
@@ -19,7 +19,7 @@ public class Saturation extends PointFilter {
 
     @Override
     public int filter(int x, int y, int v) {
-        int amount = pValue.get();
+        int amount = pAmount.get();
 
         	if ( amount != 1 ) {
             int a = v & 0xff000000;

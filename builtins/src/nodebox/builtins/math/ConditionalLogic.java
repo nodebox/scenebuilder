@@ -12,10 +12,10 @@ public class ConditionalLogic extends Node {
     public final int COMPARE_GREATER_THAN_OR_EQUAL = 4;
     public final int COMPARE_LOWER_THAN_OR_EQUAL  = 5;
 
-    public FloatPort pOperand1 = new FloatPort(this, "value1", Port.Direction.INPUT, 0f);
+    public FloatPort pValue1 = new FloatPort(this, "value1", Port.Direction.INPUT, 0f);
     public IntPort pCondition = new IntPort(this, "condition", Port.Direction.INPUT, COMPARE_EQUAL);
-    public FloatPort pOperand2 = new FloatPort(this, "value2", Port.Direction.INPUT, 0f);
-    public BooleanPort pOutput = new BooleanPort(this, "result", Port.Direction.OUTPUT);
+    public FloatPort pValue2 = new FloatPort(this, "value2", Port.Direction.INPUT, 0f);
+    public BooleanPort pOutput = new BooleanPort(this, "output", Port.Direction.OUTPUT);
 
     public ConditionalLogic() {
         pCondition.addMenuItem(COMPARE_EQUAL, "is Equal");
@@ -28,8 +28,8 @@ public class ConditionalLogic extends Node {
 
     @Override
     public void execute(Context context, float time) {
-        float value1 = pOperand1.get();
-        float value2 = pOperand2.get();
+        float value1 = pValue1.get();
+        float value2 = pValue2.get();
         
         switch (pCondition.get()) {
             case COMPARE_EQUAL:

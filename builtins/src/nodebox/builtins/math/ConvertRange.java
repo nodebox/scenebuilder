@@ -13,7 +13,7 @@ public class ConvertRange extends Node {
     public final int OVERFLOW_MIRROR = 2;
     public final int OVERFLOW_CLAMP = 3;
 
-    public FloatPort pValue = new FloatPort(this, "value", Port.Direction.INPUT);
+    public FloatPort pInputValue = new FloatPort(this, "inputValue", Port.Direction.INPUT);
     public FloatPort pSourceMinimum = new FloatPort(this, "sourceMinimum", Port.Direction.INPUT, 0);
     public FloatPort pSourceMaximum = new FloatPort(this, "sourceMaximum", Port.Direction.INPUT, 100);
     public FloatPort pTargetMinimum = new FloatPort(this, "targetMinimum", Port.Direction.INPUT, 0);
@@ -22,6 +22,8 @@ public class ConvertRange extends Node {
     public FloatPort pOutputValue = new FloatPort(this, "outputValue", Port.Direction.OUTPUT);
 
     public ConvertRange() {
+        pInputValue.setDisplayName("value");
+        pOutputValue.setDisplayName("value");
         pOverflow.addMenuItem(OVERFLOW_IGNORE, "Ignore");
         pOverflow.addMenuItem(OVERFLOW_WRAP, "Wrap");
         pOverflow.addMenuItem(OVERFLOW_MIRROR, "Mirror");
@@ -35,7 +37,7 @@ public class ConvertRange extends Node {
         float targetMin = pTargetMinimum.get();
         float targetMax = pTargetMaximum.get();
         int overflow = pOverflow.get();
-        float value = pValue.get();
+        float value = pInputValue.get();
         switch (overflow) {
             case OVERFLOW_WRAP:
                 value = srcMin + value % (srcMax - srcMin);

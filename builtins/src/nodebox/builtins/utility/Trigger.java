@@ -9,12 +9,12 @@ import java.awt.event.ActionListener;
 @Description("Trigger a true value for the duration of one frame, otherwise false.")
 @Category("Utility")
 public class Trigger extends Node {
-    public boolean output = false;
-    public BooleanPort pOut = new BooleanPort(this, "out", Port.Direction.OUTPUT);
+    public boolean triggered = false;
+    public BooleanPort pTriggered = new BooleanPort(this, "triggered", Port.Direction.OUTPUT);
 
     public void execute(Context context, float time) {
-        pOut.set(output);
-        output = false;
+        pTriggered.set(triggered);
+        triggered = false;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class Trigger extends Node {
         final JButton b = new JButton("Trigger");
         b.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                output = true;
+                triggered = true;
             }
         });
         return b;

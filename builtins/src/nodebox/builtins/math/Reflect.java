@@ -12,8 +12,13 @@ public class Reflect extends Node {
     public FloatPort pY2 = new FloatPort(this, "y2", Port.Direction.INPUT);
     public FloatPort pDistancePct = new FloatPort(this, "distance%", Port.Direction.INPUT, 100);
     public FloatPort pAngleOffset = new FloatPort(this, "angleOffset", Port.Direction.INPUT, 180);
-    public FloatPort pOutputX = new FloatPort(this, "x", Port.Direction.OUTPUT);
-    public FloatPort pOutputY = new FloatPort(this, "y", Port.Direction.OUTPUT);
+    public FloatPort pOutputX = new FloatPort(this, "outputX", Port.Direction.OUTPUT);
+    public FloatPort pOutputY = new FloatPort(this, "outputY", Port.Direction.OUTPUT);
+
+    public Reflect() {
+        pOutputX.setDisplayName("x");
+        pOutputY.setDisplayName("y");
+    }
 
     @Override
     public void execute(Context context, float time) {

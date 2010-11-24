@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <ndbx formatVersion="3">
     <node name="root" type="nodebox.node.Network" x="0" y="0">
-        <node name="Clear1" type="nodebox.builtins.render.Clear" x="126" y="28">
-            <port name="enabled">true</port>
+        <node name="Clear1" type="nodebox.builtins.draw.Clear" x="126" y="28">
             <port name="color">#00000031</port>
         </node>
         <node name="VoronoiLooper1" type="nodebox.toxiclibscore.VoronoiLooper" x="57" y="138">
