@@ -147,6 +147,8 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
         g2.scale(zoomFactor, zoomFactor);
         g2.translate(centerX, centerY);
 
+        g2.setColor(CONNECTION_COLOR);
+        g2.setStroke(CONNECTION_STROKE);
         paintConnections(g2);
         if (isConnecting() && connectionStartPort != null) {
             Port port = connectionStartPort;
@@ -172,8 +174,6 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
             GeneralPath p = new GeneralPath();
             p.moveTo(outputX, outputY);
             p.curveTo(inputX, outputY, inputX - dx, inputY, inputX, inputY);
-            g.setColor(CONNECTION_COLOR);
-            g.setStroke(CONNECTION_STROKE);
             g.draw(p);
         }
     }
