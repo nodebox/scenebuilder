@@ -21,11 +21,11 @@ public class CopyNode extends Network {
 
     public final IntPort pCopies = new IntPort(this, "copies", Port.Direction.INPUT, 1);
     public final IntPort pOrder = new IntPort(this, "order", Port.Direction.INPUT, ORDER_TRANS_SCALE_ROT);
-    public final FloatPort pTx = new FloatPort(this, "translate x", Port.Direction.INPUT);
-    public final FloatPort pTy = new FloatPort(this, "translate y", Port.Direction.INPUT);
+    public final FloatPort pTx = new FloatPort(this, "translateX", Port.Direction.INPUT);
+    public final FloatPort pTy = new FloatPort(this, "translateY", Port.Direction.INPUT);
     public final FloatPort pR = new FloatPort(this, "rotate", Port.Direction.INPUT);
-    public final FloatPort pSx = new FloatPort(this, "scale x", Port.Direction.INPUT);
-    public final FloatPort pSy = new FloatPort(this, "scale y", Port.Direction.INPUT);
+    public final FloatPort pSx = new FloatPort(this, "scaleX", Port.Direction.INPUT);
+    public final FloatPort pSy = new FloatPort(this, "scaleY", Port.Direction.INPUT);
     public final GeometryPort pOutput = new GeometryPort(this, "output", Port.Direction.OUTPUT);
 
     public static final String KEY_AMOUNT = "amount";

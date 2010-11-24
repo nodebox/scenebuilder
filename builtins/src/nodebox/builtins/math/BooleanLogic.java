@@ -14,9 +14,9 @@ public class BooleanLogic extends Node {
     public final int LOGIC_NOR  = 5;
     public final int LOGIC_NXOR = 6;
 
-    public BooleanPort pOperand1 = new BooleanPort(this, "first operand", Port.Direction.INPUT, false);
+    public BooleanPort pOperand1 = new BooleanPort(this, "operand1", Port.Direction.INPUT, false);
     public IntPort pOperation = new IntPort(this, "operation", Port.Direction.INPUT, LOGIC_AND);
-    public BooleanPort pOperand2 = new BooleanPort(this, "second operand", Port.Direction.INPUT, false);
+    public BooleanPort pOperand2 = new BooleanPort(this, "operand2", Port.Direction.INPUT, false);
     public BooleanPort pOutput = new BooleanPort(this, "result", Port.Direction.OUTPUT);
 
     public BooleanLogic() {

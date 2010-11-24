@@ -12,9 +12,9 @@ public class ConditionalLogic extends Node {
     public final int COMPARE_GREATER_THAN_OR_EQUAL = 4;
     public final int COMPARE_LOWER_THAN_OR_EQUAL  = 5;
 
-    public FloatPort pOperand1 = new FloatPort(this, "first value", Port.Direction.INPUT, 0f);
+    public FloatPort pOperand1 = new FloatPort(this, "value1", Port.Direction.INPUT, 0f);
     public IntPort pCondition = new IntPort(this, "condition", Port.Direction.INPUT, COMPARE_EQUAL);
-    public FloatPort pOperand2 = new FloatPort(this, "second value", Port.Direction.INPUT, 0f);
+    public FloatPort pOperand2 = new FloatPort(this, "value2", Port.Direction.INPUT, 0f);
     public BooleanPort pOutput = new BooleanPort(this, "result", Port.Direction.OUTPUT);
 
     public ConditionalLogic() {

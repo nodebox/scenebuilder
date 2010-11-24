@@ -18,7 +18,7 @@ public class ReflectNode extends FilterNode {
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT, 50);
     public final FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT);
     public final FloatPort pAngle = new FloatPort(this, "angle", Port.Direction.INPUT, 120);
-    public final BooleanPort pKeepOriginal = new BooleanPort(this, "keep original", Port.Direction.INPUT, true);
+    public final BooleanPort pKeepOriginal = new BooleanPort(this, "keepOriginal", Port.Direction.INPUT, true);
 
     @Override
     public Geometry cook(Context context, float time) {
