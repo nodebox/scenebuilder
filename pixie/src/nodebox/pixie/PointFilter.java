@@ -10,7 +10,11 @@ import processing.core.PImage;
 
 public abstract class PointFilter extends ImageNode {
 
-    public final ImagePort pImage = new ImagePort(this, "image", Port.Direction.INPUT);
+    public final ImagePort pImage = new ImagePort(this, "inputImage", Port.Direction.INPUT);
+
+    public PointFilter() {
+        pImage.setDisplayName("image");
+    }
 
     @Override
     public PImage cook(Context context, float time) {

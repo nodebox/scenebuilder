@@ -45,10 +45,10 @@
             <port name="wy">10.0</port>
             <port name="seed">1</port>
         </node>
-        <conn input="ResampleNode1" inputPort="geometry" output="TextPathNode1" outputPort="output"/>
-        <conn input="WiggleNode1" inputPort="geometry" output="ResampleNode1" outputPort="output"/>
+        <conn input="ResampleNode1" inputPort="inputGeometry" output="TextPathNode1" outputPort="outputGeometry"/>
+        <conn input="WiggleNode1" inputPort="inputGeometry" output="ResampleNode1" outputPort="outputGeometry"/>
         <conn input="SineWave1" inputPort="position" output="CurrentTime1" outputPort="time"/>
         <conn input="TextPathNode1" inputPort="size" output="SineWave1" outputPort="value"/>
-        <conn input="SnapNode1" inputPort="geometry" output="WiggleNode1" outputPort="output"/>
+        <conn input="SnapNode1" inputPort="inputGeometry" output="WiggleNode1" outputPort="outputGeometry"/>
     </node>
 </ndbx>

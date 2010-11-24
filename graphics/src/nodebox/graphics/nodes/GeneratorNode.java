@@ -8,7 +8,11 @@ import processing.core.PGraphics;
 
 public abstract class GeneratorNode extends Node {
 
-    public final GeometryPort pOutput = new GeometryPort(this, "output", Port.Direction.OUTPUT);
+    public final GeometryPort pOutput = new GeometryPort(this, "outputGeometry", Port.Direction.OUTPUT);
+
+    public GeneratorNode() {
+        pOutput.setDisplayName("geo");
+    }
 
     @Override
     public void execute(Context context, float time) {

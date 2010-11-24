@@ -9,7 +9,11 @@ import processing.core.PImage;
 
 public abstract class ImageNode extends Node {
 
-    public final ImagePort pOutput = new ImagePort(this, "output", Port.Direction.OUTPUT);
+    public final ImagePort pOutput = new ImagePort(this, "outputImage", Port.Direction.OUTPUT);
+
+    public ImageNode() {
+        pOutput.setDisplayName("image");
+    }
 
     @Override
     public void execute(Context context, float time) {
