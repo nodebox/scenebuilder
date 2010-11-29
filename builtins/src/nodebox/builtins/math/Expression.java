@@ -107,8 +107,28 @@ public class Expression extends Node {
 
     @Override
     public JComponent createCustomEditor() {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        panel.setOpaque(false);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+        Dimension d = new Dimension(300, 20);
+        panel.setPreferredSize(d);
+        panel.setMaximumSize(d);
+        panel.setMinimumSize(d);
+
+        d = new Dimension(114, 20);
+        JLabel label = new JLabel("Expression");
+        label.setPreferredSize(d);
+        label.setMaximumSize(d);
+        label.setMinimumSize(d);
+        label.setForeground(new Color(255, 255, 0, 120));
+        label.setHorizontalAlignment(JLabel.RIGHT);
+        panel.add(label);
+
+        panel.add(Box.createHorizontalStrut(5));
+
         final JTextField f = new JTextField(expression);
-        f.setMaximumSize(new Dimension(500, 24));
         f.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
                 expressionChanged(f.getText());
@@ -122,7 +142,8 @@ public class Expression extends Node {
                 expressionChanged(f.getText());
             }
         });
-        return f;
+        panel.add(f);
+        return panel;
     }
 
     private void expressionChanged(String expression) {
