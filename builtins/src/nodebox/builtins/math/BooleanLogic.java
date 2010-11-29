@@ -2,61 +2,62 @@ package nodebox.builtins.math;
 
 import nodebox.node.*;
 
+import java.util.Locale;
+
 @Description("Perform a boolean operation on two given boolean values.")
 @Category("Math")
 public class BooleanLogic extends Node {
 
-    public final int LOGIC_AND  = 0;
-    public final int LOGIC_OR   = 1;
-    public final int LOGIC_XOR  = 2;
-    public final int LOGIC_NOT  = 3;
-    public final int LOGIC_NAND = 4;
-    public final int LOGIC_NOR  = 5;
-    public final int LOGIC_NXOR = 6;
+    public static enum Operation {
+        AND, OR, XOR, NOT, NAND, NOR, NXOR
+    }
 
     public BooleanPort pOperand1 = new BooleanPort(this, "operand1", Port.Direction.INPUT, false);
-    public IntPort pOperation = new IntPort(this, "operation", Port.Direction.INPUT, LOGIC_AND);
+    public StringPort pOperation = new StringPort(this, "operation", Port.Direction.INPUT, "and");
     public BooleanPort pOperand2 = new BooleanPort(this, "operand2", Port.Direction.INPUT, false);
     public BooleanPort pOutput = new BooleanPort(this, "output", Port.Direction.OUTPUT);
 
     public BooleanLogic() {
-        pOperation.addMenuItem(LOGIC_AND, "AND");
-        pOperation.addMenuItem(LOGIC_OR, "OR");
-        pOperation.addMenuItem(LOGIC_XOR, "XOR");
-        pOperation.addMenuItem(LOGIC_NOT, "NOT");
-        pOperation.addMenuItem(LOGIC_NAND, "NAND");
-        pOperation.addMenuItem(LOGIC_NOR, "NOR");
-        pOperation.addMenuItem(LOGIC_NXOR, "NXOR");
+        for (Operation op : Operation.values()) {
+            pOperation.addMenuItem(op.name().toLowerCase(Locale.US), op.name());
+        }
     }
 
     @Override
     public void execute(Context context, float time) {
-        boolean value1 = pOperand1.get();
-        boolean value2 = pOperand2.get();
-        switch (pOperation.get()) {
-            case LOGIC_AND:
-                pOutput.set(value1 && value2);
-                break;
-            case LOGIC_OR:
-                pOutput.set(value1 || value2);
-                break;
-            case LOGIC_XOR:
-                pOutput.set(value1 ^ value2);
-                break;
-            case LOGIC_NOT:
-                pOutput.set(! value1);
-                break;
-            case LOGIC_NAND:
-                pOutput.set(!(value1 && value2));
-                break;
-            case LOGIC_NOR:
-                pOutput.set(!(value1 || value2));
-                break;
-            case LOGIC_NXOR:
-                pOutput.set(!(value1 ^ value2));
-                break;
-            default:
-                break;
+        try {
+            boolean value1 = pOperand1.get();
+            boolean value2 = pOperand2.get();
+
+            switch (Operation.valueOf(pOperation.get().toUpperCase(Locale.US))) {
+                case AND:
+                    pOutput.set(value1 && value2);
+                    break;
+                case OR:
+                    pOutput.set(value1 || value2);
+                    break;
+                case XOR:
+                    pOutput.set(value1 ^ value2);
+                    break;
+                case NOT:
+                    pOutput.set(! value1);
+                    break;
+                case NAND:
+                    pOutput.set(!(value1 && value2));
+                    break;
+                case NOR:
+                    pOutput.set(!(value1 || value2));
+                    break;
+                case NXOR:
+                    pOutput.set(!(value1 ^ value2));
+                    break;
+                default:
+                    break;
+            }
+
+        } catch (IllegalArgumentException e) {
+            pOutput.set(false);
+            return;
         }
     }
 }
