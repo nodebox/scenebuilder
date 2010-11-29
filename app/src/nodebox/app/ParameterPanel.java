@@ -1,8 +1,6 @@
 package nodebox.app;
 
-import nodebox.node.IntPort;
-import nodebox.node.Node;
-import nodebox.node.Port;
+import nodebox.node.*;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -159,14 +157,13 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             number.setNumberFormat(intFormat);
             return number;
         } else if (widget.equals("menu")) {
-            IntPort intPort = (IntPort) port;
-            int selectedValue = intPort.get();
+            String selectedValue = ((PersistablePort) port).getValueAsString();
             MenuItem selectedItem = null;
             Vector<MenuItem> v = new Vector<MenuItem>();
-            for (Map.Entry<Integer, String> entry : intPort.getMenuItems().entrySet()) {
+            for (Map.Entry<String, String> entry : ((MenuPort) port).getMenuItems().entrySet()) {
                 MenuItem item = new MenuItem(entry.getKey(), entry.getValue());
                 v.add(item);
-                if (entry.getKey() == selectedValue)
+                if (entry.getKey().equals(selectedValue))
                     selectedItem = item;
             }
             JComboBox menu = new JComboBox(v);
@@ -228,7 +225,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         } else if (p.getWidget().equals("menu")) {
             JComboBox b = (JComboBox) e.getSource();
             MenuItem item = (MenuItem) b.getSelectedItem();
-            p.setValue(item.key);
+            p.setValue(((PersistablePort) p).parseValue(item.key));
         }
     }
 
@@ -258,10 +255,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
     }
 
     private class MenuItem {
-        private int key;
+        private String key;
         private String label;
 
-        private MenuItem(int key, String label) {
+        private MenuItem(String key, String label) {
             this.key = key;
             this.label = label;
         }

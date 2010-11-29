@@ -1,10 +1,10 @@
 package nodebox.node;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class StringPort extends Port implements PersistablePort {
+public class StringPort extends Port implements PersistablePort, MenuPort {
 
     private String value;
     private Map<String, String> menuItems;
@@ -70,7 +70,7 @@ public class StringPort extends Port implements PersistablePort {
         menuItems.put(key, label);
     }
 
-    public void removeMenuItem(int key) {
+    public void removeMenuItem(String key) {
         if (menuItems == null) return;
         menuItems.remove(key);
     }
@@ -81,6 +81,6 @@ public class StringPort extends Port implements PersistablePort {
 
     private void ensureMenuItems() {
         if (menuItems == null)
-            menuItems = new HashMap<String, String>();
+            menuItems = new LinkedHashMap<String, String>();
     }
 }

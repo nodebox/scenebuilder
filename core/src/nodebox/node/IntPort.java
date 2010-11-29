@@ -1,7 +1,7 @@
 package nodebox.node;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -9,10 +9,10 @@ import java.util.Map;
  * <p/>
  * Integer ports support both integer data and floating-point data. Floating-point data is rounded.
  */
-public class IntPort extends Port implements PersistablePort {
+public class IntPort extends Port implements PersistablePort, MenuPort {
 
     private int value;
-    private Map<Integer, String> menuItems;
+    private Map<String, String> menuItems;
 
     public IntPort(Node node, String name, Direction direction) {
         super(node, name, direction);
@@ -81,22 +81,29 @@ public class IntPort extends Port implements PersistablePort {
     }
 
     public void addMenuItem(int key, String label) {
+        addMenuItem(Integer.toString(key), label);
+    }
+
+    public void addMenuItem(String key, String label) {
         ensureMenuItems();
         menuItems.put(key, label);
     }
 
     public void removeMenuItem(int key) {
+        removeMenuItem(Integer.toString(key));
+    }
+
+    public void removeMenuItem(String key) {
         if (menuItems == null) return;
         menuItems.remove(key);
     }
 
-    public Map<Integer, String> getMenuItems() {
-        return menuItems != null ? menuItems : Collections.<Integer, String>emptyMap();
+    public Map<String, String> getMenuItems() {
+        return menuItems != null ? menuItems : Collections.<String, String>emptyMap();
     }
 
     private void ensureMenuItems() {
         if (menuItems == null)
-            menuItems = new HashMap<Integer, String>();
+            menuItems = new LinkedHashMap<String, String>();
     }
-
 }
