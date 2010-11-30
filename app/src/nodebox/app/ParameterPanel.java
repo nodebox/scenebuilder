@@ -5,9 +5,11 @@ import nodebox.node.*;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -166,11 +168,8 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
                 if (entry.getKey().equals(selectedValue))
                     selectedItem = item;
             }
-            JComboBox menu = new JComboBox(v);
-            menu.putClientProperty("JComponent.sizeVariant", "small");
-            menu.putClientProperty("JComboBox.isPopDown", Boolean.TRUE);
-            menu.setFont(Theme.SMALL_BOLD_FONT);
-            forceSize(menu, 136, 20);
+            PortMenu menu = new PortMenu(v);
+            forceSize(menu, 132, 20);
             menu.setSelectedItem(selectedItem);
             menu.addActionListener(this);
             return menu;
@@ -227,7 +226,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             JTextField f = (JTextField) e.getSource();
             p.setValue(f.getText());
         } else if (p.getWidget().equals("menu")) {
-            JComboBox b = (JComboBox) e.getSource();
+            PortMenu b = (PortMenu) e.getSource();
             MenuItem item = (MenuItem) b.getSelectedItem();
             p.setValue(((PersistablePort) p).parseValue(item.key));
         }
@@ -273,4 +272,79 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         }
     }
 
+    private class PortMenu extends PaneMenu {
+
+        private PortMenuPopup portMenuPopup;
+        private MenuItem selectedItem = null;
+
+        private transient ActionEvent actionEvent = null;
+        private EventListenerList listenerList = new EventListenerList();
+
+        public PortMenu(Vector<MenuItem> menuItems) {
+            super();
+            portMenuPopup = new PortMenuPopup(menuItems);
+        }
+
+        public MenuItem getSelectedItem() {
+            return selectedItem;
+        }
+
+        public void setSelectedItem(MenuItem selectedItem) {
+            this.selectedItem = selectedItem;
+        }
+
+        public void addActionListener(ActionListener l) {
+            listenerList.add(ActionListener.class, l);
+        }
+
+        public void removeActionListener(ActionListener l) {
+            listenerList.remove(ActionListener.class, l);
+        }
+
+        private void fireStateChanged() {
+            Object[] listeners = listenerList.getListenerList();
+            for (int i = listeners.length - 2; i >= 0; i -= 2) {
+                if (listeners[i] == ActionListener.class) {
+                    if (actionEvent == null) {
+                        actionEvent = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, "");
+                    }
+                    ((ActionListener) listeners[i + 1]).actionPerformed(actionEvent);
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            portMenuPopup.show(this, 0, 20);
+        }
+
+        @Override
+        public String getMenuName() {
+            if (selectedItem != null)
+                return selectedItem.label;
+            return "";
+        }
+
+        private class PortMenuPopup extends JPopupMenu {
+            public PortMenuPopup(Vector<MenuItem> menuItems) {
+                for (MenuItem item : menuItems)
+                    add(new ChangePortMenuItemAction(item));
+            }
+        }
+
+        private class ChangePortMenuItemAction extends AbstractAction {
+            private MenuItem menuItem;
+
+            private ChangePortMenuItemAction(MenuItem menuItem) {
+                super(menuItem.label);
+                this.menuItem = menuItem;
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                setSelectedItem(menuItem);
+                fireStateChanged();
+                PortMenu.this.repaint();
+            }
+        }
+    }
 }
