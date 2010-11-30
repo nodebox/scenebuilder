@@ -167,6 +167,10 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
                     selectedItem = item;
             }
             JComboBox menu = new JComboBox(v);
+            menu.putClientProperty("JComponent.sizeVariant", "small");
+            menu.putClientProperty("JComboBox.isPopDown", Boolean.TRUE);
+            menu.setFont(Theme.SMALL_BOLD_FONT);
+            forceSize(menu, 136, 20);
             menu.setSelectedItem(selectedItem);
             menu.addActionListener(this);
             return menu;
