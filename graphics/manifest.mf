@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: nodebox.graphics
 Bundle-Name: NodeBox-Graphics
 Bundle-Version: 1.0.0
-Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util
+Import-Package: org.osgi.framework, javax.swing, javax.swing.event, processing.core, nodebox.node, nodebox.util
 Export-Package: nodebox.graphics
 Export-Node: nodebox.graphics.nodes.ColorNode,
   nodebox.graphics.nodes.CompoundNode,
@@ -13,6 +13,7 @@ Export-Node: nodebox.graphics.nodes.ColorNode,
   nodebox.graphics.nodes.FitNode,
   nodebox.graphics.nodes.GridNode,
   nodebox.graphics.nodes.LineNode,
+  nodebox.graphics.nodes.MergeNode,
   nodebox.graphics.nodes.PlaceNode,
   nodebox.graphics.nodes.PlaceVariables,
   nodebox.graphics.nodes.PolygonNode,
