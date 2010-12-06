@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="gridNode1" type="nodebox.graphics.nodes.GridNode" x="66" y="92">
+            <port name="width">400.0</port>
+            <port name="height">400.0</port>
+            <port name="rows">40</port>
+            <port name="columns">30</port>
+            <port name="x">0.0</port>
+            <port name="y">0.0</port>
+        </node>
+        <node name="placeNode1" rendered="true" type="nodebox.graphics.nodes.PlaceNode" x="263" y="172">
+            <node name="ellipseNode1" rendered="true" type="nodebox.graphics.nodes.EllipseNode" x="595" y="120">
+                <port name="x">0.0</port>
+                <port name="y">0.0</port>
+                <port name="width">1.267027</port>
+                <port name="height">10.083423</port>
+                <port name="fill">#7f8000ff</port>
+                <port name="stroke">#000000ff</port>
+                <port name="strokeWeight">1.0</port>
+            </node>
+            <node name="expression1" type="nodebox.builtins.math.Expression" x="193" y="48">
+                <data name="expression">10+Math.sin(size*2.5)*10</data>
+                <port name="size">91.0</port>
+            </node>
+            <node name="expression2" type="nodebox.builtins.math.Expression" x="193" y="339">
+                <data name="expression">10+Math.cos(size/2.5)/10</data>
+                <port name="size">93.0</port>
+            </node>
+            <node name="expression3" type="nodebox.builtins.math.Expression" x="215" y="159">
+                <data name="expression">width / num</data>
+                <port name="width">15.805866</port>
+                <port name="num">40.0</port>
+            </node>
+            <node name="expression4" type="nodebox.builtins.math.Expression" x="217" y="238">
+                <data name="expression">height / num</data>
+                <port name="height">10.0764265</port>
+                <port name="num">20.0</port>
+            </node>
+            <node name="placeVariables1" type="nodebox.graphics.nodes.PlaceVariables" x="-12" y="117"/>
+            <node name="rGBColor1" type="nodebox.builtins.color.RGBColor" x="395" y="186">
+                <port name="red">0.40832686</port>
+                <port name="green">0.49837938</port>
+                <port name="blue">0.0</port>
+                <port name="alpha">1.0</port>
+                <port name="range">1.0</port>
+            </node>
+            <conn input="expression1" inputPort="size" output="placeVariables1" outputPort="index"/>
+            <conn input="ellipseNode1" inputPort="width" output="expression1" outputPort="result"/>
+            <conn input="expression2" inputPort="size" output="placeVariables1" outputPort="index"/>
+            <conn input="ellipseNode1" inputPort="height" output="expression2" outputPort="result"/>
+            <conn input="rGBColor1" inputPort="red" output="expression3" outputPort="result"/>
+            <conn input="rGBColor1" inputPort="green" output="expression4" outputPort="result"/>
+            <conn input="ellipseNode1" inputPort="fill" output="rGBColor1" outputPort="color"/>
+            <conn input="expression3" inputPort="width" output="expression1" outputPort="result"/>
+            <conn input="expression4" inputPort="height" output="expression2" outputPort="result"/>
+        </node>
+        <conn input="placeNode1" inputPort="template" output="gridNode1" outputPort="outputGeometry"/>
+    </node>
+</ndbx>

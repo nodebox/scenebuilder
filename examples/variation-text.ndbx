@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="placeNode1" rendered="true" type="nodebox.graphics.nodes.PlaceNode" x="380" y="218">
+            <node name="ellipseNode1" rendered="true" type="nodebox.graphics.nodes.EllipseNode" x="434" y="55">
+                <port name="x">0.0</port>
+                <port name="y">0.0</port>
+                <port name="width">13.340233</port>
+                <port name="height">13.340233</port>
+                <port name="fill">#006565ff</port>
+                <port name="stroke">#000000ff</port>
+                <port name="strokeWeight">0.4</port>
+            </node>
+            <node name="placeVariables1" type="nodebox.graphics.nodes.PlaceVariables" x="-5" y="30"/>
+            <node name="rGBColor1" type="nodebox.builtins.color.RGBColor" x="278" y="177">
+                <port name="red">0.0</port>
+                <port name="green">101.34593</port>
+                <port name="blue">101.34593</port>
+                <port name="alpha">255.0</port>
+                <port name="range">255.0</port>
+            </node>
+            <node name="randomFloat1" type="nodebox.builtins.random.RandomFloat" x="195" y="26">
+                <port name="minimum">5.0</port>
+                <port name="maximum">20.0</port>
+                <port name="seed">280</port>
+            </node>
+            <node name="randomFloat2" type="nodebox.builtins.random.RandomFloat" x="102" y="214">
+                <port name="minimum">60.0</port>
+                <port name="maximum">195.0</port>
+                <port name="seed">2</port>
+            </node>
+            <conn input="randomFloat1" inputPort="seed" output="placeVariables1" outputPort="index"/>
+            <conn input="rGBColor1" inputPort="green" output="randomFloat2" outputPort="value"/>
+            <conn input="rGBColor1" inputPort="blue" output="randomFloat2" outputPort="value"/>
+            <conn input="ellipseNode1" inputPort="fill" output="rGBColor1" outputPort="color"/>
+            <conn input="randomFloat2" inputPort="seed" output="placeVariables1" outputPort="y"/>
+            <conn input="ellipseNode1" inputPort="width" output="randomFloat1" outputPort="value"/>
+            <conn input="ellipseNode1" inputPort="height" output="randomFloat1" outputPort="value"/>
+        </node>
+        <node name="resampleNode1" type="nodebox.graphics.nodes.ResampleNode" x="191" y="276">
+            <port name="method">length</port>
+            <port name="length">8.0</port>
+            <port name="amount">10</port>
+            <port name="perContour">false</port>
+        </node>
+        <node name="textPathNode1" type="nodebox.graphics.nodes.TextPathNode" x="2" y="160">
+            <port name="text">blub</port>
+            <port name="font">Arial-BoldMT</port>
+            <port name="size">196.0</port>
+            <port name="align">1</port>
+            <port name="x">-199.0</port>
+            <port name="y">63.0</port>
+            <port name="width">0.0</port>
+            <port name="height">0.0</port>
+            <port name="fill">#ffffffff</port>
+            <port name="stroke">#000000ff</port>
+            <port name="strokeWeight">1.0</port>
+        </node>
+        <conn input="resampleNode1" inputPort="inputGeometry" output="textPathNode1" outputPort="outputGeometry"/>
+        <conn input="placeNode1" inputPort="template" output="resampleNode1" outputPort="outputGeometry"/>
+    </node>
+</ndbx>

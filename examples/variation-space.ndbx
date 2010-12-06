@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ndbx formatVersion="3">
+    <node displayName="Root" name="root" type="nodebox.node.Network" x="0" y="0">
+        <node name="gridNode1" type="nodebox.graphics.nodes.GridNode" x="7" y="232">
+            <port name="width">400.0</port>
+            <port name="height">400.0</port>
+            <port name="rows">11</port>
+            <port name="columns">11</port>
+            <port name="x">0.0</port>
+            <port name="y">0.0</port>
+        </node>
+        <node name="mergeNode1" rendered="true" type="nodebox.graphics.nodes.MergeNode" x="408" y="106">
+            <data name="ports">2</data>
+        </node>
+        <node name="placeNode1" type="nodebox.graphics.nodes.PlaceNode" x="180" y="286">
+            <node name="expression1" type="nodebox.builtins.math.Expression" x="232" y="349">
+                <data name="expression">cnum * seed</data>
+                <port name="cnum">73.0</port>
+                <port name="seed">64.0</port>
+            </node>
+            <node name="gridNode1" type="nodebox.graphics.nodes.GridNode" x="83" y="82">
+                <port name="width">10.0</port>
+                <port name="height">15.0</port>
+                <port name="rows">4</port>
+                <port name="columns">3</port>
+                <port name="x">0.0</port>
+                <port name="y">0.0</port>
+            </node>
+            <node name="placeNode1" type="nodebox.graphics.nodes.PlaceNode" x="302" y="255">
+                <node name="expression1" type="nodebox.builtins.math.Expression" x="71" y="63">
+                    <data name="expression">v + cnum</data>
+                    <port name="v" published="true">4672.0</port>
+                    <port name="cnum">11.0</port>
+                </node>
+                <node name="expression2" type="nodebox.builtins.math.Expression" x="270" y="38">
+                    <data name="expression">floor(a)</data>
+                    <port name="a">1.851637</port>
+                </node>
+                <node name="placeVariables1" type="nodebox.graphics.nodes.PlaceVariables" x="-56" y="146"/>
+                <node name="rGBColor1" type="nodebox.builtins.color.RGBColor" x="172" y="269">
+                    <port name="red">1.0</port>
+                    <port name="green">1.0</port>
+                    <port name="blue">1.0</port>
+                    <port name="alpha">1.0</port>
+                    <port name="range">1.0</port>
+                </node>
+                <node name="randomFloat1" type="nodebox.builtins.random.RandomFloat" x="110" y="0">
+                    <port name="minimum">0.0</port>
+                    <port name="maximum">2.0</port>
+                    <port name="seed">4683</port>
+                </node>
+                <node name="rectNode1" rendered="true" type="nodebox.graphics.nodes.RectNode" x="390" y="146">
+                    <port name="x">0.0</port>
+                    <port name="y">0.0</port>
+                    <port name="width">5.0</port>
+                    <port name="height">5.0</port>
+                    <port name="rx">0.0</port>
+                    <port name="ry">0.0</port>
+                    <port name="fill">#ffffffff</port>
+                    <port name="stroke">#000000ff</port>
+                    <port name="strokeWeight">0.0</port>
+                </node>
+                <conn input="expression1" inputPort="cnum" output="placeVariables1" outputPort="index"/>
+                <conn input="randomFloat1" inputPort="seed" output="expression1" outputPort="result"/>
+                <conn input="rectNode1" inputPort="fill" output="rGBColor1" outputPort="color"/>
+                <conn input="expression2" inputPort="a" output="randomFloat1" outputPort="value"/>
+                <conn input="rGBColor1" inputPort="red" output="expression2" outputPort="result"/>
+                <conn input="rGBColor1" inputPort="green" output="expression2" outputPort="result"/>
+                <conn input="rGBColor1" inputPort="blue" output="expression2" outputPort="result"/>
+            </node>
+            <node name="placeVariables1" type="nodebox.graphics.nodes.PlaceVariables" x="40" y="306"/>
+            <node name="reflectNode1" rendered="true" type="nodebox.graphics.nodes.ReflectNode" x="408" y="95">
+                <port name="x">7.0</port>
+                <port name="y">0.0</port>
+                <port name="angle">90.0</port>
+                <port name="keepOriginal">true</port>
+            </node>
+            <conn input="placeNode1" inputPort="template" output="gridNode1" outputPort="outputGeometry"/>
+            <conn input="reflectNode1" inputPort="inputGeometry" output="placeNode1" outputPort="outputGeometry"/>
+            <conn input="expression1" inputPort="cnum" output="placeVariables1" outputPort="index"/>
+            <conn input="placeNode1" inputPort="expression1_v" output="expression1" outputPort="result"/>
+        </node>
+        <node name="rectNode1" type="nodebox.graphics.nodes.RectNode" x="70" y="7">
+            <port name="x">0.0</port>
+            <port name="y">0.0</port>
+            <port name="width">500.0</port>
+            <port name="height">500.0</port>
+            <port name="rx">0.0</port>
+            <port name="ry">0.0</port>
+            <port name="fill">#ffffffff</port>
+            <port name="stroke">#000000ff</port>
+            <port name="strokeWeight">0.0</port>
+        </node>
+        <conn input="placeNode1" inputPort="template" output="gridNode1" outputPort="outputGeometry"/>
+        <conn input="mergeNode1" inputPort="geo2" output="placeNode1" outputPort="outputGeometry"/>
+        <conn input="mergeNode1" inputPort="geo1" output="rectNode1" outputPort="outputGeometry"/>
+    </node>
+</ndbx>
