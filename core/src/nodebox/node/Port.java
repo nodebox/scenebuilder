@@ -156,6 +156,7 @@ public abstract class Port {
      */
     public final boolean canConnectTo(Port port) {
         checkNotNull(port);
+        if (port instanceof VariantPort || this instanceof VariantPort) return true;
         // One port needs to be input, the other output.
         // The direction can thus not be the same.
         if (this.direction == port.direction) return false;
