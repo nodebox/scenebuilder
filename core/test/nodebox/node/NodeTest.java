@@ -5,6 +5,83 @@ import processing.core.PGraphics;
 
 public class NodeTest extends TestCase {
 
+    public void testBasicUsage() {
+        Node dotNode = new DotNode();
+
+        // Check default values
+        assertEquals(0F, dotNode.getValue("x"));
+        assertEquals(0F, dotNode.getValue("y"));
+        assertNull(dotNode.getValue("output"));
+
+        // Process
+        dotNode.update(new MockContext(), 0f);
+        assertEquals("dot(0.0,0.0)", dotNode.getValue("output"));
+
+        // Change values
+        dotNode.setValue("x", 25F);
+        dotNode.setValue("y", 42F);
+        dotNode.update(new MockContext(), 0f);
+        assertEquals("dot(25.0,42.0)", dotNode.getValue("output"));
+    }
+
+    public void testGetValue() {
+        Node n = new CNode();
+        assertEquals(1F, n.getValue("a"));
+        assertEquals(2F, n.getValue("b"));
+        assertEquals(3F, n.getValue("c"));
+    }
+
+    public void testSetValue() {
+        Node nodeC = new CNode();
+        nodeC.setValue("a", 10F);
+        nodeC.setValue("b", 20F);
+        nodeC.setValue("c", 30F);
+        assertEquals(10F, nodeC.getValue("a"));
+        assertEquals(20F, nodeC.getValue("b"));
+        assertEquals(30F, nodeC.getValue("c"));
+    }
+
+    public void testPortAttributes() {
+        Node nodeA = new TestNode();
+        assertEquals(0, nodeA.getOutputPorts().size());
+        new StringPort(nodeA, "output", Port.Direction.OUTPUT);
+        assertTrue(nodeA.getPort("output") instanceof StringPort);
+        assertEquals(1, nodeA.getOutputPorts().size());
+        Port pOutput = nodeA.getOutputPorts().get(0);
+        assertEquals("output", pOutput.getName());
+        assertEquals("output", pOutput.getDisplayName());
+        assertEquals(Port.Direction.OUTPUT, pOutput.getDirection());
+        assertTrue(pOutput.isOutputPort());
+        assertEquals(null, pOutput.getValue());
+        Port pString = new StringPort(nodeA, "stringPort", Port.Direction.INPUT);
+        assertEquals("stringPort", pString.getName());
+        assertEquals("string Port", pString.getDisplayName());
+        assertEquals(Port.Direction.INPUT, pString.getDirection());
+        assertTrue(pString.isInputPort());
+        assertEquals(null, pString.getValue());
+    }
+
+    public void testChildNodes() {
+        Network net = new Network();
+        Node test = new TestNode();
+        net.addChild(test);
+        assertTrue(net.hasChild("testNode"));
+    }
+
+    public void testUniqueName() {
+        Network net = new Network();
+        Node node1 = net.createChild(TestNode.class);
+        assertEquals("testNode1", node1.getName());
+        assertEquals("testNode2", net.uniqueChildName("testNode"));
+        assertEquals("testNode2", net.uniqueChildName("testNode1"));
+        assertEquals("testNode33", net.uniqueChildName("testNode33"));
+        Node node99 = net.createChild(TestNode.class);
+        node99.setName("testNode99");
+        assertEquals("testNode2", net.uniqueChildName("testNode"));
+        assertEquals("testNode100", net.uniqueChildName("testNode99"));
+        assertEquals("testNode12a1", net.uniqueChildName("testNode12a"));
+    }
+
     public void testLifeCycleMethods() {
         Scene scene = new Scene();
         Network net = scene.getRootNetwork();
@@ -103,7 +180,12 @@ public class NodeTest extends TestCase {
         assertEquals(0, gamma.deactivated);
     }
 
-
+    public static class TestNode extends Node {
+        @Override
+        public void execute(Context context, float time) {
+        }
+    }
+    
     public static class LifeCycleNode extends Node {
 
         public IntPort pInput = new IntPort(this, "input", Port.Direction.INPUT);
@@ -150,4 +232,28 @@ public class NodeTest extends TestCase {
         }
     }
 
+    public static class DotNode extends Node {
+        public FloatPort pX = new FloatPort(this, "x", Port.Direction.INPUT);
+        public FloatPort pY = new FloatPort(this, "y", Port.Direction.INPUT);
+        public StringPort pOutput = new StringPort(this, "output", Port.Direction.OUTPUT);
+
+        @Override
+        public void execute(Context context, float time) {
+            float x = pX.get();
+            float y = pY.get();
+            pOutput.set("dot(" + x + "," + y + ")");
+        }
+    }
+
+    public static class ANode extends Node {
+        public FloatPort pA = new FloatPort(this, "a", Port.Direction.INPUT, 1F);
+    }
+
+    public static class BNode extends ANode {
+        public FloatPort pB = new FloatPort(this, "b", Port.Direction.INPUT, 2F);
+    }
+
+    public static class CNode extends BNode {
+        public FloatPort pC = new FloatPort(this, "c", Port.Direction.INPUT, 3F);
+    }
 }
