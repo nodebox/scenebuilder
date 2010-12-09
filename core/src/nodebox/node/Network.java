@@ -15,6 +15,7 @@ public class Network extends Node {
 
     private static final Pattern NUMBER_AT_THE_END = Pattern.compile("^(.*?)(\\d*)$");
 
+    private Scene scene;
     private List<Node> children;
     private List<Connection> connections;
     private Set<Port> publishedPorts;
@@ -25,6 +26,16 @@ public class Network extends Node {
         children = new LinkedList<Node>();
         connections = new LinkedList<Connection>();
         publishedPorts = new LinkedHashSet<Port>();
+    }
+
+    @Override
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setScene(Scene scene) {
+        checkNotNull(scene, "The scene object cannot be null.");
+        this.scene = scene;
     }
 
     //// Children ////
@@ -41,7 +52,6 @@ public class Network extends Node {
             throw new RuntimeException(e);
         }
         n.setName(uniqueChildName(n.getName()));
-        n.setScene(getScene());
         addChild(n);
         n.initialize();
         return n;
@@ -50,7 +60,6 @@ public class Network extends Node {
     public void addChild(Node child) {
         children.add(child);
         child.setNetwork(this);
-        child.setScene(getScene());
     }
 
     public void removeChild(Node child) {

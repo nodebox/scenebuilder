@@ -15,7 +15,6 @@ public abstract class Node {
 
     public static final HashMap<Class, Integer> instanceCounts = new HashMap<Class, Integer>();
 
-    private Scene scene;
     private Network network;
     private String name = "";
     private String displayName;
@@ -46,12 +45,10 @@ public abstract class Node {
     }
 
     public Scene getScene() {
-        return scene;
-    }
-
-    public void setScene(Scene scene) {
-        checkNotNull(scene, "The scene object cannot be null.");
-        this.scene = scene;
+        if (network != null)
+            return network.getScene();
+        else
+            return null;
     }
 
     public Network getNetwork() {
