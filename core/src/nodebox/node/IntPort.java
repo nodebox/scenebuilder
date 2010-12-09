@@ -84,7 +84,7 @@ public class IntPort extends Port implements PersistablePort, MenuPort {
         addMenuItem(Integer.toString(key), label);
     }
 
-    public void addMenuItem(String key, String label) {
+    private void addMenuItem(String key, String label) {
         ensureMenuItems();
         menuItems.put(key, label);
     }
@@ -93,7 +93,7 @@ public class IntPort extends Port implements PersistablePort, MenuPort {
         removeMenuItem(Integer.toString(key));
     }
 
-    public void removeMenuItem(String key) {
+    private void removeMenuItem(String key) {
         if (menuItems == null) return;
         menuItems.remove(key);
     }
