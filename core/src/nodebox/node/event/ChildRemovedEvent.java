@@ -1,13 +1,14 @@
 package nodebox.node.event;
 
 import nodebox.node.Node;
+import nodebox.node.Network;
 import nodebox.node.NodeEvent;
 
 public class ChildRemovedEvent extends NodeEvent {
 
     private Node child;
 
-    public ChildRemovedEvent(Node source, Node child) {
+    public ChildRemovedEvent(Network source, Node child) {
         super(source);
         this.child = child;
     }

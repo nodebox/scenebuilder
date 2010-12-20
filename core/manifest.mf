@@ -15,4 +15,4 @@ Import-Package: org.osgi.framework,
     javax.xml.transform,
     javax.xml.transform.dom,
     javax.xml.transform.stream
-Export-Package: nodebox.node, nodebox.util, processing.core, processing.xml
+Export-Package: nodebox.node, nodebox.node.event, nodebox.util, processing.core, processing.xml

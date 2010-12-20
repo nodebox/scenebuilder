@@ -1,5 +1,7 @@
 package nodebox.node;
 
+import nodebox.node.event.*;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.Attributes;
@@ -51,6 +53,7 @@ public class Scene {
     private Network rootNetwork;
     private Properties properties = new Properties(DEFAULT_PROPERTIES);
     private transient PApplet applet;
+    private NodeEventBus eventBus = new NodeEventBus();
 
     public Scene() {
         rootNetwork = new Network();
@@ -92,6 +95,24 @@ public class Scene {
 
     public void setProperty(String key, String value) {
         properties.setProperty(key, value);
+    }
+
+        //// Events ////
+
+    public void addListener(NodeEventListener l) {
+        eventBus.addListener(l);
+    }
+
+    public boolean removeListener(NodeEventListener l) {
+        return eventBus.removeListener(l);
+    }
+
+    public void fireChildAdded(Network source, Node child) {
+        eventBus.send(new ChildAddedEvent(source, child));
+    }
+
+    public void fireChildRemoved(Network source, Node child) {
+        eventBus.send(new ChildRemovedEvent(source, child));
     }
 
     //// Loading ////

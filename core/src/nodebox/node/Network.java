@@ -60,6 +60,7 @@ public class Network extends Node {
     public void addChild(Node child) {
         children.add(child);
         child.setNetwork(this);
+        scene.fireChildAdded(this, child);
     }
 
     public void removeChild(Node child) {
@@ -70,6 +71,7 @@ public class Network extends Node {
         children.remove(child);
         child.setNetwork(null);
         child.destroy();
+        scene.fireChildRemoved(this, child);
     }
 
     public Node getChild(String childName) {
