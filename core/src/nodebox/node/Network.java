@@ -58,20 +58,29 @@ public class Network extends Node {
     }
 
     public void addChild(Node child) {
+        if (child.getNetwork() != null)
+            child.getNetwork().removeChild(child, false);
         children.add(child);
         child.setNetwork(this);
-        scene.fireChildAdded(this, child);
+        if (scene != null)
+            scene.fireChildAdded(this, child);
     }
 
     public void removeChild(Node child) {
+        removeChild(child, true);
+    }
+
+    public void removeChild(Node child, boolean destroy) {
         if (child.isRenderedNode()) {
             setRenderedNode(null);
         }
         disconnect(child);
         children.remove(child);
         child.setNetwork(null);
-        child.destroy();
-        scene.fireChildRemoved(this, child);
+        if (destroy)
+            child.destroy();
+        if (scene != null)
+            scene.fireChildRemoved(this, child);
     }
 
     public Node getChild(String childName) {

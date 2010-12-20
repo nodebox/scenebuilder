@@ -56,7 +56,11 @@ public abstract class Node {
     }
 
     public void setNetwork(Network network) {
-        this.network = network;
+        if (this.network != null && network != null) {
+            network.addChild(this);
+        } else {
+            this.network = network;
+        }
     }
 
     public String getName() {
