@@ -1,6 +1,7 @@
 package nodebox.app;
 
 import nodebox.node.*;
+import nodebox.node.event.NodeAttributeChangedEvent;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -19,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener {
+public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener, NodeEventListener {
 
     public static final int LABEL_WIDTH = 114;
 
@@ -40,6 +41,7 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
 
     public ParameterPanel(SceneDocument document) {
         this.document = document;
+        document.getScene().addListener(this);
         Dimension d = new Dimension(300, 100);
         //setSize(d.width, d.height);
         setMinimumSize(d);
@@ -57,13 +59,16 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
      */
     public void propertyChange(PropertyChangeEvent evt) {
         selection = (Set<Node>) evt.getNewValue();
+        rebuildInterface();
+    }
+
+    private void rebuildInterface() {
         clearInterface();
         for (Node node : selection) {
             makeInterfaceForNode(node);
         }
         finishInterface();
     }
-
 
     private void finishInterface() {
         add(Box.createVerticalGlue());
@@ -215,6 +220,13 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         return components.get(c);
     }
 
+    //// Events ////
+
+    public void receive(NodeEvent event) {
+        if (!(event instanceof NodeAttributeChangedEvent)) return;
+        if (((NodeAttributeChangedEvent) event).getAttribute() == Node.Attribute.POSITION) return;
+        rebuildInterface();
+    }
 
     public void actionPerformed(ActionEvent e) {
         Port p = getPort((JComponent) e.getSource());
