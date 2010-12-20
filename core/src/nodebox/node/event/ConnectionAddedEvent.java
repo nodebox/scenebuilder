@@ -1,14 +1,14 @@
 package nodebox.node.event;
 
 import nodebox.node.Connection;
-import nodebox.node.Node;
+import nodebox.node.Network;
 import nodebox.node.NodeEvent;
 
 public class ConnectionAddedEvent extends NodeEvent {
 
     private Connection connection;
 
-    public ConnectionAddedEvent(Node source, Connection connection) {
+    public ConnectionAddedEvent(Network source, Connection connection) {
         super(source);
         this.connection = connection;
     }

@@ -198,7 +198,11 @@ public class Network extends Node {
         checkArgument(output.getNode().getNetwork() == this, "Output %s is not a child of this network.", output);
         checkArgument(input.getNode().getNetwork() == this, "Input %s is not a child of this network.", input);
         disconnect(input);
-        connections.add(new Connection(this, output, input));
+        Connection conn = new Connection(this, output, input);
+        connections.add(conn);
+        if (scene != null)
+            scene.fireConnectionAdded(this, conn);
+
     }
 
     public Collection<Connection> getInputConnections(Node node) {
@@ -230,6 +234,7 @@ public class Network extends Node {
         LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputNode() == node || c.getOutputNode() == node) {
+                scene.fireConnectionRemoved(this, c);
                 connectionsToRemove.add(c);
             }
         }
@@ -252,6 +257,7 @@ public class Network extends Node {
         LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputPort() == port || c.getOutputPort() == port) {
+                scene.fireConnectionRemoved(this, c);
                 connectionsToRemove.add(c);
             }
         }

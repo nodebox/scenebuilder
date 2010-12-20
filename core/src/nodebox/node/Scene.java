@@ -115,6 +115,14 @@ public class Scene {
         eventBus.send(new ChildRemovedEvent(source, child));
     }
 
+    public void fireConnectionAdded(Network source, Connection c) {
+        eventBus.send(new ConnectionAddedEvent(source, c));
+    }
+
+    public void fireConnectionRemoved(Network source, Connection c) {
+        eventBus.send(new ConnectionRemovedEvent(source, c));
+    }
+
     //// Loading ////
 
     /**

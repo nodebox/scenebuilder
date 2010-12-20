@@ -1,14 +1,14 @@
 package nodebox.node.event;
 
 import nodebox.node.Connection;
-import nodebox.node.Node;
+import nodebox.node.Network;
 import nodebox.node.NodeEvent;
 
 public class ConnectionRemovedEvent extends NodeEvent {
 
     private Connection connection;
 
-    public ConnectionRemovedEvent(Node source, Connection connection) {
+    public ConnectionRemovedEvent(Network source, Connection connection) {
         super(source);
         this.connection = connection;
     }
