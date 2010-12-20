@@ -107,6 +107,10 @@ public class Scene {
         return eventBus.removeListener(l);
     }
 
+    public void fireNodeAttributeChanged(Node source, Node.Attribute attribute) {
+        eventBus.send(new NodeAttributeChangedEvent(source, attribute));
+    }
+
     public void fireChildAdded(Network source, Node child) {
         eventBus.send(new ChildAddedEvent(source, child));
     }

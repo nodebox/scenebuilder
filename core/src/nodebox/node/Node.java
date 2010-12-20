@@ -21,6 +21,10 @@ public abstract class Node {
     private Point position = new Point(0, 0);
     private LinkedList<Port> ports = new LinkedList<Port>();
 
+    public enum Attribute {
+        NAME, POSITION, DESCRIPTION, IMAGE, PORT
+    }
+
     public static int createInstance(Class c) {
         synchronized (instanceCounts) {
             Integer index = instanceCounts.get(c);
@@ -160,6 +164,8 @@ public abstract class Node {
         checkArgument(port.getNode() == this, "Port.node should be set to this.");
         checkArgument(!hasPort(port.getName()), "This node already has a port named %s", port.getName());
         ports.add(port);
+        if (getScene() != null)
+            getScene().fireNodeAttributeChanged(this, Attribute.PORT);
         return port;
     }
 
@@ -171,6 +177,8 @@ public abstract class Node {
     public void removePort(Port port) {
         network.disconnect(port);
         ports.remove(port);
+        if (getScene() != null)
+            getScene().fireNodeAttributeChanged(this, Attribute.PORT);
     }
 
     /**
