@@ -5,8 +5,6 @@ import org.mvel2.MVEL;
 import org.mvel2.ParserContext;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -58,17 +56,17 @@ public class Expression extends Node {
             Object result = null;
             try {
                 result = MVEL.executeExpression(compiledExpression, valueMap);
-            if (result instanceof Float) {
-                pResult.set((Float) result);
-            } else if (result instanceof Double) {
-                pResult.set(((Double) result).floatValue());
-            } else if (result instanceof Integer) {
-                pResult.set(((Integer) result).floatValue());
-            } else if (result instanceof Long) {
-                pResult.set(((Long) result).floatValue());
-            } else {
-                pResult.set(0);
-            }
+                if (result instanceof Float) {
+                    pResult.set((Float) result);
+                } else if (result instanceof Double) {
+                    pResult.set(((Double) result).floatValue());
+                } else if (result instanceof Integer) {
+                    pResult.set(((Integer) result).floatValue());
+                } else if (result instanceof Long) {
+                    pResult.set(((Long) result).floatValue());
+                } else {
+                    pResult.set(0);
+                }
             } catch (Exception e) {
                 pResult.set(0);
             }
