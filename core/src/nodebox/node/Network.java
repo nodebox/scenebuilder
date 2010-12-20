@@ -234,7 +234,8 @@ public class Network extends Node {
         LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputNode() == node || c.getOutputNode() == node) {
-                scene.fireConnectionRemoved(this, c);
+                if (scene != null)
+                    scene.fireConnectionRemoved(this, c);
                 connectionsToRemove.add(c);
             }
         }
@@ -257,7 +258,8 @@ public class Network extends Node {
         LinkedList<Connection> connectionsToRemove = new LinkedList<Connection>();
         for (Connection c : connections) {
             if (c.getInputPort() == port || c.getOutputPort() == port) {
-                scene.fireConnectionRemoved(this, c);
+                if (scene != null)
+                    scene.fireConnectionRemoved(this, c);
                 connectionsToRemove.add(c);
             }
         }
