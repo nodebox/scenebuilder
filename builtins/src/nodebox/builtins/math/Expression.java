@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -129,18 +131,14 @@ public class Expression extends Node {
         panel.add(Box.createHorizontalStrut(5));
 
         final JTextField f = new JTextField(expression);
-        f.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) {
-                expressionChanged(f.getText());
+        f.addKeyListener(new KeyAdapter() {
+            public void keyPressed(KeyEvent e) {
+                int key = e.getKeyCode();
+                if (key == KeyEvent.VK_ENTER) {
+                    expressionChanged(f.getText());
+                }
             }
 
-            public void removeUpdate(DocumentEvent e) {
-                expressionChanged(f.getText());
-            }
-
-            public void changedUpdate(DocumentEvent e) {
-                expressionChanged(f.getText());
-            }
         });
         panel.add(f);
         return panel;
