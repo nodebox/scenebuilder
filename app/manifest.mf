@@ -14,4 +14,5 @@ Import-Package: org.osgi.framework,
     javax.imageio,
     processing.core,
     nodebox.node,
+    nodebox.node.event,
     nodebox.util

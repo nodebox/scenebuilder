@@ -1,6 +1,7 @@
 package nodebox.app;
 
 import nodebox.node.*;
+import nodebox.node.event.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class NetworkViewer extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
+public class NetworkViewer extends JPanel implements MouseListener, MouseMotionListener, KeyListener, NodeEventListener {
 
     public static final String SELECT_PROPERTY = "NetworkViewer.select";
 
@@ -47,6 +48,7 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
     public NetworkViewer(SceneDocument document, Scene scene) {
         this.document = document;
         this.scene = scene;
+        scene.addListener(this);
         setCurrentNetwork(scene.getRootNetwork());
         addMouseListener(this);
         addMouseMotionListener(this);
@@ -370,6 +372,23 @@ public class NetworkViewer extends JPanel implements MouseListener, MouseMotionL
 
     public boolean isConnectionEndPort(Port port) {
         return connectionEndPort == port;
+    }
+
+
+    //// Events ////
+
+    public void receive(NodeEvent event) {
+        if (event instanceof NodeAttributeChangedEvent) {
+            if (event.getSource().getNetwork() != getCurrentNetwork()) return;
+            childAttributeChanged(event.getSource(), ((NodeAttributeChangedEvent) event).getAttribute());
+        }
+        if (event.getSource() != getCurrentNetwork()) return;
+    }
+
+    public void childAttributeChanged(Node child, Node.Attribute attribute) {
+        if (attribute == Node.Attribute.PORT) {
+            updateView();
+        }
     }
 
     private class PopupHandler extends MouseAdapter {
