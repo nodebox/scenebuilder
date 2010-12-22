@@ -192,7 +192,7 @@ public class Network extends Node {
         return connections;
     }
 
-    public void connect(Port output, Port input) {
+    public Connection connect(Port output, Port input) {
         checkNotNull(output);
         checkNotNull(input);
         checkArgument(output.getNode().getNetwork() == this, "Output %s is not a child of this network.", output);
@@ -202,7 +202,7 @@ public class Network extends Node {
         connections.add(conn);
         if (scene != null)
             scene.fireConnectionAdded(this, conn);
-
+        return conn;
     }
 
     public Collection<Connection> getInputConnections(Node node) {
@@ -339,6 +339,18 @@ public class Network extends Node {
     public boolean isConnected(Port port) {
         for (Connection c : connections) {
             if (c.getInputPort() == port || c.getOutputPort() == port) return true;
+        }
+        return false;
+    }
+
+    public boolean isConnectedTo(Port port1, Port port2) {
+        if (port1.getDirection() == port2.getDirection()) return false;
+        Port output = port1.isOutputPort() ? port1 : port2;
+        Port input = port1.isInputPort() ? port1 : port2;
+        for (Connection c : connections) {
+            if (output == c.getOutputPort() && input == c.getInputPort()) {
+                return true;
+            }
         }
         return false;
     }

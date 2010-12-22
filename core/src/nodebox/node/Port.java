@@ -136,6 +136,11 @@ public abstract class Port {
         return parent != null && parent.isConnected(this);
     }
 
+    public boolean isConnectedTo(Port port) {
+        Network parent = node.getNetwork();
+        return parent != null && parent.isConnectedTo(this, port);
+    }
+
     public Connection getConnection() {
         checkState(isInputPort(), "Get connection only works on input ports.");
         Network parent = node.getNetwork();

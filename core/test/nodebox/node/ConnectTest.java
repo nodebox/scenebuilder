@@ -19,6 +19,39 @@ public class ConnectTest extends TestCase {
         }
     }
 
+    public void testConnect() {
+        Network net = new Network();
+        Node number1 = net.createChild(Number.class);
+        Node multiply1 = net.createChild(Multiply.class);
+        Node upper1 = net.createChild(ConvertToUppercase.class);
+
+        assertFalse(multiply1.getPort("value1").isConnected());
+        assertFalse(multiply1.getPort("value1").isConnectedTo(number1.getPort("value")));
+        assertFalse(number1.getPort("value").isConnected());
+        assertFalse(number1.getPort("value").isConnectedTo(multiply1.getPort("value1")));
+
+        assertTrue(multiply1.getPort("value1").canConnectTo(number1.getPort("value")));
+        assertTrue(multiply1.getPort("value2").canConnectTo(number1.getPort("value")));
+        assertFalse(upper1.getPort("output").canConnectTo(number1.getPort("value")));
+
+        Connection conn = net.connect(number1.getPort("value"), multiply1.getPort("value1"));
+        assertTrue(multiply1.getPort("value1").isConnected());
+        assertTrue(multiply1.getPort("value1").isConnectedTo(number1.getPort("value")));
+        assertTrue(number1.getPort("value").isConnected());
+        assertTrue(number1.getPort("value").isConnectedTo(multiply1.getPort("value1")));
+        assertEquals(multiply1.getPort("value1"), conn.getInputPort());
+        assertEquals(number1.getPort("value"), conn.getOutputPort());
+        assertEquals(multiply1, conn.getInputNode());
+        assertEquals(number1, conn.getOutputNode());
+
+        Node number2 = net.createChild(Number.class);
+        Node multiply2 = net.createChild(Multiply.class);
+        net.connect(number2.getPort("value"), multiply2.getPort("value1"));
+        assertTrue(number2.getPort("value").isConnectedTo(multiply2.getPort("value1")));
+        assertFalse(number1.getPort("value").isConnectedTo(multiply2.getPort("value1")));
+        assertFalse(number2.getPort("value").isConnectedTo(multiply1.getPort("value1")));
+    }
+
     public void testConnectionEvents() {
         ConnectListener l = new ConnectListener();
         Scene scene = new Scene();
@@ -61,6 +94,27 @@ public class ConnectTest extends TestCase {
         @Override
         public void execute(Context context, float time) {
             pOutput.set(pValue1.get() + pValue2.get());
+        }
+    }
+
+    public static class Multiply extends Node {
+        public IntPort pValue1 = new IntPort(this, "value1", Port.Direction.INPUT);
+        public IntPort pValue2 = new IntPort(this, "value2", Port.Direction.INPUT);
+        public IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT);
+
+        @Override
+        public void execute(Context context, float time) {
+            pOutput.set(pValue1.get() * pValue2.get());
+        }
+    }
+
+    public static class ConvertToUppercase extends Node {
+        public StringPort pString = new StringPort(this, "string", Port.Direction.INPUT);
+        public StringPort pOutput = new StringPort(this, "output", Port.Direction.OUTPUT);
+
+        @Override
+        public void execute(Context context, float time) {
+            pOutput.set(pString.get().toUpperCase());
         }
     }
 }
