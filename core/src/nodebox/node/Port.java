@@ -2,7 +2,9 @@ package nodebox.node;
 
 import nodebox.util.Strings;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import static nodebox.util.Preconditions.checkNotNull;
@@ -136,9 +138,33 @@ public abstract class Port {
         return parent != null && parent.isConnected(this);
     }
 
+    /**
+     * Check if this port is connected to the given port.
+     *
+     * @return true if the two ports are connected.
+     */
     public boolean isConnectedTo(Port port) {
         Network parent = node.getNetwork();
         return parent != null && parent.isConnectedTo(this, port);
+    }
+
+    /**
+     * Check if this port is connected to any of the ports of the given node.
+     *
+     * @return true if a connection exists.
+     */
+    public boolean isConnectedTo(Node node) {
+        Network parent = node.getNetwork();
+        return parent != null && parent.isConnectedTo(this, node);
+    }
+
+    public Collection<Connection> getConnections() {
+        Network parent = node.getNetwork();
+        if (parent != null) {
+            return parent.getConnections(this);
+        } else {
+            return new LinkedList<Connection>();
+        }
     }
 
     public Connection getConnection() {
@@ -148,6 +174,16 @@ public abstract class Port {
             return parent.getInputConnection(this);
         } else {
             return null;
+        }
+    }
+
+    public Collection<Connection> getOutputConnections() {
+        checkState(isOutputPort(), "Get output connections only works on output ports.");
+        Network parent = node.getNetwork();
+        if (parent != null) {
+            return parent.getOutputConnections(this);
+        } else {
+            return new LinkedList<Connection>();
         }
     }
 

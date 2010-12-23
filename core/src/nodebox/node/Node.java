@@ -264,6 +264,67 @@ public abstract class Node {
         }
     }
 
+    //// Connections ////
+
+    public Collection<Connection> getConnections() {
+        if (network != null) {
+            return network.getConnections(this);
+        } else {
+            return new LinkedList<Connection>();
+        }
+    }
+
+    public Collection<Connection> getInputConnections() {
+        if (network != null) {
+            return network.getInputConnections(this);
+        } else {
+            return new LinkedList<Connection>();
+        }
+    }
+
+
+    public Collection<Connection> getOutputConnections() {
+        if (network != null) {
+            return network.getOutputConnections(this);
+        } else {
+            return new LinkedList<Connection>();
+        }
+    }
+
+    /**
+     * Check if this node is connected to another node.
+     *
+     * @return true if this node is connected.
+     */
+    public boolean isConnected() {
+        if (network != null)
+            return network.isConnected(this);
+        return false;
+    }
+
+    /**
+     * Check if this node is connected to the given node.
+     *
+     * @return true if the two nodes are connected.
+     */
+    public boolean isConnectedTo(Node node) {
+        if (network != null)
+            return network.isConnectedTo(this, node);
+        return false;
+    }
+
+    /**
+     * Check if any of this node's ports are connected to the given port.
+     *
+     * @return true if a connection exists.
+     */
+    public boolean isConnectedTo(Port port) {
+        if (network != null)
+            return port.isConnectedTo(this);
+        return false;
+    }
+
+
     //// Custom interface ////
 
     public JComponent createCustomEditor() {

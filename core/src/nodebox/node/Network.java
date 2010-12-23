@@ -205,6 +205,28 @@ public class Network extends Node {
         return conn;
     }
 
+    public Collection<Connection> getConnections(Node node) {
+        LinkedList<Connection> cs = new LinkedList<Connection>();
+        for (Connection c : connections) {
+            if (c.getInputNode() == node || c.getOutputNode() == node) {
+                cs.add(c);
+            }
+        }
+        return cs;
+    }
+
+    public Collection<Connection> getConnections(Port port) {
+        if (port.isInputPort()) {
+            LinkedList<Connection> cs = new LinkedList<Connection>();
+            Connection c = getInputConnection(port);
+            if (c != null)
+                cs.add(c);
+            return cs;
+        } else {
+            return getOutputConnections(port);
+        }
+    }
+
     public Collection<Connection> getInputConnections(Node node) {
         LinkedList<Connection> cs = new LinkedList<Connection>();
         for (Connection c : connections) {
@@ -223,6 +245,27 @@ public class Network extends Node {
             }
         }
         return null;
+    }
+
+    public Collection<Connection> getOutputConnections(Node node) {
+        LinkedList<Connection> cs = new LinkedList<Connection>();
+        for (Connection c : connections) {
+            if (c.getOutputNode() == node) {
+                cs.add(c);
+            }
+        }
+        return cs;
+    }
+
+    public Collection<Connection> getOutputConnections(Port port) {
+        checkArgument(port.isOutputPort(), "getOutputConnections() can only take output ports.");
+        LinkedList<Connection> cs = new LinkedList<Connection>();
+        for (Connection c : connections) {
+            if (c.getOutputPort() == port) {
+                cs.add(c);
+            }
+        }
+        return cs;
     }
 
     public void disconnect(Node node) {
@@ -336,9 +379,27 @@ public class Network extends Node {
         }
     }
 
+    public boolean isConnected(Node node) {
+        for (Connection c : connections) {
+            if (c.getInputNode() == node || c.getOutputNode() == node) return true;
+        }
+        return false;
+    }
+
     public boolean isConnected(Port port) {
         for (Connection c : connections) {
             if (c.getInputPort() == port || c.getOutputPort() == port) return true;
+        }
+        return false;
+    }
+
+    public boolean isConnectedTo(Node node1, Node node2) {
+        if (node1 == node2) return false;
+        for (Connection c : connections) {
+            if ((node1 == c.getOutputNode() && node2 == c.getInputNode()) ||
+                (node1 == c.getInputNode() && node2 == c.getOutputNode())) {
+                return true;
+            }
         }
         return false;
     }
@@ -355,4 +416,20 @@ public class Network extends Node {
         return false;
     }
 
+    public boolean isConnectedTo(Port port, Node node) {
+        boolean isInput = port.isInputPort();
+
+        for (Connection c : connections) {
+            if (isInput) {
+                if (c.getInputPort() == port && c.getOutputNode() == node) {
+                    return true;
+                }
+            } else {
+                if (c.getOutputPort() == port && c.getInputNode() == node) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
