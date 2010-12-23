@@ -60,6 +60,85 @@ public class ConnectTest extends TestCase {
         assertFalse(number2.getPort("output").isConnectedTo(multiply1));
     }
 
+    public void testValuePropagation() {
+        Network net = new Network();
+        Node number1 = net.createChild(Number.class);
+        Node number2 = net.createChild(Number.class);
+        Node m = net.createChild(Multiply.class);
+        net.connect(number1.getPort("output"), m.getPort("v1"));
+        net.connect(number2.getPort("output"), m.getPort("v2"));
+        assertEquals(0, m.getValue("output"));
+        number1.setValue("value", 3);
+        number2.setValue("value", 2);
+        assertEquals(0, m.getValue("output"));
+        // Updating the NumberIn node has no effect on the multiplier node.
+        number1.update(new MockContext(), 0.0f);
+        assertEquals(0, m.getValue("output"));
+        m.update(new MockContext(), 0.0f);
+        assertEquals(6, m.getValue("output"));
+        // Test if value stops propagating after disconnection.
+        net.disconnect(m.getPort("v1"));
+        assertFalse(m.getPort("v1").isConnected());
+        // The value is still the old value because the node has not been updated yet.
+        assertEquals(6, m.getValue("output"));
+        number1.setValue("value", 3);
+    }
+
+    public void testDisconnect() {
+        Network net = new Network();
+        Node number1 = net.createChild(Number.class);
+        Node number2 = net.createChild(Number.class);
+        Node m = net.createChild(Multiply.class);
+        number1.setValue("value", 5);
+        number2.setValue("value", 2);
+        net.connect(number1.getPort("output"), m.getPort("v1"));
+        net.connect(number2.getPort("output"), m.getPort("v2"));
+        assertTrue(m.getPort("v1").isConnected());
+        assertTrue(number1.getPort("output").isConnected());
+        m.update(new MockContext(), 0.0f);
+        assertEquals(5, m.getPort("v1").getValue());
+        assertEquals(10, m.getValue("output"));
+        assertFalse(m.getPort("v1").getConnections().isEmpty());
+
+        // Disconnecting a port makes the dependent nodes dirty, but not the upstream nodes.
+        // "Dirt flows downstream"
+        net.disconnect(m.getPort("v1"));
+        assertFalse(m.getPort("v1").isConnected());
+        assertFalse(number1.getPort("output").isConnected());
+        assertTrue(m.getPort("v1").getConnections().isEmpty());
+    }
+
+    /**
+     * Check if all connections are destroyed when removing a node.
+     */
+    public void testRemoveNode() {
+        Network net = new Network();
+        // Create a basic connection.
+        Node numberOut = net.createChild(Number.class);
+        Node numberIn = net.createChild(Number.class);
+        net.connect(numberOut.getPort("output"), numberIn.getPort("value"));
+        // Remove the node. This should also remove all connections.
+        net.removeChild(numberOut);
+        assertFalse(numberOut.isConnected());
+        assertFalse(numberIn.isConnected());
+    }
+
+    public void testOnlyOneConnect() {
+        Network net = new Network();
+        Node number1 = net.createChild(Number.class);
+        Node number2 = net.createChild(Number.class);
+        Node numberIn = net.createChild(Number.class);
+        net.connect(number1.getPort("output"), numberIn.getPort("value"));
+        assertTrue(number1.isConnected());
+        assertFalse(number2.isConnected());
+        assertTrue(numberIn.isConnected());
+        // Now change the connection to number2.
+        net.connect(number2.getPort("output"), numberIn.getPort("value"));
+        assertFalse(number1.isConnected());
+        assertTrue(number2.isConnected());
+        assertTrue(numberIn.isConnected());
+    }
+
     public void testConnectionEvents() {
         ConnectListener l = new ConnectListener();
         Scene scene = new Scene();
