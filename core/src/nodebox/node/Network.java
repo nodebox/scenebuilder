@@ -199,7 +199,12 @@ public class Network extends Node {
         checkArgument(input.getNode().getNetwork() == this, "Input %s is not a child of this network.", input);
         disconnect(input);
         Connection conn = new Connection(this, output, input);
-        connections.add(conn);
+        ArrayList<Connection> newConnections = new ArrayList<Connection>(connections);
+        newConnections.add(conn);
+        CycleDetector detector = new CycleDetector(newConnections);
+        // This check will throw an IllegalArgumentException, which is the exception we want.
+        checkArgument(!detector.hasCycles(), "Creating this connection would cause a cyclic dependency.");
+        connections = newConnections;
         if (scene != null)
             scene.fireConnectionAdded(this, conn);
         return conn;
