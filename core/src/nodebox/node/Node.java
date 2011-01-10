@@ -48,6 +48,11 @@ public abstract class Node {
         return (drawable != null);
     }
 
+    public boolean shouldAlwaysEvaluate() {
+        EvaluatedNode evaluatedNode = getClass().getAnnotation(EvaluatedNode.class);
+        return (evaluatedNode != null);
+    }
+
     public Scene getScene() {
         if (network != null)
             return network.getScene();

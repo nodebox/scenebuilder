@@ -354,13 +354,18 @@ public class Network extends Node {
 
 
     /**
-     * Execute the rendered child node in the network.
+     * Execute the child nodes in the network that should always evaluate
+     * as well as the rendered child node.
      *
      * @param context the rendering context
      * @param time    the current time
      */
     @Override
     public void execute(Context context, float time) {
+        for (Node childNode : children) {
+            if (childNode != renderedNode && childNode.shouldAlwaysEvaluate())
+                childNode.update(context, time);
+        }
         if (renderedNode != null) {
             renderedNode.update(context, time);
         }
