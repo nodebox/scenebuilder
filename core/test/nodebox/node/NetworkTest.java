@@ -4,6 +4,9 @@ import junit.framework.TestCase;
 import nodebox.node.event.ChildAddedEvent;
 import nodebox.node.event.ChildRemovedEvent;
 
+import nodebox.node.TestNodes.TestNode;
+import nodebox.node.TestNodes.Number;
+
 public class NetworkTest extends TestCase {
     
     class TestChildListener implements NodeEventListener {
@@ -108,24 +111,6 @@ public class NetworkTest extends TestCase {
             net.connect(outputNode.getPort("output"), inputNode.getPort(inputPortName));
             fail("Should have thrown IllegalArgumentException.");
         } catch (IllegalArgumentException ignored) {
-        }
-    }
-
-
-
-    public static class TestNode extends Node {
-        @Override
-        public void execute(Context context, float time) {
-        }
-    }
-
-    public static class Number extends Node {
-        public IntPort pValue = new IntPort(this, "value", Port.Direction.INPUT);
-        public IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT);
-
-        @Override
-        public void execute(Context context, float time) {
-            pOutput.set(pValue.get());
         }
     }
 }

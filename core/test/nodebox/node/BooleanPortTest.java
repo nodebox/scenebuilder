@@ -1,6 +1,7 @@
 package nodebox.node;
 
 import junit.framework.TestCase;
+import nodebox.node.TestNodes.TestNode;
 
 public class BooleanPortTest extends TestCase {
     
@@ -22,11 +23,5 @@ public class BooleanPortTest extends TestCase {
         BooleanPort p = new BooleanPort(new TestNode(), "bool", Port.Direction.INPUT, false);
         assertEquals(true, p.parseValue("true"));
         assertEquals(false, p.parseValue("false"));
-    }
-
-    public static class TestNode extends Node {
-        @Override
-        public void execute(Context context, float time) {
-        }
     }
 }

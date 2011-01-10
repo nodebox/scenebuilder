@@ -1,6 +1,7 @@
 package nodebox.node;
 
 import junit.framework.TestCase;
+import nodebox.node.TestNodes.TestNode;
 
 public class IntPortTest extends TestCase {
     /**
@@ -43,11 +44,5 @@ public class IntPortTest extends TestCase {
         p.removeMenuItem(2);
         assertFalse(p.hasMenu());
         assertEquals("int", p.getWidget());
-    }
-
-    public static class TestNode extends Node {
-        @Override
-        public void execute(Context context, float time) {
-        }
     }
 }

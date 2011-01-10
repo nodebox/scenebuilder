@@ -1,6 +1,7 @@
 package nodebox.node;
 
 import junit.framework.TestCase;
+import nodebox.node.TestNodes.TestNode;
 
 public class FloatPortTest extends TestCase {
     /**
@@ -28,11 +29,5 @@ public class FloatPortTest extends TestCase {
         assertEquals("123.45", p.getValueAsString());
         p.setValue(-239f);
         assertEquals("-239.0", p.getValueAsString());
-    }
-
-    public static class TestNode extends Node {
-        @Override
-        public void execute(Context context, float time) {
-        }
     }
 }

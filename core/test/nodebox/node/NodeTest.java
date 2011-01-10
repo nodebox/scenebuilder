@@ -3,6 +3,8 @@ package nodebox.node;
 import junit.framework.TestCase;
 import processing.core.PGraphics;
 
+import nodebox.node.TestNodes.TestNode;
+
 public class NodeTest extends TestCase {
 
     public void testBasicUsage() {
@@ -180,12 +182,6 @@ public class NodeTest extends TestCase {
         assertEquals(0, gamma.deactivated);
     }
 
-    public static class TestNode extends Node {
-        @Override
-        public void execute(Context context, float time) {
-        }
-    }
-    
     public static class LifeCycleNode extends Node {
 
         public IntPort pInput = new IntPort(this, "input", Port.Direction.INPUT);

@@ -1,6 +1,7 @@
 package nodebox.node;
 
 import junit.framework.TestCase;
+import nodebox.node.TestNodes.TestNode;
 
 public class StringPortTest extends TestCase {
     
@@ -30,11 +31,5 @@ public class StringPortTest extends TestCase {
         p.removeMenuItem("key2");
         assertFalse(p.hasMenu());
         assertEquals("string", p.getWidget());
-    }
-
-    public static class TestNode extends Node {
-        @Override
-        public void execute(Context context, float time) {
-        }
     }
 }

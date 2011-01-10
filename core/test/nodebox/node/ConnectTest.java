@@ -4,6 +4,11 @@ import junit.framework.TestCase;
 import nodebox.node.event.ConnectionAddedEvent;
 import nodebox.node.event.ConnectionRemovedEvent;
 
+import nodebox.node.TestNodes.Number;
+import nodebox.node.TestNodes.Add;
+import nodebox.node.TestNodes.Multiply;
+import nodebox.node.TestNodes.ConvertToUppercase;
+
 public class ConnectTest extends TestCase {
 
     private class ConnectListener implements NodeEventListener {
@@ -167,47 +172,5 @@ public class ConnectTest extends TestCase {
         assertEquals(2, l.connectCounter);
         assertEquals(2, l.disconnectCounter);
         scene.removeListener(l);
-    }
-
-    public static class Number extends Node {
-        public IntPort pValue = new IntPort(this, "value", Port.Direction.INPUT);
-        public IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT);
-
-        @Override
-        public void execute(Context context, float time) {
-            pOutput.set(pValue.get());
-        }
-    }
-
-    public static class Add extends Node {
-        public IntPort pValue1 = new IntPort(this, "v1", Port.Direction.INPUT);
-        public IntPort pValue2 = new IntPort(this, "v2", Port.Direction.INPUT);
-        public IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT);
-
-        @Override
-        public void execute(Context context, float time) {
-            pOutput.set(pValue1.get() + pValue2.get());
-        }
-    }
-
-    public static class Multiply extends Node {
-        public IntPort pValue1 = new IntPort(this, "v1", Port.Direction.INPUT);
-        public IntPort pValue2 = new IntPort(this, "v2", Port.Direction.INPUT);
-        public IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT);
-
-        @Override
-        public void execute(Context context, float time) {
-            pOutput.set(pValue1.get() * pValue2.get());
-        }
-    }
-
-    public static class ConvertToUppercase extends Node {
-        public StringPort pString = new StringPort(this, "string", Port.Direction.INPUT);
-        public StringPort pOutput = new StringPort(this, "output", Port.Direction.OUTPUT);
-
-        @Override
-        public void execute(Context context, float time) {
-            pOutput.set(pString.get().toUpperCase());
-        }
     }
 }
