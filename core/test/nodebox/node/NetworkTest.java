@@ -65,10 +65,67 @@ public class NetworkTest extends TestCase {
         assertEquals(1, l3.childAddedCounter);
     }
 
+    public void testCycles() {
+        Scene scene = new Scene();
+        Network net = scene.getRootNetwork();
+        Node n1 = net.createChild(Number.class);
+        Node n2 = net.createChild(Number.class);
+        Node n3 = net.createChild(Number.class);
+        assertFalse(n2.isConnected());
+        assertValidConnect(net, n2, "value", n1);
+        assertTrue(n2.isConnected());
+        assertTrue(n2.getPort("value").isConnectedTo(n1));
+        assertTrue(n1.getPort("output").isConnectedTo(n2));
+        assertValidConnect(net, n3, "value", n2);
+        assertTrue(n3.isConnected());
+        assertTrue(n3.getPort("value").isConnectedTo(n2));
+        assertTrue(n2.getPort("output").isConnectedTo(n3));
+        // Try creating a 2-node cycle.
+        assertInvalidConnect(net, n1, "value", n2);
+        // The connection didn't go through, so n1's input is not connected to n2.
+        assertFalse(n1.getPort("value").isConnectedTo(n2));
+        // However the output of n2 is still connected to n1.
+        assertTrue(n2.getPort("value").isConnectedTo(n1));
+        assertTrue(n1.isConnected());
+        assertTrue(n2.isConnected());
+        // Try creating a 3-node cycle.
+        assertInvalidConnect(net, n1, "value", n3);
+    }
+
+    private void assertValidConnect(Network net, Node inputNode, String inputPortName, Node outputNode) {
+        assert inputNode != null;
+        assert inputPortName != null;
+        assert outputNode != null;
+        try {
+            net.connect(outputNode.getPort("output"), inputNode.getPort(inputPortName));
+        } catch (IllegalArgumentException e) {
+            fail("Should not have thrown IllegalArgumentException: " + e);
+        }
+    }
+
+    private void assertInvalidConnect(Network net, Node inputNode, String inputPortName, Node outputNode) {
+        try {
+            net.connect(outputNode.getPort("output"), inputNode.getPort(inputPortName));
+            fail("Should have thrown IllegalArgumentException.");
+        } catch (IllegalArgumentException ignored) {
+        }
+    }
+
+
 
     public static class TestNode extends Node {
         @Override
         public void execute(Context context, float time) {
+        }
+    }
+
+    public static class Number extends Node {
+        public IntPort pValue = new IntPort(this, "value", Port.Direction.INPUT);
+        public IntPort pOutput = new IntPort(this, "output", Port.Direction.OUTPUT);
+
+        @Override
+        public void execute(Context context, float time) {
+            pOutput.set(pValue.get());
         }
     }
 }
