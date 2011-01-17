@@ -5,4 +5,5 @@ Bundle-Name: Node-Video
 Bundle-Version: 1.0.0
 Bundle-ClassPath: .,QTJava.zip,processing-video.jar
 Import-Package: org.osgi.framework, processing.core, nodebox.node, nodebox.util, javax.swing
-Export-Node: nodebox.video.Capture
+Export-Node: nodebox.video.Capture,
+    nodebox.video.Movie
