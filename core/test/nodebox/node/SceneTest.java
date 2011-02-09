@@ -93,6 +93,32 @@ public class SceneTest extends TestCase {
         assertEquals(99, net1.getChild("inputNode4").getPort("input").getValue());
     }
 
+    public void testSaveVariant() {
+        Scene scene = new Scene();
+        Network root = scene.getRootNetwork();
+        Network net = (Network) root.createChild(Network.class);
+        net.setScene(scene);
+        Node inputSplitter1 = net.createChild(InputSplitter.class);
+        Node inputSplitter2 = net.createChild(InputSplitter.class);
+        net.connect(inputSplitter2.getPort("output"), inputSplitter1.getPort("input"));
+        net.publishPort(inputSplitter2.getPort("input"));
+        net.publishPort(inputSplitter1.getPort("output"));
+        inputSplitter1.setRenderedNode();
+        Node outputNode = root.createChild(OutputNode.class);
+        Node inputNode = root.createChild(InputNode.class);
+        root.connect(outputNode.getPort("output"), net.getPort("inputSplitter2_input"));
+        root.connect(net.getPort("inputSplitter1_output"), inputNode.getPort("input"));
+        inputNode.setRenderedNode();
+        Scene newScene = Scene.load(scene.toXML(), manager);
+        Network newRoot = newScene.getRootNetwork();
+        assertTrue(newRoot.getChild("network1").getPort("inputSplitter2_input").isConnected());
+        assertTrue(newRoot.getChild("network1").getPort("inputSplitter1_output").isConnected());
+        newRoot.getChild("outputNode1").setValue("output", 42);
+        assertEquals(0, newRoot.getChild("inputNode1").getValue("input"));
+        newRoot.execute(new Context((PApplet) null), 0);
+        assertEquals(42, newRoot.getChild("inputNode1").getValue("input"));
+    }
+
     @Category("Test")
     public static class AllTypesNode extends Node {
         public final IntPort pInt = new IntPort(this, "int", Port.Direction.INPUT, 42);
