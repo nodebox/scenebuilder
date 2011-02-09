@@ -16,6 +16,7 @@ public class SceneTest extends TestCase {
         manager.registerNodeClass(AllTypesNode.class);
         manager.registerNodeClass(OutputNode.class);
         manager.registerNodeClass(InputNode.class);
+        manager.registerNodeClass(InputSplitter.class);
     }
 
     public void testLoad() {
@@ -111,7 +112,7 @@ public class SceneTest extends TestCase {
     }
 
     @Category("Test")
-    public class InputSplitter extends Node {
+    public static class InputSplitter extends Node {
         public VariantPort pInput = new VariantPort(this, "input", Port.Direction.INPUT);
         public VariantPort pOutput = new VariantPort(this, "output", Port.Direction.OUTPUT);
 
