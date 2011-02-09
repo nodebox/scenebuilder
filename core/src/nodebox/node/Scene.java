@@ -401,7 +401,9 @@ public class Scene {
          */
         private void setPortValue(String stringValue) throws SAXException {
             if (currentPort == null) throw new SAXException("There is no current port.");
-            if (currentPort.isPersistable()) {
+            Network network = currentPort.getNode().getNetwork();
+            boolean persistable = (network != null && network.isPublished(currentPort));
+            if (currentPort.isPersistable() && ! persistable) {
                 PersistablePort persistablePort = (PersistablePort) currentPort;
                 Object value = persistablePort.parseValue(stringValue);
                 currentPort.setValue(value);
