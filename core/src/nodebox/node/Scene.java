@@ -550,22 +550,18 @@ public class Scene {
     }
 
     private static void writePort(Document doc, Element parent, Port port) {
-        if (port.isPersistable()) {
-            PersistablePort persistablePort = (PersistablePort) port;
+        Network network = port.getNode().getNetwork();
+        if (network != null && network.isPublished(port)) { // published port
             Element el = doc.createElement("port");
             el.setAttribute("name", port.getName());
-
-            Network network = port.getNode().getNetwork();
-            if (network != null && network.isPublished(port)) {
-                el.setAttribute("published", "true");
-                if (port.isOutputPort())
-                    parent.appendChild(el);
-            }
-            
-            if (port.isInputPort()) {
-                el.appendChild(doc.createTextNode(persistablePort.getValueAsString()));
-                parent.appendChild(el);
-            }
+            el.setAttribute("published", "true");
+            parent.appendChild(el);
+        } else if (port.isPersistable() && port.isInputPort()) { // persistent inputport
+            Element el = doc.createElement("port");
+            el.setAttribute("name", port.getName());
+            PersistablePort persistablePort = (PersistablePort) port;
+            el.appendChild(doc.createTextNode(persistablePort.getValueAsString()));
+            parent.appendChild(el);
         }
     }
 
