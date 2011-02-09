@@ -51,7 +51,45 @@ public class SceneTest extends TestCase {
         String xml = scene.toXML();
         Scene newScene = Scene.load(xml, manager);
         Network newRoot = newScene.getRootNetwork();
+        assertEquals(2, newRoot.getChildren().size());
+        assertTrue(newRoot.getChild("outputNode1").getPort("output").isOutputPort());
         assertTrue(newRoot.getChild("outputNode1").getPort("output").isConnected());
+        assertTrue(newRoot.getChild("inputNode1").getPort("input").isConnectedTo(newRoot.getChild("outputNode1")));
+    }
+
+    public void testSavePublished() {
+        Scene scene = new Scene();
+        Network root = scene.getRootNetwork();
+        Network net = (Network) root.createChild(Network.class);
+        net.setScene(scene);
+        Node input1 = net.createChild(InputNode.class);
+        Node input2 = net.createChild(InputNode.class);
+        Node input3 = net.createChild(InputNode.class);
+        Node input4 = net.createChild(InputNode.class);
+        net.publishPort(input1.getPort("input"));
+        net.publishPort(input3.getPort("input"));
+        net.unPublishPort(input3.getPort("input"));
+        net.publishPort(input4.getPort("input"));
+        Node output1 = root.createChild(OutputNode.class);
+        root.connect(output1.getPort("output"), net.getPort("inputNode4_input"));
+        String xml = scene.toXML();
+        Scene newScene = Scene.load(xml, manager);
+        Network newRoot = newScene.getRootNetwork();
+        assertTrue(newRoot.hasChild("network1"));
+        Network net1 = (Network) newRoot.getChild("network1");
+        assertTrue(net1.hasPort("inputNode1_input"));
+        assertFalse(net1.hasPort("intputNode2_input"));
+        assertFalse(net1.hasPort("intputNode3_input"));
+        assertTrue(net1.hasPort("inputNode4_input"));
+        assertTrue(net1.isPublished(net1.getChild("inputNode1").getPort("input")));
+        assertFalse(net1.isPublished(net1.getChild("inputNode2").getPort("input")));
+        assertFalse(net1.isPublished(net1.getChild("inputNode3").getPort("input")));
+        assertFalse(net1.getChild("inputNode1").isConnected());
+        assertFalse(net1.getPort("inputNode1_input").isConnected());
+        assertTrue(net1.getPort("inputNode4_input").isConnected());
+        assertEquals(0, net1.getChild("inputNode4").getPort("input").getValue());
+        newRoot.execute(new Context((PApplet) null), 0);
+        assertEquals(99, net1.getChild("inputNode4").getPort("input").getValue());
     }
 
     @Category("Test")
@@ -70,5 +108,16 @@ public class SceneTest extends TestCase {
     @Category("Test")
     public static class InputNode extends Node {
         public final IntPort pInput = new IntPort(this, "input", Port.Direction.INPUT, 0);
+    }
+
+    @Category("Test")
+    public class InputSplitter extends Node {
+        public VariantPort pInput = new VariantPort(this, "input", Port.Direction.INPUT);
+        public VariantPort pOutput = new VariantPort(this, "output", Port.Direction.OUTPUT);
+
+        @Override
+        public void execute(Context context, float time) {
+            pOutput.set(pInput.get());
+        }
     }
 }
