@@ -18,7 +18,7 @@ public class OpenDocumentAction extends AbstractAction {
     }
 
     public void actionPerformed(ActionEvent e) {
-        File chosenFile = FileUtils.showOpenDialog(null, SceneDocument.lastFilePath, "ndbx", "NodeBox Document");
+        File chosenFile = FileUtils.showOpenDialog(SceneDocument.getCurrentDocument(), SceneDocument.lastFilePath, "ndbx", "NodeBox Document");
         if (chosenFile != null) {
             Application.getInstance().openDocument(chosenFile);
         }
