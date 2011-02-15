@@ -35,5 +35,6 @@ public class ImagePort extends Port {
 
     public void set(PImage value) {
         this.value = value;
+        markDirty();
     }
 }

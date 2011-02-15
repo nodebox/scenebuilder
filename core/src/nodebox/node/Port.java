@@ -30,6 +30,7 @@ public abstract class Port {
     private final String name;
     private final Direction direction;
     private Map<String, Object> attributes = new HashMap<String, Object>();
+    private transient boolean dirty;
 
     public Port(Node node, String name, Direction direction) {
         this.node = node;
@@ -105,6 +106,18 @@ public abstract class Port {
      * @throws IllegalArgumentException if the value is invalid for this port.
      */
     public abstract void setValue(Object value) throws IllegalArgumentException;
+
+    protected void markDirty() {
+        if (dirty) return;
+        dirty = true;
+        fireValueChanged();
+    }
+
+    protected void fireValueChanged() {
+        //firePortValueChanged(getNode(), this);
+//        getLibrary().fireValueChanged(getNode(), this);
+//        getNode().markDirty();
+    }
 
     /**
      * Check if this port can write and read its value as a string.

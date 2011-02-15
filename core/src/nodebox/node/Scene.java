@@ -127,6 +127,11 @@ public class Scene {
         eventBus.send(new ConnectionRemovedEvent(source, c));
     }
 
+    public void firePortValueChanged(Node source, Port port) {
+        eventBus.send(new ValueChangedEvent(source, port));
+    }
+
+
     //// Loading ////
 
     /**
