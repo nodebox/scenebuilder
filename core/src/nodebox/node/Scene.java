@@ -330,6 +330,8 @@ public class Scene {
                 currentNetwork.addChild(newNode);
             }
 
+            newNode.initialize();
+
             // If this is rendered node, mark it.
             if ("true".equals(attributes.getValue("rendered"))) {
                 newNode.setRenderedNode();
