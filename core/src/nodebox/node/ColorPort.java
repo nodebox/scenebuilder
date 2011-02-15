@@ -45,6 +45,7 @@ public class ColorPort extends Port implements PersistablePort {
 
     public void set(Color value) {
         this.value = value;
+        markDirty();
     }
 
     public Object parseValue(String value) throws IllegalArgumentException {

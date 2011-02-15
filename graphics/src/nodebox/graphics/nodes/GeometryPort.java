@@ -31,5 +31,6 @@ public class GeometryPort extends Port {
 
     public void set(Geometry value) {
         this.value = value;
+        markDirty();
     }
 }

@@ -48,6 +48,7 @@ public class FloatPort extends Port implements PersistablePort {
 
     public void set(float value) {
         this.value = value;
+        markDirty();
     }
 
     public Object parseValue(String value) throws IllegalArgumentException {

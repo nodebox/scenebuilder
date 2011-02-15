@@ -54,6 +54,7 @@ public class IntPort extends Port implements PersistablePort, MenuPort {
 
     public void set(int value) {
         this.value = value;
+        markDirty();
     }
 
     public Object parseValue(String value) throws IllegalArgumentException {

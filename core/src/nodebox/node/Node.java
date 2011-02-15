@@ -20,6 +20,7 @@ public abstract class Node {
     private String displayName;
     private Point position = new Point(0, 0);
     private LinkedList<Port> ports = new LinkedList<Port>();
+    private transient boolean dirty = true;
 
     public enum Attribute {
         NAME, POSITION, DESCRIPTION, IMAGE, PORT
@@ -269,6 +270,32 @@ public abstract class Node {
         }
     }
 
+    //// Dirty handling ////
+
+    public void markDirty() {
+        if (dirty)
+            return;
+        dirty = true;
+        if (getNetwork() != null) {
+            Network network = getNetwork();
+            network.markChildDirty(this);
+            if (!network.isDirty()) {
+                // Only changes to the rendered node should make the network dirty.
+                // TODO: Check for corner cases.
+                if (network.getRenderedNode() == this) {
+                    network.markDirty();
+                }
+            }
+        }
+
+        if (getScene() != null)
+            getScene().fireNodeDirty(this);
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
     //// Connections ////
 
     public Collection<Connection> getConnections() {
@@ -414,8 +441,13 @@ public abstract class Node {
      * @param time    the current time
      */
     public void update(Context context, float time) {
+        if (!dirty) return;
         updateDependencies(context, time);
         execute(context, time);
+        dirty = false;
+        if (getScene() != null)
+            getScene().fireNodeUpdated(this, context);
+
     }
 
     public void updateDependencies(Context context, float time) {
@@ -427,6 +459,10 @@ public abstract class Node {
                 n.update(context, time);
             }
             c.getInputPort().setValue(c.getOutputPort().getValue());
+        }
+
+        for (Port port : ports) {
+            port.update();
         }
     }
 

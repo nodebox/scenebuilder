@@ -113,10 +113,17 @@ public abstract class Port {
         fireValueChanged();
     }
 
+    public void update() {
+        if (!dirty) return;
+        dirty = false;
+    }
+
     protected void fireValueChanged() {
-        //firePortValueChanged(getNode(), this);
-//        getLibrary().fireValueChanged(getNode(), this);
-//        getNode().markDirty();
+        Scene scene = node.getScene();
+        if (scene != null)
+            scene.firePortValueChanged(node, this);
+
+        getNode().markDirty();
     }
 
     /**

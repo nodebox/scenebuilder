@@ -39,7 +39,7 @@ public class StringPort extends Port implements PersistablePort, MenuPort {
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
         if (value instanceof String) {
-            this.value = (String) value;
+            set((String) value);
         } else if (value == null) {
             set("");
         } else {
@@ -49,6 +49,7 @@ public class StringPort extends Port implements PersistablePort, MenuPort {
 
     public void set(String value) {
         this.value = value;
+        markDirty();
     }
 
     public Object parseValue(String value) throws IllegalArgumentException {

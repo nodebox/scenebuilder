@@ -127,6 +127,15 @@ public class Network extends Node {
         }
     }
 
+    protected void markChildDirty(Node node) {
+        checkNotNull(node);
+        for (Connection c : connections) {
+            if (node == c.getOutputNode()) {
+                c.getInputNode().markDirty();
+            }
+        }
+    }
+
     //// Activate/deactivate nodes ////
 
     private Set<Node> reachableNodes() {
@@ -184,6 +193,7 @@ public class Network extends Node {
         this.renderedNode = renderedNode;
         Set<Node> newReachableNodes = reachableNodes();
         updateNodeActivation(oldReachableNodes, newReachableNodes);
+        markDirty();
     }
 
     //// Connections ////
@@ -205,6 +215,7 @@ public class Network extends Node {
         // This check will throw an IllegalArgumentException, which is the exception we want.
         checkArgument(!detector.hasCycles(), "Creating this connection would cause a cyclic dependency.");
         connections = newConnections;
+        input.getNode().markDirty();
         if (scene != null)
             scene.fireConnectionAdded(this, conn);
         return conn;

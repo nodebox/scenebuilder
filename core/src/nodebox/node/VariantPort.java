@@ -23,11 +23,12 @@ public class VariantPort extends Port {
 
     @Override
     public void setValue(Object value) throws IllegalArgumentException {
-        this.value = value;
+        set(value);
     }
 
     public void set(Object value) {
         this.value = value;
+        markDirty();
     }
 
     @Override

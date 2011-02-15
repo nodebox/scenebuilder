@@ -40,6 +40,7 @@ public class BooleanPort extends Port implements PersistablePort {
 
     public void set(boolean value) {
         this.value = value;
+        markDirty();
     }
 
     public Object parseValue(String value) throws IllegalArgumentException {
