@@ -367,12 +367,12 @@ public class Network extends Node {
      */
     @Override
     public void execute(Context context, float time) {
+        if (renderedNode != null) {
+            renderedNode.update(context, time);
+        }
         for (Node childNode : children) {
             if (childNode != renderedNode && childNode.shouldAlwaysEvaluate())
                 childNode.update(context, time);
-        }
-        if (renderedNode != null) {
-            renderedNode.update(context, time);
         }
     }
 
