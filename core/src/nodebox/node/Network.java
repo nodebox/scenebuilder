@@ -136,6 +136,16 @@ public class Network extends Node {
         }
     }
 
+    @Override
+    public boolean hasExternalInputs() {
+        boolean external = super.hasExternalInputs();
+        if (external) return true;
+        Node renderedNode = getRenderedNode();
+        if (renderedNode != null)
+            return renderedNode.hasExternalInputs();
+        return false;
+    }
+
     //// Activate/deactivate nodes ////
 
     private Set<Node> reachableNodes() {
