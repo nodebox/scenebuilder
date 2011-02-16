@@ -6,6 +6,7 @@ import processing.core.PGraphics;
 
 @Description("Provide access to keyboard data.")
 @Category("Device")
+@ExternalInput
 public class Keyboard extends Node {
 
     public final StringPort pKey = new StringPort(this, "key", Port.Direction.OUTPUT, "");

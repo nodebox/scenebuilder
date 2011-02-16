@@ -441,13 +441,19 @@ public abstract class Node {
      * @param time    the current time
      */
     public void update(Context context, float time) {
-        if (!dirty) return;
-        updateDependencies(context, time);
-        execute(context, time);
-        dirty = false;
-        if (getScene() != null)
-            getScene().fireNodeUpdated(this, context);
-
+        if (hasExternalInputs()) {
+            updateDependencies(context, time);
+            execute(context, time);
+            if (getScene() != null)
+                getScene().fireNodeUpdated(this, context);
+        } else {
+            if (!dirty) return;
+            updateDependencies(context, time);
+            execute(context, time);
+            dirty = false;
+            if (getScene() != null)
+                getScene().fireNodeUpdated(this, context);
+        }
     }
 
     public void updateDependencies(Context context, float time) {
@@ -464,6 +470,22 @@ public abstract class Node {
         for (Port port : ports) {
             port.update();
         }
+    }
+
+    public boolean isExternal() {
+        ExternalInput external = getClass().getAnnotation(ExternalInput.class);
+        return (external != null);
+    }
+
+    public boolean hasExternalInputs() {
+        if (isExternal()) return true;
+        for (Connection c : network.getInputConnections(this)) {
+            Node n = c.getOutputNode();
+            if (n.hasExternalInputs())
+                return true;
+        }
+
+        return false;
     }
 
     /**

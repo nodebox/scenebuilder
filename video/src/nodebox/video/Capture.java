@@ -6,6 +6,7 @@ import processing.core.PGraphics;
 @Description("Captures video images.")
 @Drawable
 @Category("Video")
+@ExternalInput
 public class Capture extends Node {
 
     private static final int CAPTURE_WIDTH = 320;

@@ -9,6 +9,7 @@ import processing.core.PGraphics;
  */
 @Description("Provide access to mouse coordinates.")
 @Category("Device")
+@ExternalInput
 public class Mouse extends Node {
 
     public final FloatPort pX = new FloatPort(this, "x", Port.Direction.OUTPUT);
