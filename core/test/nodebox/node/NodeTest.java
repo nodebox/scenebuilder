@@ -1,11 +1,33 @@
 package nodebox.node;
 
 import junit.framework.TestCase;
+import nodebox.node.event.NodeDirtyEvent;
+import nodebox.node.event.NodeUpdatedEvent;
 import processing.core.PGraphics;
 
 import nodebox.node.TestNodes.TestNode;
+import nodebox.node.TestNodes.Number;
+import nodebox.node.TestNodes.Add;
 
 public class NodeTest extends TestCase {
+
+    private class TestDirtyListener implements NodeEventListener {
+        public Node source;
+        public int dirtyCounter, updatedCounter;
+
+        private TestDirtyListener(Node source) {
+            this.source = source;
+        }
+
+        public void receive(NodeEvent event) {
+            if (event.getSource() != source) return;
+            if (event instanceof NodeDirtyEvent) {
+                dirtyCounter++;
+            } else if (event instanceof NodeUpdatedEvent) {
+                updatedCounter++;
+            }
+        }
+    }
 
     public void testBasicUsage() {
         Node dotNode = new DotNode();
@@ -82,6 +104,80 @@ public class NodeTest extends TestCase {
         assertEquals("testNode2", net.uniqueChildName("testNode"));
         assertEquals("testNode100", net.uniqueChildName("testNode99"));
         assertEquals("testNode12a1", net.uniqueChildName("testNode12a"));
+    }
+
+    public void testDirty() {
+        Network net = new Network();
+        Node n = net.createChild(Number.class);
+        assertTrue(n.isDirty());
+        n.update(new MockContext(), 0f);
+        assertFalse(n.isDirty());
+        n.setValue("value", 12);
+        assertTrue(n.isDirty());
+        n.update(new MockContext(), 0f);
+        assertFalse(n.isDirty());
+        n.getPort("value").setValue(13);
+        assertTrue(n.isDirty());
+        n.update(new MockContext(), 0f);
+        assertFalse(n.isDirty());
+    }
+
+    public void testDirtyEvent() {
+        Scene scene = new Scene();
+        Network net = new Network();
+        net.setScene(scene);
+        Node add = net.createChild(Add.class);
+        TestDirtyListener listener = new TestDirtyListener(add);
+        scene.addListener(listener);
+        add.setValue("v1", 12);
+        add.setValue("v2", 3);
+        // Since the node starts out as dirty, setting values doesn't increase the counter.
+        assertEquals(0, listener.dirtyCounter);
+        // This code inherits the default code, which doesn't throw an error.
+        add.update(new MockContext(), 0f);
+        assertEquals(15, add.getValue("output"));
+        // Updating the code marks it as clean.
+        assertFalse(add.isDirty());
+        assertEquals(1, listener.updatedCounter);
+        assertEquals(0, listener.dirtyCounter);
+        add.setValue("v1", 17);
+        assertEquals(1, listener.dirtyCounter);
+        // We just changed a parameter value, so the node is dirty.
+        assertTrue(add.isDirty());
+        add.update(new MockContext(), 0f);
+        assertFalse(add.isDirty());
+        assertEquals(20, add.getValue("output"));
+        assertEquals(2, listener.updatedCounter);
+        assertEquals(1, listener.dirtyCounter);
+    }
+
+    public void testExternalInput() {
+        Scene scene = new Scene();
+        Network net = new Network();
+        net.setScene(scene);
+        Node add = net.createChild(Add.class);
+        TestDirtyListener listener = new TestDirtyListener(add);
+        scene.addListener(listener);
+        assertTrue(add.isDirty());
+        Node counter = net.createChild(Counter.class);
+        assertTrue(counter.isDirty());
+        net.connect(counter.getPort("value"), add.getPort("v1"));
+        add.setValue("v2", 20);
+        assertEquals(0, add.getValue("output"));
+        assertEquals(0, listener.dirtyCounter);
+        assertEquals(0, listener.updatedCounter);
+        add.update(new MockContext(), 0f);
+        assertEquals(1, listener.updatedCounter);
+        assertEquals(20, add.getValue("output"));
+        assertTrue(add.isDirty());
+        add.update(new MockContext(), 0f);
+        assertEquals(2, listener.updatedCounter);
+        assertEquals(1, counter.getValue("value"));
+        add.update(new MockContext(), 0f);
+        assertEquals(0, listener.dirtyCounter);
+        assertEquals(3, listener.updatedCounter);
+        assertEquals(22, add.getValue("output"));
+        assertEquals(2, counter.getValue("value"));
     }
 
     public void testLifeCycleMethods() {
@@ -251,5 +347,23 @@ public class NodeTest extends TestCase {
 
     public static class CNode extends BNode {
         public FloatPort pC = new FloatPort(this, "c", Port.Direction.INPUT, 3F);
+    }
+
+    @Category("Test")
+    @ExternalInput
+    public static class Counter extends Node {
+        public IntPort pValue = new IntPort(this, "value", Port.Direction.OUTPUT);
+        private int value;
+
+        @Override
+        public void initialize() {
+            value = 0;
+        }
+
+        @Override
+        public void execute(Context context, float time) {
+            pValue.set(value);
+            value++;
+        }
     }
 }
