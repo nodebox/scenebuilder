@@ -478,6 +478,7 @@ public abstract class Node {
     }
 
     public boolean hasExternalInputs() {
+        if (network == null) return false;
         if (isExternal()) return true;
         for (Connection c : network.getInputConnections(this)) {
             Node n = c.getOutputNode();
