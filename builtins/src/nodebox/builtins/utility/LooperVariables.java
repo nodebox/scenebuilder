@@ -10,6 +10,7 @@ import nodebox.node.*;
  */
 @Description("Variables that contain information for every loop execution.")
 @Category("Utility")
+@ExternalInput
 public class LooperVariables extends Node {
 
     public final IntPort pAmount = new IntPort(this, "amount", Port.Direction.OUTPUT);

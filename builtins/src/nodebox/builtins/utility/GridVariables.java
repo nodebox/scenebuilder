@@ -9,6 +9,7 @@ import nodebox.node.*;
  */
 @Description("Variables that contain information for every point in the grid.")
 @Category("Utility")
+@ExternalInput
 public class GridVariables extends Node {
 
     public final IntPort pRows = new IntPort(this, "rows", Port.Direction.OUTPUT);

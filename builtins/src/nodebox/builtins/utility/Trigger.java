@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 @Description("Trigger a true value for the duration of one frame, otherwise false.")
 @Category("Utility")
+@ExternalInput
 public class Trigger extends Node {
     public boolean triggered = false;
     public BooleanPort pTriggered = new BooleanPort(this, "triggered", Port.Direction.OUTPUT);
