@@ -14,11 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class ParameterPanel extends JPanel implements PropertyChangeListener, ActionListener, ChangeListener, NodeEventListener {
 
@@ -189,6 +187,25 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
             field.putClientProperty("JComponent.sizeVariant", "small");
             field.addActionListener(this);
             return field;
+        } else if (widget.equals("file")) {
+            FileControl control = new FileControl((String) value);
+            control.addActionListener(this);
+            return control;
+/*            JPanel panel = new JPanel();
+            panel.setOpaque(false);
+            panel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            JTextField field = new JTextField((String) value);
+            field.setFont(PORT_VALUE_FONT);
+            field.putClientProperty("JComponent.sizeVariant", "small");
+            forceSize(field, 100, 19);
+            field.addActionListener(this);
+            panel.add(field);
+            JButton chooseButton = new JButton("...");
+            chooseButton.putClientProperty("JButton.buttonType", "gradient");
+            forceSize(chooseButton, 30, 25);
+            //chooseButton.addActionListener(this);
+            panel.add(chooseButton);
+            return panel; */
         } else {
             return null;
         }
@@ -237,6 +254,8 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
         } else if (p.getWidget().equals("string")) {
             JTextField f = (JTextField) e.getSource();
             p.setValue(f.getText());
+        } else if (p.getWidget().equals("file")) {
+            p.setValue(e.getActionCommand());
         } else if (p.getWidget().equals("menu")) {
             PortMenu b = (PortMenu) e.getSource();
             MenuItem item = (MenuItem) b.getSelectedItem();
@@ -356,6 +375,63 @@ public class ParameterPanel extends JPanel implements PropertyChangeListener, Ac
                 setSelectedItem(menuItem);
                 fireStateChanged();
                 PortMenu.this.repaint();
+            }
+        }
+    }
+
+    private class FileControl extends JComponent implements ActionListener {
+        private JTextField textField;
+        private JButton chooseButton;
+        private EventListenerList actionListenerList = new EventListenerList();
+
+        public FileControl(String value) {
+            setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
+            textField = new JTextField();
+            if (value != null) {
+                File f = new File(value);
+                if (f.canRead())
+                    textField.setText(f.getName());
+            }
+            textField.setFont(PORT_VALUE_FONT);
+            textField.putClientProperty("JComponent.sizeVariant", "small");
+            textField.setEditable(false);
+            forceSize(textField, 100, 19);
+            add(textField);
+            chooseButton = new JButton("...");
+            chooseButton.putClientProperty("JButton.buttonType", "gradient");
+            chooseButton.addActionListener(this);
+            forceSize(chooseButton, 30, 25);
+            add(chooseButton);
+        }
+
+        public void addActionListener(ActionListener actionListener) {
+            actionListenerList.add(ActionListener.class, actionListener);
+        }
+
+        public void removeActionListener(ActionListener actionListener) {
+            actionListenerList.remove(ActionListener.class, actionListener);
+        }
+
+        protected void fireActionPerformed(ActionEvent actionEvent) {
+            EventListener listenerList[] = actionListenerList.getListeners(ActionListener.class);
+            for (int i = 0, n = listenerList.length; i < n; i++) {
+                ((ActionListener) listenerList[i]).actionPerformed(actionEvent);
+            }
+        }
+
+        public boolean isFocusable() {
+            return true;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            File chosenFile = FileUtils.showOpenDialog(document, "", "*", "");
+            if (chosenFile != null) {
+                try {
+                    textField.setText(chosenFile.getName());
+                    fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, chosenFile.getAbsolutePath()));
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
             }
         }
     }

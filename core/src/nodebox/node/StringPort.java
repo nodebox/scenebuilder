@@ -20,7 +20,9 @@ public class StringPort extends Port implements PersistablePort, MenuPort {
 
     @Override
     public String getWidget() {
-        if (hasMenu()) {
+        if (getName().substring(0,4).equalsIgnoreCase("file"))
+            return "file";
+        else if (hasMenu()) {
             return "menu";
         } else {
             return "string";
