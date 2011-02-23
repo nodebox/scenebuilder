@@ -50,6 +50,7 @@ public class Scene {
 
     private static Logger logger = Logger.getLogger(Scene.class.getName());
 
+    private File file;
     private Network rootNetwork;
     private Properties properties = new Properties(DEFAULT_PROPERTIES);
     private transient PApplet applet;
@@ -65,6 +66,14 @@ public class Scene {
     private Scene(Network root) {
         rootNetwork = root;
         rootNetwork.setScene(this);
+    }
+
+    public File getFile() {
+        return file;
+    }
+
+    public void setFile(File f) {
+        this.file = f;
     }
 
     public Network getRootNetwork() {
@@ -156,7 +165,9 @@ public class Scene {
         try {
             // The library name is the file name without the ".ndbx" extension.
             // Chop off the .ndbx
-            return load(new FileInputStream(f), manager);
+            Scene scene = load(new FileInputStream(f), manager);
+            scene.setFile(f);
+            return scene;
         } catch (ParserConfigurationException e) {
             throw new RuntimeException("Error in the XML parser configuration", e);
         } catch (SAXException e) {
@@ -461,6 +472,7 @@ public class Scene {
     //// Saving ////
 
     public void save(File f) {
+        this.file = f;
         StreamResult streamResult = new StreamResult(f);
         write(this, streamResult);
     }

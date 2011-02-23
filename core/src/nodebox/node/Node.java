@@ -61,6 +61,10 @@ public abstract class Node {
             return null;
     }
 
+    public boolean isPartOfScene() {
+        return (getScene() != null);
+    }
+
     public Network getNetwork() {
         return network;
     }
