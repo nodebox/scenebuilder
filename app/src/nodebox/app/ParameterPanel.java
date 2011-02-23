@@ -4,6 +4,7 @@ import nodebox.node.*;
 import nodebox.node.event.NodeAttributeChangedEvent;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
