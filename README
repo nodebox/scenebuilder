@@ -1,6 +1,8 @@
-SceneBuilder is the next generation of NodeBox: a node-based interface to Processing for visual coders. 
+SceneBuilder is a node-based interface to Processing for visual coders.
 
-SceneBuilder can be considered to be in "alpha" state: it runs, but a lot of important features are still missing. Do not depend on it for day-to-day work, and don't forget to save early and often!
+**SceneBuilder is no longer being maintained: we're putting its features into NodeBox.**
+
+A lot of important features are still missing. Do not depend on it for day-to-day work, and don't forget to save early and often!
 
 To start hacking on it:
 
